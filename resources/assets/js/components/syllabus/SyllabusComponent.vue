@@ -1,0 +1,85 @@
+<template>
+    <main>
+        <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
+        <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
+        <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
+        <button type="button" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
+        <button type="button" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
+        <button type="button" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
+        <button type="button" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+        <div v-if="status == 'vista'">
+            <vista></vista>
+        </div>
+        <div v-if="status == 'generales'">
+            <generales></generales>
+        </div>
+        <div v-if="status == 'sumillas'">
+            <sumillas></sumillas>
+        </div>
+        <div v-if="status == 'contenidos'">
+            <contenidos></contenidos>
+        </div>
+        <div v-if="status == 'estrategias'">
+            <estrategias></estrategias>
+        </div>
+        <div v-if="status == 'evaluaciones'">
+            <evaluaciones></evaluaciones>
+        </div>
+        <div v-if="status == 'bibliografias'">
+            <bibliografias></bibliografias>
+        </div>
+    </main>
+</template>
+<script>
+    import vista from './Vista';
+	import generales from './Generales';
+    import sumillas  from './Sumillas';
+    import competencias  from './Competencias';
+    import contenidos  from './Contenidos';
+    import estrategias from './Estrategias';
+    import evaluaciones from './Evaluaciones';
+    import bibliografias from './Bibliografias';
+    import {mapState} from 'vuex';
+
+    export default {
+        mounted() {
+            console.log('SyllabusComponent.vue mounted.')
+        },
+        components: {
+            vista, generales, sumillas, competencias, contenidos, estrategias, evaluaciones, bibliografias
+        },
+        computed: mapState(['status']),
+        methods:{
+            view(tipo){
+                this.$store.commit('view', tipo);
+            },
+        },
+    }
+</script>
+
+
+<style>
+    .titulo0 {
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .titulo1 {
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .unidades {
+        border: 1px solid black;
+    }
+
+    .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
+    .col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,
+    .col-3.generales 
+    {
+        margin-left: 0px;
+    }
+
+    .evaluaciones {
+        border: 0.5px solid black;
+    }
+
+</style>
