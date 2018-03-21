@@ -10,9 +10,11 @@
                 <tr v-for="fila in items">
                     <div class="row">
                         <span v-for="item in fila.data">                            
-                            <div :class="rowclass(item, fila.tipo)" :align="item.align">
-                                {{item.texto}}
-                            </div>
+                            <span :class="rowclass(item, fila.tipo)" :align="item.align">
+                                <span class="text-normal">
+                                    {{viewTexto(item)}}
+                                </span>
+                            </span>
                         </span>
                     </div>
                 </tr>
@@ -32,19 +34,29 @@
                 items: (state) => state.lineas,
                 columnas: (state) => state.columnas,
             }),
-            //
-            // Reemplazar chr(13) con <br>
-            //
+
         },
         methods: {
             rowclass(item, tipo){
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-            }
+            },
+            //
+            // Reemplazar chr(13) con <br>
+            //
+            viewTexto(item){
+                console.log('viewTexto', item.texto.replace('\n', "\r\n"));
+                return item.texto.replace('\n','\r\n');
+            },
         }    
     }
 </script>
 
 <style>
+
+    #viewTexto {
+        white-space: pre-wrap;
+    }
+
     .titulo0 {
         font-size: 25px;
         font-weight: bold;
