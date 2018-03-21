@@ -17,7 +17,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'generales', 
-			'texto' => 'I. DATOS GENERALES' 
+			'texto' => 'I. DATOS GENERALES',
+			'orden' => 1,
 		]);
 
     	Titulo::create([
@@ -25,7 +26,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'sumillas', 
-			'texto' => 'II. SUMILLA'
+			'texto' => 'II. SUMILLA',
+			'orden' => 2,
 		]);
 
     	Titulo::create([
@@ -33,7 +35,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'competencias', 
-			'texto' => 'III. SISTEMA DE COMPETENCIAS'
+			'texto' => 'III. SISTEMA DE COMPETENCIAS',
+			'orden' => 3,
 		]);
 
     	Titulo::create([
@@ -41,7 +44,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
-			'texto' => 'COMPETENCIAS GENERALES'
+			'texto' => 'COMPETENCIAS GENERALES',
+			'orden' => 4,
 		]);
 
     	Titulo::create([
@@ -49,7 +53,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
-			'texto' => 'COMPETENCIAS ESPECÍFICAS'
+			'texto' => 'COMPETENCIAS ESPECÍFICAS',
+			'orden' => 5,
 		]);
 
     	Titulo::create([
@@ -57,7 +62,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'contenidos', 
-			'texto' => 'IV. PROGRAMACIÓN DE CONTENIDOS'
+			'texto' => 'IV. PROGRAMACIÓN DE CONTENIDOS',
+			'orden' => 6,
 		]);
 
     	Titulo::create([
@@ -65,7 +71,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
-			'texto' => 'SEMANA'
+			'texto' => 'SEMANA',
+			'orden' => 7,
 		]);
 
     	Titulo::create([
@@ -73,7 +80,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
-			'texto' => 'CONCEPTUAL' 
+			'texto' => 'CONCEPTUAL' ,
+			'orden' => 8,
 		]);
 
     	Titulo::create([
@@ -81,7 +89,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
-			'texto' => 'PROCEDIMENTAL'
+			'texto' => 'PROCEDIMENTAL',
+			'orden' => 9,
 		]);
 
     	Titulo::create([
@@ -89,7 +98,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
-			'texto' => 'ACTIVIDAD DE APRENDIZAJE'
+			'texto' => 'ACTIVIDAD DE APRENDIZAJE',
+			'orden' => 10,
 		]);
 
     	Titulo::create([
@@ -97,7 +107,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'estrategias', 
-			'texto' => 'V. ESTRATEGIAS METODOLÓGICAS'
+			'texto' => 'V. ESTRATEGIAS METODOLÓGICAS',
+			'orden' => 11,
 		]);
 
     	Titulo::create([
@@ -105,7 +116,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'evaluaciones', 
-			'texto' => 'VI. EVALUACIÓN'
+			'texto' => 'VI. EVALUACIÓN',
+			'orden' => 12,
 		]);
 
     	Titulo::create([
@@ -113,7 +125,8 @@ class TitulosTablesSeeder extends Seeder
 			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'bibliografia', 
-			'texto' => 'VII. BIBLIOGRAFÍA'
+			'texto' => 'VII. BIBLIOGRAFÍA',
+			'orden' => 13,
 		]);
 
     }

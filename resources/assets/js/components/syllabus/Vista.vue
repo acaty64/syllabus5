@@ -32,6 +32,9 @@
                 items: (state) => state.lineas,
                 columnas: (state) => state.columnas,
             }),
+            //
+            // Reemplazar chr(13) con <br>
+            //
         },
         methods: {
             rowclass(item, tipo){
