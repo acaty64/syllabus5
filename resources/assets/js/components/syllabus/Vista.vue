@@ -10,11 +10,7 @@
                 <tr v-for="fila in items">
                     <div class="row">
                         <span v-for="item in fila.data">                            
-                            <span :class="rowclass(item, fila.tipo)" :align="item.align">
-                                <span class="text-normal">
-                                    {{viewTexto(item)}}
-                                </span>
-                            </span>
+                            <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
                         </span>
                     </div>
                 </tr>
@@ -44,8 +40,9 @@
             // Reemplazar chr(13) con <br>
             //
             viewTexto(item){
-                console.log('viewTexto', item.texto.replace('\n', "\r\n"));
-                return item.texto.replace('\n','\r\n');
+                            
+                var newText = item.texto.replace(/\n/g, '<br>');
+                return newText;
             },
         }    
     }
