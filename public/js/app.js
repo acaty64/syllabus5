@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(7);
 var isBuffer = __webpack_require__(23);
 
 /*global toString:true*/
@@ -1478,10 +1478,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(9);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(9);
   }
   return adapter;
 }
@@ -1552,10 +1552,313 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(48)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1573,7 +1876,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1763,7 +2066,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1774,7 +2077,7 @@ var settle = __webpack_require__(26);
 var buildURL = __webpack_require__(28);
 var parseHeaders = __webpack_require__(29);
 var isURLSameOrigin = __webpack_require__(30);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(10);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(31);
 
 module.exports = function xhrAdapter(config) {
@@ -1950,7 +2253,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1975,7 +2278,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1987,7 +2290,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2013,7 +2316,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12830,314 +13133,11 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(40).setImmediate))
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(48)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(78);
+module.exports = __webpack_require__(80);
 
 
 /***/ }),
@@ -13146,7 +13146,7 @@ module.exports = __webpack_require__(78);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(79);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -13156,7 +13156,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __webpack_require__(16);
 
-window.Vue = __webpack_require__(11);
+window.Vue = __webpack_require__(13);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -43122,7 +43122,7 @@ module.exports = __webpack_require__(22);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(7);
 var Axios = __webpack_require__(24);
 var defaults = __webpack_require__(4);
 
@@ -43157,9 +43157,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(10);
+axios.Cancel = __webpack_require__(12);
 axios.CancelToken = __webpack_require__(38);
-axios.isCancel = __webpack_require__(9);
+axios.isCancel = __webpack_require__(11);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -43312,7 +43312,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(10);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -43747,7 +43747,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(35);
-var isCancel = __webpack_require__(9);
+var isCancel = __webpack_require__(11);
 var defaults = __webpack_require__(4);
 var isAbsoluteURL = __webpack_require__(36);
 var combineURLs = __webpack_require__(37);
@@ -43907,7 +43907,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(10);
+var Cancel = __webpack_require__(12);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -44248,7 +44248,7 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(8)))
 
 /***/ }),
 /* 42 */
@@ -44382,7 +44382,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(76)
+var __vue_template__ = __webpack_require__(78)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44431,7 +44431,7 @@ var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(13)("29067685", content, false);
+var update = __webpack_require__(6)("29067685", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -44450,7 +44450,7 @@ if(false) {
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(5)(false);
 // imports
 
 
@@ -44509,13 +44509,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Competencias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Competencias__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Contenidos__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Contenidos___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__Contenidos__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Estrategias__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Estrategias__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Estrategias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Estrategias__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Evaluaciones__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Evaluaciones__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Evaluaciones___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Evaluaciones__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Bibliografias__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Bibliografias__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Bibliografias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__Bibliografias__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_vuex__ = __webpack_require__(2);
+//
+//
+//
+//
 //
 //
 //
@@ -44637,7 +44641,7 @@ var content = __webpack_require__(52);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(13)("6fb61184", content, false);
+var update = __webpack_require__(6)("6fb61184", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -44656,7 +44660,7 @@ if(false) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(5)(false);
 // imports
 
 
@@ -44720,7 +44724,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         // Reemplazar chr(13) con <br>
         //
         viewTexto: function viewTexto(item) {
-
             var newText = item.texto.replace(/\n/g, '<br>');
             return newText;
         }
@@ -45215,15 +45218,19 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(65)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(65)
+var __vue_script__ = __webpack_require__(67)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(68)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -45259,11 +45266,78 @@ module.exports = Component.exports
 
 /***/ }),
 /* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(66);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(6)("f75229fc", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6932595d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Contenidos.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6932595d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Contenidos.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}    \n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -45273,22 +45347,152 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	mounted: function mounted() {
-		console.log('Contenidos.vue mounted');
-	},
+    mounted: function mounted() {
+        console.log('Contenidos.vue mounted');
+    },
 
-	computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({})
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(_extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+        lineas: function lineas(state) {
+            return state.lineas;
+        },
+        columnas: function columnas(state) {
+            return state.columnas;
+        }
+    }), {
+        items: function items() {
+            return this.$store.getters.contenidos;
+        }
+    })),
+    methods: {
+        rowclass: function rowclass(item, tipo) {
+            return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        },
+        editar: function editar(linea) {
+            this.$store.dispatch('editarContenido', linea);
+        },
+        grabar: function grabar(linea) {
+            this.$store.dispatch('grabarContenido', linea);
+        },
+        viewTexto: function viewTexto(item) {
+            var newText = item.texto.replace(/\n/g, '<br>');
+            return newText;
+        }
+    }
 });
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c("h1", [_vm._v("I. CONTENIDOS (editable)")]),
+    _vm._v(" "),
+    _c("table", [
+      _c(
+        "thead",
+        _vm._l(_vm.columnas, function(columna) {
+          return _c("tr", [_c("th", { attrs: { width: columna } })])
+        })
+      ),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.items, function(linea) {
+          return _c("tr", [
+            _c("div", { staticClass: "row" }, [
+              linea.editing
+                ? _c(
+                    "span",
+                    [
+                      _vm._l(linea.data, function(item) {
+                        return _c("span", [
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: item.texto,
+                                  expression: "item.texto"
+                                }
+                              ],
+                              class: _vm.rowclass(item, linea.tipo),
+                              attrs: {
+                                rows: "6",
+                                wrap: "hard",
+                                align: item.align
+                              },
+                              domProps: { value: item.texto },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(item, "texto", $event.target.value)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(item.texto))]
+                          )
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.grabar(linea)
+                            }
+                          }
+                        },
+                        [_vm._v("Grabar")]
+                      )
+                    ],
+                    2
+                  )
+                : _c(
+                    "span",
+                    [
+                      _vm._l(linea.data, function(item) {
+                        return _c("span", [
+                          _c("span", {
+                            class: _vm.rowclass(item, linea.tipo),
+                            attrs: { align: item.align },
+                            domProps: { innerHTML: _vm._s(_vm.viewTexto(item)) }
+                          })
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.editar(linea)
+                            }
+                          }
+                        },
+                        [_vm._v("Editar")]
+                      )
+                    ],
+                    2
+                  )
+            ])
+          ])
+        })
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45301,15 +45505,15 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(68)
+var __vue_script__ = __webpack_require__(70)
 /* template */
-var __vue_template__ = __webpack_require__(69)
+var __vue_template__ = __webpack_require__(71)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45348,7 +45552,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45371,7 +45575,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45391,15 +45595,15 @@ if (false) {
 }
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(71)
+var __vue_script__ = __webpack_require__(73)
 /* template */
-var __vue_template__ = __webpack_require__(72)
+var __vue_template__ = __webpack_require__(74)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45438,7 +45642,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45461,7 +45665,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45481,15 +45685,15 @@ if (false) {
 }
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(74)
+var __vue_script__ = __webpack_require__(76)
 /* template */
-var __vue_template__ = __webpack_require__(75)
+var __vue_template__ = __webpack_require__(77)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45528,7 +45732,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45551,7 +45755,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45571,7 +45775,7 @@ if (false) {
 }
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45619,6 +45823,20 @@ var render = function() {
         }
       },
       [_vm._v("Sumillas")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-default",
+        attrs: { type: "button" },
+        on: {
+          click: function($event) {
+            _vm.view("unidades")
+          }
+        }
+      },
+      [_vm._v("Unidades")]
     ),
     _vm._v(" "),
     _c(
@@ -45683,6 +45901,8 @@ var render = function() {
     _vm._v(" "),
     _vm.status == "sumillas" ? _c("div", [_c("sumillas")], 1) : _vm._e(),
     _vm._v(" "),
+    _vm.status == "unidades" ? _c("div", [_c("unidades")], 1) : _vm._e(),
+    _vm._v(" "),
     _vm.status == "contenidos" ? _c("div", [_c("contenidos")], 1) : _vm._e(),
     _vm._v(" "),
     _vm.status == "estrategias" ? _c("div", [_c("estrategias")], 1) : _vm._e(),
@@ -45707,12 +45927,12 @@ if (false) {
 }
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return store; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
 
@@ -45724,7 +45944,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     state: {
         lineas: [
         //
-        { 'tipo': 'titulo0', 'data': [{ 'reg': 11, 'subtipo': '', 'row': 1, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'center', 'texto': 'CONTABILIDAD GERENCIAL', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 21, 'subtipo': 'generales', 'row': 2, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'I. DATOS GENERALES', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 35, 'subtipo': '', 'row': 3, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Código:', 'offset': 2 }, { 'reg': 85, 'subtipo': '', 'row': 3, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': '100048', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 130, 'subtipo': '', 'row': 4, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Pre‐ Requisito :', 'offset': 2 }, { 'reg': 7, 'subtipo': '', 'row': 4, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Contabilidad General', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 109, 'subtipo': '', 'row': 5, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Créditos : ', 'offset': 2 }, { 'reg': 13, 'subtipo': '', 'row': 5, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': '03', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 128, 'subtipo': '', 'row': 6, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Horas :', 'offset': 2 }, { 'reg': 91, 'subtipo': '', 'row': 6, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': '04 horas', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 24, 'subtipo': '', 'row': 7, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Semestre académico : ', 'offset': 2 }, { 'reg': 86, 'subtipo': '', 'row': 7, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': '2017‐ I', 'offset': 1 }] }, { 'tipo': 'generales', 'data': [{ 'reg': 81, 'subtipo': '', 'row': 8, 'col': 2, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Ciclo :', 'offset': 2 }, { 'reg': 103, 'subtipo': '', 'row': 8, 'col': 3, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'III', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 45, 'subtipo': 'sumillas', 'row': 9, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'II. SUMILLA', 'offset': 1 }] }, { 'tipo': 'sumillas', 'data': [{ 'reg': 36, 'subtipo': '', 'row': 10, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'justify', 'texto': 'El curso tiene como propósito integrar las teorías, las técnicas y las herramientas adquiridas en las materias de contabilidad general y administración que le permita llegar al alumno a desarrollar las habilidades de análisis, integración de la información para la construcción de propuestas y soluciones que llevan al logro de los objetivos de la organización. Se pondrá énfasis en el análisis financiero de los estados financieros y su relación con los costos empresariales.', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 82, 'subtipo': 'competencias', 'row': 11, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'III. SISTEMA DE COMPETENCIAS', 'offset': 1 }] }, { 'tipo': 'titulo2', 'data': [{ 'reg': 37, 'subtipo': '', 'row': 12, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS GENERALES', 'offset': 1 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 10, 'subtipo': '', 'row': 13, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 13, 'subtipo': '', 'row': 14, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 81, 'subtipo': '', 'row': 15, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 41, 'subtipo': '', 'row': 16, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Planifica la gestión de la empresa a futuro.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 77, 'subtipo': '', 'row': 17, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Capacidad de trabajo en equipo.', 'offset': 2 }] }, { 'tipo': 'titulo2', 'data': [{ 'reg': 9, 'subtipo': '', 'row': 18, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS ESPECÍFICAS', 'offset': 1 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 84, 'subtipo': '', 'row': 19, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 32, 'subtipo': '', 'row': 20, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros. ', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 111, 'subtipo': '', 'row': 21, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 28, 'subtipo': '', 'row': 22, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.', 'offset': 2 }] }, { 'tipo': 'competencias', 'data': [{ 'reg': 27, 'subtipo': '', 'row': 23, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'justify', 'texto': 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.', 'offset': 2 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 126, 'subtipo': 'contenidos', 'row': 24, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'IV. PROGRAMACIÓN DE CONTENIDOS', 'offset': 1 }] }, { 'tipo': 'unidades', 'data': [{ 'reg': 22, 'subtipo': '', 'row': 25, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'center', 'texto': 'UNIDAD I: LA CONTABILIDAD GERENCIAL.', 'offset': 1 }] }, { 'tipo': 'titulo3', 'data': [{ 'reg': 35, 'subtipo': '', 'row': 26, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': 'SEMANA', 'offset': 1 }, { 'reg': 48, 'subtipo': '', 'row': 26, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'center', 'texto': 'CONCEPTUAL', 'offset': 1 }, { 'reg': 14, 'subtipo': '', 'row': 26, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'center', 'texto': 'PROCEDIMENTAL', 'offset': 1 }, { 'reg': 25, 'subtipo': '', 'row': 26, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'center', 'texto': 'ACTIVIDAD DE APRENDIZAJE', 'offset': 1 }] }, { 'tipo': 'contenidos', 'data': [{ 'reg': 99, 'subtipo': '', 'row': 27, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': '1', 'offset': 1 }, { 'reg': 127, 'subtipo': '', 'row': 27, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'left', 'texto': 'La contabilidad gerencial.\n‐ Qué es la contabilidad. El ciclo contable. Los Estados Financieros.\n‐Qué es la contabilidad gerencial. Objetivos e importancia de la contabilidad gerencial.\n‐Diferencias entre la contabilidad gerencial y la contabilidad financiera. Usuarios de la información. Tipo de información. Normas de regulación.', 'offset': 1 }, { 'reg': 91, 'subtipo': '', 'row': 27, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Reconoce el recorrido de las operaciones empresariales en el ciclo contable de una empresa. Evalúa la utilidad de la información financiera y gerencial.', 'offset': 1 }, { 'reg': 115, 'subtipo': '', 'row': 27, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Exposición dialogada\nTaller', 'offset': 1 }] }, { 'tipo': 'contenidos', 'data': [{ 'reg': 62, 'subtipo': '', 'row': 28, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': '2', 'offset': 1 }, { 'reg': 17, 'subtipo': '', 'row': 28, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'left', 'texto': 'La Contabilidad de Costos Empresariales.\n‐ Concepto. Importancia y su aplicación. Relación entre la contabilidad Gerencial y la Contabilidad de Costos.', 'offset': 1 }, { 'reg': 102, 'subtipo': '', 'row': 28, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Determinación, distribución y aplicación de los costos en una empresa mercantil.', 'offset': 1 }, { 'reg': 126, 'subtipo': '', 'row': 28, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Dinámica grupal/debate en clase', 'offset': 1 }] }, { 'tipo': 'contenidos', 'data': [{ 'reg': 39, 'subtipo': '', 'row': 29, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': '3', 'offset': 1 }, { 'reg': 124, 'subtipo': '', 'row': 29, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'left', 'texto': 'Elementos de los Estados Financieros:\n‐ Balance General: Activo, pasivo y patrimonio.\n‐ Estado de Resultados: Ingresos y Gastos', 'offset': 1 }, { 'reg': 26, 'subtipo': '', 'row': 29, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Analizar y aplicar el marco legal normativo para la elaboración de los Estados Financieros.', 'offset': 1 }, { 'reg': 40, 'subtipo': '', 'row': 29, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Exposición dialogada', 'offset': 1 }] }, { 'tipo': 'contenidos', 'data': [{ 'reg': 43, 'subtipo': '', 'row': 30, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': '4', 'offset': 1 }, { 'reg': 62, 'subtipo': '', 'row': 30, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'left', 'texto': 'Análisis de los Estados Financieros\n‐Análisis Horizontal.\n‐Análisis Vertical.\n‐Desarrollo de casos de aplicación.\n‐ Elaboración de un informe gerencial.', 'offset': 1 }, { 'reg': 10, 'subtipo': '', 'row': 30, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Evalúa los resultados obtenidos. Demuestra la aplicación del análisis vertical y horizontal.', 'offset': 1 }, { 'reg': 82, 'subtipo': '', 'row': 30, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'left', 'texto': 'Clase Expositiva\n Taller\n  Discusión de caso', 'offset': 1 }] }, { 'tipo': 'evaluaciones', 'data': [{ 'reg': 19, 'subtipo': '', 'row': 31, 'col': 2, 'rows': 1, 'cols': 7, 'align': 'center', 'texto': 'EVALUACIÓN PARCIAL 1 ', 'offset': 2 }] }, { 'tipo': 'contenidos', 'data': [{ 'reg': 82, 'subtipo': '', 'row': 32, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': '5', 'offset': 1 }, { 'reg': 61, 'subtipo': '', 'row': 32, 'col': 2, 'rows': 1, 'cols': 3, 'align': '', 'texto': 'Trabajos de aplicación\n ‐Análisis de todo el proceso aplicado hasta el informe gerencial.', 'offset': 1 }, { 'reg': 39, 'subtipo': '', 'row': 32, 'col': 4, 'rows': 1, 'cols': 2, 'align': '', 'texto': 'Propicia un debate acerca de la toma de decisiones en una empresa.', 'offset': 1 }, { 'reg': 69, 'subtipo': '', 'row': 32, 'col': 6, 'rows': 1, 'cols': 2, 'align': '', 'texto': 'Exposición dialogada', 'offset': 1 }] }, { 'tipo': 'unidades', 'data': [{ 'reg': 124, 'subtipo': '', 'row': 33, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'center', 'texto': 'UNIDAD II: ANALISIS E INTERPRETACION DE LOS ESTADOS FINANCIEROS', 'offset': 1 }] }, { 'tipo': 'titulo3', 'data': [{ 'reg': 62, 'subtipo': '', 'row': 34, 'col': 1, 'rows': 1, 'cols': 1, 'align': 'center', 'texto': 'SEMANA', 'offset': 1 }, { 'reg': 61, 'subtipo': '', 'row': 34, 'col': 2, 'rows': 1, 'cols': 3, 'align': 'center', 'texto': 'CONCEPTUAL', 'offset': 1 }, { 'reg': 73, 'subtipo': '', 'row': 34, 'col': 4, 'rows': 1, 'cols': 2, 'align': 'center', 'texto': 'PROCEDIMENTAL', 'offset': 1 }, { 'reg': 27, 'subtipo': '', 'row': 34, 'col': 6, 'rows': 1, 'cols': 2, 'align': 'center', 'texto': 'ACTIVIDAD DE APRENDIZAJE', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 6, 'subtipo': 'estrategias', 'row': 35, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'V. ESTRATEGIAS METODOLÓGICAS', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 75, 'subtipo': 'evaluaciones', 'row': 36, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'VI. EVALUACIÓN', 'offset': 1 }] }, { 'tipo': 'titulo1', 'data': [{ 'reg': 102, 'subtipo': 'bibliografias', 'row': 37, 'col': 1, 'rows': 1, 'cols': 8, 'align': 'left', 'texto': 'VII. BIBLIOGRAFÍA', 'offset': 1 }] }],
+        { 'row': 1, 'editing': false, 'tipo': 'titulo0', 'data': [{ 'reg': 11, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'center', 'texto': 'CONTABILIDAD GERENCIAL', 'offset': 1 }] }, { 'row': 2, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 21, 'subtipo': 'generales', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'I. DATOS GENERALES', 'offset': 1 }] }, { 'row': 3, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 35, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Código:', 'offset': 2 }, { 'reg': 85, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': '100048', 'offset': 1 }] }, { 'row': 4, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 130, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Pre‐ Requisito :', 'offset': 2 }, { 'reg': 7, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': 'Contabilidad General', 'offset': 1 }] }, { 'row': 5, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 109, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Créditos : ', 'offset': 2 }, { 'reg': 13, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': '03', 'offset': 1 }] }, { 'row': 6, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 128, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Horas :', 'offset': 2 }, { 'reg': 91, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': '04 horas', 'offset': 1 }] }, { 'row': 7, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 24, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Semestre académico : ', 'offset': 2 }, { 'reg': 86, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': '2017‐ I', 'offset': 1 }] }, { 'row': 8, 'editing': false, 'tipo': 'generales', 'data': [{ 'reg': 81, 'subtipo': '', 'col': 2, 'cols': 2, 'align': 'left', 'texto': 'Ciclo :', 'offset': 2 }, { 'reg': 103, 'subtipo': '', 'col': 3, 'cols': 2, 'align': 'left', 'texto': 'III', 'offset': 1 }] }, { 'row': 9, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 45, 'subtipo': 'sumillas', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'II. SUMILLA', 'offset': 1 }] }, { 'row': 10, 'editing': false, 'tipo': 'sumillas', 'data': [{ 'reg': 36, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'justify', 'texto': 'El curso tiene como propósito integrar las teorías, las técnicas y las herramientas adquiridas en las materias de contabilidad general y administración que le permita llegar al alumno a desarrollar las habilidades de análisis, integración de la información para la construcción de propuestas y soluciones que llevan al logro de los objetivos de la organización. Se pondrá énfasis en el análisis financiero de los estados financieros y su relación con los costos empresariales.', 'offset': 1 }] }, { 'row': 11, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 82, 'subtipo': 'competencias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'III. SISTEMA DE COMPETENCIAS', 'offset': 1 }] }, { 'row': 12, 'editing': false, 'tipo': 'titulo2', 'data': [{ 'reg': 37, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS GENERALES', 'offset': 1 }] }, { 'row': 13, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 10, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.', 'offset': 2 }] }, { 'row': 14, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 13, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.', 'offset': 2 }] }, { 'row': 15, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 81, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.', 'offset': 2 }] }, { 'row': 16, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 41, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Planifica la gestión de la empresa a futuro.', 'offset': 2 }] }, { 'row': 17, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 77, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Capacidad de trabajo en equipo.', 'offset': 2 }] }, { 'row': 18, 'editing': false, 'tipo': 'titulo2', 'data': [{ 'reg': 9, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS ESPECÍFICAS', 'offset': 1 }] }, { 'row': 19, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 84, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.', 'offset': 2 }] }, { 'row': 20, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 32, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros. ', 'offset': 2 }] }, { 'row': 21, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 111, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.', 'offset': 2 }] }, { 'row': 22, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 28, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.', 'offset': 2 }] }, { 'row': 23, 'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 27, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.', 'offset': 2 }] }, { 'row': 24, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 126, 'subtipo': 'contenidos', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'IV. PROGRAMACIÓN DE CONTENIDOS', 'offset': 1 }] }, { 'row': 25, 'editing': false, 'tipo': 'unidades', 'data': [{ 'reg': 22, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'center', 'texto': 'UNIDAD I: LA CONTABILIDAD GERENCIAL.', 'offset': 1 }] }, { 'row': 26, 'editing': false, 'tipo': 'titulo3', 'data': [{ 'reg': 35, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': 'SEMANA', 'offset': 1 }, { 'reg': 48, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'center', 'texto': 'CONCEPTUAL', 'offset': 1 }, { 'reg': 14, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'center', 'texto': 'PROCEDIMENTAL', 'offset': 1 }, { 'reg': 25, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'center', 'texto': 'ACTIVIDAD DE APRENDIZAJE', 'offset': 1 }] }, { 'row': 27, 'editing': false, 'tipo': 'contenidos', 'data': [{ 'reg': 99, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': '1', 'offset': 1 }, { 'reg': 127, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'left', 'texto': 'La contabilidad gerencial.\n‐ Qué es la contabilidad. El ciclo contable. Los Estados Financieros.\n‐Qué es la contabilidad gerencial. Objetivos e importancia de la contabilidad gerencial.\n‐Diferencias entre la contabilidad gerencial y la contabilidad financiera. Usuarios de la información. Tipo de información. Normas de regulación.', 'offset': 1 }, { 'reg': 91, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'left', 'texto': 'Reconoce el recorrido de las operaciones empresariales en el ciclo contable de una empresa. Evalúa la utilidad de la información financiera y gerencial.', 'offset': 1 }, { 'reg': 115, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'left', 'texto': 'Exposición dialogada\nTaller', 'offset': 1 }] }, { 'row': 28, 'editing': false, 'tipo': 'contenidos', 'data': [{ 'reg': 62, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': '2', 'offset': 1 }, { 'reg': 17, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'left', 'texto': 'La Contabilidad de Costos Empresariales.\n‐ Concepto. Importancia y su aplicación. Relación entre la contabilidad Gerencial y la Contabilidad de Costos.', 'offset': 1 }, { 'reg': 102, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'left', 'texto': 'Determinación, distribución y aplicación de los costos en una empresa mercantil.', 'offset': 1 }, { 'reg': 126, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'left', 'texto': 'Dinámica grupal/debate en clase', 'offset': 1 }] }, { 'row': 29, 'editing': false, 'tipo': 'contenidos', 'data': [{ 'reg': 39, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': '3', 'offset': 1 }, { 'reg': 124, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'left', 'texto': 'Elementos de los Estados Financieros:\n‐ Balance General: Activo, pasivo y patrimonio.\n‐ Estado de Resultados: Ingresos y Gastos', 'offset': 1 }, { 'reg': 26, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'left', 'texto': 'Analizar y aplicar el marco legal normativo para la elaboración de los Estados Financieros.', 'offset': 1 }, { 'reg': 40, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'left', 'texto': 'Exposición dialogada', 'offset': 1 }] }, { 'row': 30, 'editing': false, 'tipo': 'contenidos', 'data': [{ 'reg': 43, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': '4', 'offset': 1 }, { 'reg': 62, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'left', 'texto': 'Análisis de los Estados Financieros\n‐Análisis Horizontal.\n‐Análisis Vertical.\n‐Desarrollo de casos de aplicación.\n‐ Elaboración de un informe gerencial.', 'offset': 1 }, { 'reg': 10, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'left', 'texto': 'Evalúa los resultados obtenidos. Demuestra la aplicación del análisis vertical y horizontal.', 'offset': 1 }, { 'reg': 82, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'left', 'texto': 'Clase Expositiva\n Taller\n  Discusión de caso', 'offset': 1 }] }, { 'row': 31, 'editing': false, 'tipo': 'evaluaciones', 'data': [{ 'reg': 19, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'center', 'texto': 'EVALUACIÓN PARCIAL 1 ', 'offset': 2 }] }, { 'row': 32, 'editing': false, 'tipo': 'contenidos', 'data': [{ 'reg': 82, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': '5', 'offset': 1 }, { 'reg': 61, 'subtipo': '', 'col': 2, 'cols': 3, 'align': '', 'texto': 'Trabajos de aplicación\n ‐Análisis de todo el proceso aplicado hasta el informe gerencial.', 'offset': 1 }, { 'reg': 39, 'subtipo': '', 'col': 4, 'cols': 2, 'align': '', 'texto': 'Propicia un debate acerca de la toma de decisiones en una empresa.', 'offset': 1 }, { 'reg': 69, 'subtipo': '', 'col': 6, 'cols': 2, 'align': '', 'texto': 'Exposición dialogada', 'offset': 1 }] }, { 'row': 33, 'editing': false, 'tipo': 'unidades', 'data': [{ 'reg': 124, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'center', 'texto': 'UNIDAD II: ANALISIS E INTERPRETACION DE LOS ESTADOS FINANCIEROS', 'offset': 1 }] }, { 'row': 34, 'editing': false, 'tipo': 'titulo3', 'data': [{ 'reg': 62, 'subtipo': '', 'col': 1, 'cols': 1, 'align': 'center', 'texto': 'SEMANA', 'offset': 1 }, { 'reg': 61, 'subtipo': '', 'col': 2, 'cols': 3, 'align': 'center', 'texto': 'CONCEPTUAL', 'offset': 1 }, { 'reg': 73, 'subtipo': '', 'col': 4, 'cols': 2, 'align': 'center', 'texto': 'PROCEDIMENTAL', 'offset': 1 }, { 'reg': 27, 'subtipo': '', 'col': 6, 'cols': 2, 'align': 'center', 'texto': 'ACTIVIDAD DE APRENDIZAJE', 'offset': 1 }] }, { 'row': 35, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 6, 'subtipo': 'estrategias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'V. ESTRATEGIAS METODOLÓGICAS', 'offset': 1 }] }, { 'row': 36, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 75, 'subtipo': 'evaluaciones', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'VI. EVALUACIÓN', 'offset': 1 }] }, { 'row': 37, 'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 102, 'subtipo': 'bibliografias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'VII. BIBLIOGRAFÍA', 'offset': 1 }] }],
 
         columnas: ['10%', '15%', '15%', '10%', '15%', '10%', '15%', '10%'],
 
@@ -45735,10 +45955,18 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         view: function view(state, tipo) {
             state.status = tipo;
         },
-        changeSumilla: function changeSumilla(state, item) {
+        saveSumilla: function saveSumilla(state, item) {
             var i = findByTipo(state.lineas, 'sumillas');
             state.lineas[i].data[0].texto = item.texto;
             state.status = 'vista';
+        },
+        switchEditingContenido: function switchEditingContenido(state, linea) {
+            var i = findByRow(state.lineas, linea.row);
+            state.lineas[i].editing = !state.lineas[i].editing;
+        },
+        saveLinea: function saveLinea(state, linea) {
+            var i = findByRow(state.lineas, linea.row);
+            state.lineas[i] = linea;
         }
     },
     getters: {
@@ -45755,13 +45983,36 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 return linea.tipo == 'sumillas';
             });
             return item[0].data[0];
+        },
+        contenidos: function contenidos(state) {
+            var array = state.lineas;
+            var items = array.filter(function (linea) {
+                return linea.tipo == 'contenidos';
+            });
+            var lineas = $store.sortByWeek(items);
+            console.log('contenidos: ', lineas);
+            return lineas;
         }
     },
+
     actions: {
         grabarSumilla: function grabarSumilla(context, item) {
-            context.commit('changeSumilla', item);
+            context.commit('saveSumilla', item);
+        },
+        editarContenido: function editarContenido(context, linea) {
+            context.commit('switchEditingContenido', linea);
+        },
+        grabarContenido: function grabarContenido(context, linea) {
+            context.commit('saveLinea', linea);
+            context.commit('switchEditingContenido', linea);
         }
+    },
 
+    sortByWeek: function sortByWeek(lineas) {
+        lineas.sort(function (a, b) {
+            return a.semana - b.semana;
+        });
+        return lineas;
     }
 });
 
@@ -45774,8 +46025,17 @@ function findByTipo(items, tipo) {
     return null;
 }
 
+function findByRow(lineas, row) {
+    for (var i in lineas) {
+        if (lineas[i].row == row) {
+            return i;
+        }
+    }
+    return null;
+}
+
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

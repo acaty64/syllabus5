@@ -3,6 +3,7 @@
         <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
         <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
         <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
+        <button type="button" class="btn btn-default" @click='view("unidades")'>Unidades</button>
         <button type="button" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
         <button type="button" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
         <button type="button" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
@@ -15,6 +16,9 @@
         </div>
         <div v-if="status == 'sumillas'">
             <sumillas></sumillas>
+        </div>
+        <div v-if="status == 'unidades'">
+            <unidades></unidades>
         </div>
         <div v-if="status == 'contenidos'">
             <contenidos></contenidos>

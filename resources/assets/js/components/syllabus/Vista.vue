@@ -39,8 +39,7 @@
             //
             // Reemplazar chr(13) con <br>
             //
-            viewTexto(item){
-                            
+            viewTexto(item){                            
                 var newText = item.texto.replace(/\n/g, '<br>');
                 return newText;
             },
