@@ -105,6 +105,24 @@ export const store = new Vuex.Store({
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i] = linea;
         },
+        sortLineas(state, tipo){
+            var array = state.lineas;
+            var items = array.filter( (linea) => linea.tipo == tipo );            
+console.log('sortLineas items: ', items);
+            /* sortByWeek  */
+            var lineas = items.sort(function (a, b){
+                return (a.data[0].texto - b.data[0].texto);
+            });
+console.log('sortLineas-1 lineas: ', lineas);
+            
+            /* Renumber row */
+            var numLinea = items[0].row;
+            lineas.forEach(function (elemento, indice) {
+                lineas[indice].row = numLinea++;
+            });
+console.log('sortLineas-2 lineas: ', lineas);
+
+        }
 
 	},
 	getters: {
@@ -121,9 +139,7 @@ export const store = new Vuex.Store({
         contenidos: (state) => {
             var array = state.lineas;
             var items = array.filter( (linea) => linea.tipo == 'contenidos' );
-            var lineas = $store.sortByWeek(items);
-console.log('contenidos: ', lineas);
-            return lineas;
+            return items;
         },
     },
 
@@ -136,17 +152,18 @@ console.log('contenidos: ', lineas);
         },
         grabarContenido: (context, linea) => {
             context.commit('saveLinea', linea);
+            context.commit('sortLineas', 'contenidos');
             context.commit('switchEditingContenido', linea);
         },
     },
-
+/*
     sortByWeek(lineas){
         lineas.sort(function (a, b){
             return (a.semana - b.semana)
         });
         return lineas;
     },
-
+*/
 });
 
 function findByTipo(items, tipo) {
