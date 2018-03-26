@@ -72,7 +72,7 @@
         margin-left: 0px;
     }
 
-    .evaluaciones {
+    .examenes {
         border: 0.5px solid black;
     }
 

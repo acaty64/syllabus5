@@ -10,7 +10,7 @@
             <tbody>
                 <tr v-for="linea in items">
                     <div class="row">
-                        <span v-if='linea.editing'>
+                        <span v-if="linea.editing">
                             <span v-for="item in linea.data">                            
                                 <textarea rows="6" wrap="hard" :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
@@ -20,7 +20,9 @@
                             <span v-for="item in linea.data">                            
                                 <span :class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
-                            <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>                            
+                            <span v-if="linea.tipo == 'contenidos'">
+                                <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>                            
+                            </span>
                         </span>
                     </div>
                 </tr>
@@ -50,6 +52,7 @@
                 this.$store.dispatch('editarContenido', linea);
             },            
             grabar(linea) {
+                linea.week = linea.data[0].texto + 0.5;
                 this.$store.dispatch('grabarContenido', linea);
             },
             viewTexto(item){
@@ -65,5 +68,10 @@
     .col-3.generales 
     {
         margin-left: 0px;
-    }    
+    } 
+
+    .examenes {
+        border: 0.5px solid black;
+    }
+
 </style>
