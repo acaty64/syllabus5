@@ -14,3 +14,12 @@ Route::get('/edit', [
 	'uses'	=> 'SyllabusController@edit'
 ]);
 
+
+Route::get('/index', [
+	'as'	=> 'index',
+	'uses'	=> 'SyllabusController@index'
+]);
+
+
+
+

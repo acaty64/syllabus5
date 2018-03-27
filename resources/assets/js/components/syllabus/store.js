@@ -25,17 +25,17 @@ export const store = new Vuex.Store({
 {'row': 10, 'week': '',  'editing': false, 'tipo': 'sumillas', 'data': [{ 'reg': 36, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'justify', 'texto': 'El curso tiene como propósito integrar las teorías, las técnicas y las herramientas adquiridas en las materias de contabilidad general y administración que le permita llegar al alumno a desarrollar las habilidades de análisis, integración de la información para la construcción de propuestas y soluciones que llevan al logro de los objetivos de la organización. Se pondrá énfasis en el análisis financiero de los estados financieros y su relación con los costos empresariales.', 'offset':1}, ],  },
 {'row': 11, 'week': '',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 82, 'subtipo': 'competencias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'III. SISTEMA DE COMPETENCIAS', 'offset':1}, ],  },
 {'row': 12, 'week': '',  'editing': false, 'tipo': 'titulo2', 'data': [{ 'reg': 37, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS GENERALES', 'offset':1}, ],  },
-{'row': 13, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 10, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.', 'offset':2}, ],  },
-{'row': 14, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 13, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.', 'offset':2}, ],  },
-{'row': 15, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 81, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.', 'offset':2}, ],  },
-{'row': 16, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 41, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Planifica la gestión de la empresa a futuro.', 'offset':2}, ],  },
-{'row': 17, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 77, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Capacidad de trabajo en equipo.', 'offset':2}, ],  },
+{'row': 13, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 10, 'subtipo': 'generales', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.', 'offset':2}, ],  },
+{'row': 14, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 13, 'subtipo': 'generales', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.', 'offset':2}, ],  },
+{'row': 15, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 81, 'subtipo': 'generales', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.', 'offset':2}, ],  },
+{'row': 16, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 41, 'subtipo': 'generales', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Planifica la gestión de la empresa a futuro.', 'offset':2}, ],  },
+{'row': 17, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 77, 'subtipo': 'generales', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Capacidad de trabajo en equipo.', 'offset':2}, ],  },
 {'row': 18, 'week': '',  'editing': false, 'tipo': 'titulo2', 'data': [{ 'reg': 9, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'COMPETENCIAS ESPECÍFICAS', 'offset':1}, ],  },
-{'row': 19, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 84, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.', 'offset':2}, ],  },
-{'row': 20, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 32, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros. ', 'offset':2}, ],  },
-{'row': 21, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 111, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.', 'offset':2}, ],  },
-{'row': 22, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 28, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.', 'offset':2}, ],  },
-{'row': 23, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 27, 'subtipo': '', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.', 'offset':2}, ],  },
+{'row': 19, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 84, 'subtipo': 'especificas', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.', 'offset':2}, ],  },
+{'row': 20, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 32, 'subtipo': 'especificas', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros. ', 'offset':2}, ],  },
+{'row': 21, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 111, 'subtipo': 'especificas', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.', 'offset':2}, ],  },
+{'row': 22, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 28, 'subtipo': 'especificas', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.', 'offset':2}, ],  },
+{'row': 23, 'week': '',  'editing': false, 'tipo': 'competencias', 'data': [{ 'reg': 27, 'subtipo': 'especificas', 'col': 2, 'cols': 7, 'align': 'justify', 'texto': 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.', 'offset':2}, ],  },
 {'row': 24, 'week': '1',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 126, 'subtipo': 'contenidos', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'IV. PROGRAMACIÓN DE CONTENIDOS', 'offset':1}, ],  },
 {'row': 25, 'week': '1.1',  'editing': false, 'tipo': 'unidades', 'data': [{ 'reg': 22, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'center', 'texto': 'UNIDAD I: LA CONTABILIDAD GERENCIAL.', 'offset':1}, ],  },
 
@@ -87,20 +87,30 @@ export const store = new Vuex.Store({
 
         status: 'vista',
 
-        orden: [
-            'titulo0',
-            'titulo1': {
-                'generales',
-                'sumillas',
-                'titulo2': {
-                    'competencias'
-                },
-                'unidades': {
-                    'titulo3',
-                    'contenidos',
-                    'examenes'
-                },
-            }
+
+
+        
+/*
+        {
+            'nivel1': 'titulo0',
+            'nivel1': 'titulo1', 
+                'nivel2':  
+                    'generales',
+                    'sumillas',
+                    'titulo2',
+                        : [
+                        'competencias'
+                    ],
+                    'unidades': [
+                        'titulo3',
+                        'contenidos',
+                        'examenes'
+                    },
+                'estrategias',
+                'evaluaciones',
+                'bibliografias'
+            ],
+*/
         ],
 
 	},
@@ -124,26 +134,26 @@ export const store = new Vuex.Store({
 
         sortLineas(state, tipo){
             var array = state.lineas;
-            var items = array.filter( (linea) => linea.tipo == tipo );            
-console.log('sortLineas items: ', items);
-
+            var rows = array.filter( (linea) => linea.tipo == tipo );            
+console.log('sortLineas rows: ', rows);
+            
             /* sortByWeek  */
-            var rows = items.sort(function (a, b){
-                return (a.week - b.week);
+            var numLinea = rows[0].row;
+            var items = rows.sort(function (a, b){
+                return (a.data[0].texto - b.data[0].texto);
             });
-console.log('sortLineas-1 rows: ', rows);
+console.log('sortLineas-1 items: ', items);
             
             /* Renumber row */
-            var numLinea = rows[0].row;
-            rows.forEach(function (elemento, indice) {
-                rows[indice].row = numLinea++;
+            items.forEach(function (elemento, indice) {
+                items[indice].row = numLinea++;
             });
-console.log('sortLineas-2 rows: ', rows);
+console.log('sortLineas-2 items: ', items);
 
-            /* Reordenar lineas */
+            /* SortByRow */
             state.lineas.sort(function (a, b){
                 return (a.row - b.row);
-            });    
+            });
 
         }
 
