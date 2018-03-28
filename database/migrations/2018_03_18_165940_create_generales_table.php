@@ -16,11 +16,10 @@ class CreateGeneralesTable extends Migration
         Schema::create('generales', function (Blueprint $table) {
             $table->increments('id');
             $table->char('semestre',6);
-            $table->char('cod_curso',6);
-            $table->char('prerequisito', 255);
-            $table->char('creditos', 20);
-            $table->char('horas', 20);
-            $table->char('ciclo', 5);
+            $table->char('texto', 50);
+            $table->char('modelo', 20);
+            $table->char('campo', 20);
+            $table->integer('orden');
             $table->timestamps();
         });
     }

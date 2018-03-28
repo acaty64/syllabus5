@@ -13,13 +13,26 @@ class SyllabusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 /*
         $titulos = Titulo::where('cod_curso', $cod_curso)->orderBy('orden');
         $generales = General::where('cod_curso', $cod_curso)->orderBy('orden');
 */
+
+        /* 'semestre', 'cod_curso', 'tipo', 'texto', 'orden', */
         $titulos = [
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo0', 'subtipo' => '', 'texto' => 'CONTABILIDAD GERENCIAL', 'orden' => 0],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'generales', 'texto' => 'I. DATOS GENERALES', 'orden' => 1],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'sumillas', 'texto' => 'II. SUMILLA', 'orden' => 2],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'competencias', 'texto' => 'III. SISTEMA DE COMPETENCIAS', 'orden' => 3],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'contenidos', 'texto' => 'IV. PROGRAMACIÓN DE CONTENIDOS', 'orden' => 4],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'estrategias', 'texto' => 'V. ESTRATEGIAS METODOLÓGICAS', 'orden' => 5],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'evaluaciones', 'texto' => 'VI. EVALUACIÓN', 'orden' => 6],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo1', 'subtipo' =>'bibliografias', 'texto' => 'VII. BIBLIOGRAFÍA', 'orden' => 7],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo2', 'subtipo' =>'competencias1', 'texto' => 'COMPETENCIAS GENERALES', 'orden' => 1],
+            ['semestre' => '2018-I', 'cod_curso' => '100048', 'tipo' => 'titulo2', 'subtipo' =>'competencias2', 'texto' => 'COMPETENCIAS ESPECÍFICAS', 'orden' => 2],
+/*
             ['tipo' => 'titulo0', 'row' => 0, 'col' => 1, 'cols' => 8, 'align' => 'center', 'texto' => 'CONTABILIDAD GERENCIAL',],
             ['tipo' => 'titulo1', 'row' => 1, 'col' => 1, 'cols' => 8, 'align' => 'left', 'texto' =>   'I. DATOS GENERALES', ],
             ['tipo' => 'titulo1', 'row' => 2, 'col' => 1, 'cols' => 8, 'align' => 'left', 'texto' =>   'II. SUMILLA', ],
@@ -34,12 +47,75 @@ class SyllabusController extends Controller
             ['tipo' => 'titulo1', 'row' => 5, 'col' => 1, 'cols' => 8, 'align' => 'left', 'texto' =>   'V. ESTRATEGIAS METODOLÓGICAS', ],
             ['tipo' => 'titulo1', 'row' => 6, 'col' => 1, 'cols' => 8, 'align' => 'left', 'texto' =>   'VI. EVALUACIÓN', ],
             ['tipo' => 'titulo1', 'row' => 7, 'col' => 1, 'cols' => 8, 'align' => 'left', 'texto' =>   'VII. BIBLIOGRAFÍA', ],
+*/
+        ];
+
+        $request = [
+            'semestre' => '2018-I',
+            'cod_curso' => '100048'
+        ];
+
+        $curso = [
+            'cod_curso' => '100048',
+            'wcurso' => 'CONTABILIDAD GERENCIAL',
+            'ht' => 2,
+            'hp' => 2,
+            'horas' => 4,
+            'creditos' => 4,
+            'prereq' => '100020',
+            'wprereq' => 'Contabilidad General',
+            'ciclo' => 3
         ];
 
         $generales = [
+            [
+                'semestre' => '20181', 
+                'texto' => 'Código: ',
+                'modelo' => 'request',
+                'campo' => 'cod_curso',
+                'orden' => 1,
+            ],
+            [
+                'semestre' => '20181', 
+                'texto' => 'Pre-requisito: ',
+                'modelo' => 'curso',
+                'campo' => 'wprereq',
+                'orden' => 2,
+            ],
+            [
+                'semestre' => '20181', 
+                'texto' => 'Créditos: ',
+                'modelo' => 'curso',
+                'campo' => 'creditos',
+                'orden' => 3,
+            ],
+            [
+                'semestre' => '20181', 
+                'texto' => 'Horas: ',
+                'modelo' => 'curso',
+                'campo' => 'horas',
+                'orden' => 4,
+            ],
+            [
+                'semestre' => '20181', 
+                'texto' => 'Semestre Académico: ',
+                'modelo' => 'request',
+                'campo' => 'semestre',
+                'orden' => 5,
+            ],
+            [
+                'semestre' => '20181', 
+                'texto' => 'Ciclo: ',
+                'modelo' => 'curso',
+                'campo' => 'ciclo',
+                'orden' => 6,
+            ],
+
+
+/*
             ['tipo' => 'generales', 'row' => 1, 'col' => 2, 'cols' => 2, 'align' => 'left', 'texto' => 'Código:', ],
             ['tipo' => 'generales', 'row' => 1, 'col' => 3, 'cols' => 2, 'align' => 'left', 'texto' => '100048', ],
-            ['tipo' => 'generales', 'row' => 2, 'col' => 2, 'cols' => 2, 'align' => 'left', 'texto' => 'Pre‐ Requisito :', ],
+            ['tipo' => 'generales', 'row' => 2, 'col' => 2, 'cols' => 2, 'align' => 'left', 'texto' => 'Pre‐Requisito :', ],
             ['tipo' => 'generales', 'row' => 2, 'col' => 3, 'cols' => 2, 'align' => 'left', 'texto' => 'Contabilidad General', ],
             ['tipo' => 'generales', 'row' => 3, 'col' => 2, 'cols' => 2, 'align' => 'left', 'texto' => 'Créditos :', ],
             ['tipo' => 'generales', 'row' => 3, 'col' => 3, 'cols' => 2, 'align' => 'left', 'texto' => '03', ],
@@ -49,6 +125,7 @@ class SyllabusController extends Controller
             ['tipo' => 'generales', 'row' => 5, 'col' => 3, 'cols' => 2, 'align' => 'left', 'texto' => '2017‐ I', ],
             ['tipo' => 'generales', 'row' => 6, 'col' => 2, 'cols' => 2, 'align' => 'left', 'texto' => 'Ciclo :', ],
             ['tipo' => 'generales', 'row' => 6, 'col' => 3, 'cols' => 2, 'align' => 'left', 'texto' => 'III', ],
+*/
         ];
 
         $sumillas = [
@@ -107,27 +184,126 @@ class SyllabusController extends Controller
 
         $datos = [];
         
+        /* titulo0 */
         $data = 'titulos';
         $tipo = 'titulo0';
         $key = 'tipo';
         $reg = array_search($tipo, array_column($$data, $key));
-        array_push($datos, $$data[$reg]);
 
+        $new_data = [];
+        $new_data['row'] = 0;
+        $new_data['week'] = '';
+        $new_data['editing'] = false;
+        $new_data['tipo'] = $$data[$reg]['tipo'];
+        $new_data['subtipo'] = $$data[$reg]['subtipo'];
+        $new_data['data'] = [
+                'col' => 1,
+                'cols' => 8,
+                'align' => 'center',
+                'texto' => $$data[$reg]['texto']
+            ];
+
+        array_push($datos, $new_data);
+
+
+        /* titulo1 */
         $data = 'titulos';
-        $reg1 = array_filter($$data, function($v, $k) {
-            $key = 'tipo';
-            $val = 'titulo1';
-            return $k == $key && $v == $val;
-        }, ARRAY_FILTER_USE_BOTH);
-dd($reg1);
-        $registros = array_filter($reg1, function($v, $k) {
-            $key = 'row';
-            $val = 1;
-            return $k == $key && $v == $val;
-        }, ARRAY_FILTER_USE_BOTH);
-        array_push($datos, $registros);
+        $data1 = $$data;
+        foreach ($data1 as $key => $value) {
+            $tipo = 'titulo1';
+            if($value['tipo'] != $tipo){
+                unset($data1[$key]);
+            }
+        };
+        foreach ($data1 as $key => $value) {
+            $new_data = [];
+            $new_data['row'] = $data1[$key]['orden'] * 10000;
+            $new_data['week'] = '';
+            $new_data['editing'] = false;
+            $new_data['tipo'] = $data1[$key]['tipo'];
+            $new_data['subtipo'] = $data1[$key]['subtipo'];
+            $new_data['data'] = [
+                    'col' => 1,
+                    'cols' => 8,
+                    'align' => 'left',
+                    'texto' => $$data[$reg]['texto']
+                ];
+            array_push($datos, $new_data);          
+        }
 
-        return $datos;
+        /* titulo2 */
+        foreach ($datos as $key => $value) {
+            $tipo = 'titulo1';
+            if($value['tipo'] == $tipo && $value['subtipo'] == 'competencias'){
+                $llave = $key;
+            }
+        };
+        $row_titulo = $datos[$llave]['row'];
+        
+        $data = 'titulos';
+        $data1 = $$data;
+        foreach ($data1 as $key => $value) {
+            $tipo = 'titulo2';
+            if($value['tipo'] != $tipo){
+                unset($data1[$key]);
+            }
+        };
+        foreach ($data1 as $key => $value) {
+            $new_data = [];
+            $new_data['row'] = $data1[$key]['orden'] * 1000 + $row_titulo;
+            $new_data['week'] = '';
+            $new_data['editing'] = false;
+            $new_data['tipo'] = $data1[$key]['tipo'];
+            $new_data['subtipo'] = $data1[$key]['subtipo'];
+            $new_data['data'] = [
+                    'col' => 1,
+                    'cols' => 8,
+                    'align' => 'left',
+                    'texto' => $$data[$reg]['texto']
+                ];
+            array_push($datos, $new_data);             
+        }
+
+        /* Generalidades */
+        foreach ($datos as $key => $value) {
+            $tipo = 'titulo1';
+            if($value['tipo'] == $tipo && $value['subtipo'] == 'generales'){
+                $llave = $key;
+            }
+        };
+        $row_titulo = $datos[$llave]['row'];
+
+        $data = 'generales';
+        $data1 = $$data;
+        foreach ($data1 as $key => $value) {
+            $modelo = $data1[$key]['modelo'];
+            $campo = $data1[$key]['campo'];
+            $new_data = [];
+            $new_data['row'] = $data1[$key]['orden'] * 1000 + $row_titulo;
+            $new_data['week'] = '';
+            $new_data['editing'] = false;
+            $new_data['tipo'] = $data;
+            $new_data['data'] = [
+                    [
+                        'col' => 2,
+                        'cols' => 2,
+                        'align' => 'left',
+                        'texto' => $$data[$reg]['texto']
+                    ],
+                    [
+                        'col' => 3,
+                        'cols' => 2,
+                        'align' => 'left',
+                        'texto' => $$modelo[$campo]
+                    ],
+                ];
+            array_push($datos, $new_data);          
+        }
+
+        return [
+            'status'=>true,
+            'data'=>$datos
+        ];
         
     }
 

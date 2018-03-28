@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state:{
-        lineas: [
-//
+        lineas: [],
+/*
 {'row': 1, 'week': '',  'editing': false, 'tipo': 'titulo0', 'data': [{ 'reg': 11, 'subtipo': '', 'col': 1, 'cols': 8, 'align': 'center', 'texto': 'CONTABILIDAD GERENCIAL', 'offset':1}, ],  },
 {'row': 2, 'week': '',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 21, 'subtipo': 'generales', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'I. DATOS GENERALES', 'offset':1}, ],  },
 
@@ -71,8 +71,8 @@ export const store = new Vuex.Store({
 {'row': 35, 'week': '',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 6, 'subtipo': 'estrategias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'V. ESTRATEGIAS METODOLÓGICAS', 'offset':1}, ],  },
 {'row': 36, 'week': '',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 75, 'subtipo': 'evaluaciones', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'VI. EVALUACIÓN', 'offset':1}, ],  },
 {'row': 37, 'week': '',  'editing': false, 'tipo': 'titulo1', 'data': [{ 'reg': 102, 'subtipo': 'bibliografias', 'col': 1, 'cols': 8, 'align': 'left', 'texto': 'VII. BIBLIOGRAFÍA', 'offset':1}, ],  },
-//
         ],
+*/
 
         columnas: [
              '10%' ,
@@ -86,9 +86,6 @@ export const store = new Vuex.Store({
         ],
 
         status: 'vista',
-
-
-
         
 /*
         {
@@ -110,10 +107,11 @@ export const store = new Vuex.Store({
                 'evaluaciones',
                 'bibliografias'
             ],
-*/
         ],
+*/
 
 	},
+
 	mutations:{
         view(state, tipo){
             state.status = tipo
@@ -155,7 +153,11 @@ console.log('sortLineas-2 items: ', items);
                 return (a.row - b.row);
             });
 
-        }
+        },
+
+        setLineas(state, lineas){
+            state.lineas = lineas;
+        },
 
 	},
 	getters: {
@@ -189,6 +191,7 @@ console.log('sortLineas-2 items: ', items);
             context.commit('switchEditingContenido', linea);
         },
     },
+
 /*
     sortByWeek(lineas){
         lineas.sort(function (a, b){

@@ -15,7 +15,7 @@ Route::get('/edit', [
 ]);
 
 
-Route::get('/index', [
+Route::post('/index', [
 	'as'	=> 'index',
 	'uses'	=> 'SyllabusController@index'
 ]);

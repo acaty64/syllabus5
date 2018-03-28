@@ -44,10 +44,12 @@
     import evaluaciones from './Evaluaciones';
     import bibliografias from './Bibliografias';
     import {mapState} from 'vuex';
+    import axios from 'axios'
 
     export default {
         mounted() {
-            console.log('SyllabusComponent.vue mounted.')
+            console.log('SyllabusComponent.vue mounted.');
+            this.getData();
         },
         components: {
             vista, generales, sumillas, competencias, contenidos, estrategias, evaluaciones, bibliografias
@@ -56,6 +58,19 @@
         methods:{
             view(tipo){
                 this.$store.commit('view', tipo);
+            },
+            getData: function() {
+                var request = {
+                      'cod_curso': '100048'
+                  };
+                var URLdomain = window.location.host;
+                var protocol = window.location.protocol;
+                var url = protocol+'//'+URLdomain+'/index/';
+                axios.post(url, request).then(response=>{
+                    console.log('response: ',response.data.data);
+                    //this.lineas = response.data.data;
+                    this.$store.commit('setLineas', response.data.data);
+                });
             },
         },
     }
