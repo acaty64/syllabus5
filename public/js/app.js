@@ -44554,6 +44554,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -44575,7 +44576,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         vista: __WEBPACK_IMPORTED_MODULE_0__Vista___default.a, generales: __WEBPACK_IMPORTED_MODULE_1__Generales___default.a, sumillas: __WEBPACK_IMPORTED_MODULE_2__Sumillas___default.a, competencias: __WEBPACK_IMPORTED_MODULE_3__Competencias___default.a, contenidos: __WEBPACK_IMPORTED_MODULE_4__Contenidos___default.a, estrategias: __WEBPACK_IMPORTED_MODULE_5__Estrategias___default.a, evaluaciones: __WEBPACK_IMPORTED_MODULE_6__Evaluaciones___default.a, bibliografias: __WEBPACK_IMPORTED_MODULE_7__Bibliografias___default.a
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_8_vuex__["b" /* mapState */])(['status']),
+    computed: Object(__WEBPACK_IMPORTED_MODULE_8_vuex__["b" /* mapState */])(['status', 'loading']),
     methods: {
         view: function view(tipo) {
             this.$store.commit('view', tipo);
@@ -44594,6 +44595,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log('response: ', response.data.data);
                 //this.lineas = response.data.data;
                 _this.$store.commit('setLineas', response.data.data);
+                _this.$store.commit('sortLineasRow');
+                _this.$store.commit('loaded');
+                //this.loading = false;
+            }).catch(function (error) {
+                console.log(error);
+                //this.loading = false;
+                this.$store.commit('loaded');
             });
         }
     }
@@ -44744,9 +44752,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         // Reemplazar chr(13) con <br>
         //
         viewTexto: function viewTexto(item) {
-            console.log('viewTexto: ', item);
-            var newText = item.texto.replace(/\n/g, '<br>');
+            //console.log('viewTexto typeof(item.texto): ', typeof item.texto );                          
+            var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
+            //return item.texto;
         }
     }
 });
@@ -45039,6 +45048,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -45055,7 +45070,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return state.columnas;
         }
     }), {
-        item: function item() {
+        items: function items() {
             return this.$store.getters.sumillas;
         }
     }),
@@ -45080,20 +45095,6 @@ var render = function() {
   return _c("div", [
     _c("h1", [_vm._v("I. SUMILLA (editable)")]),
     _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-default",
-        attrs: { type: "submit" },
-        on: {
-          click: function($event) {
-            _vm.grabar(_vm.item)
-          }
-        }
-      },
-      [_vm._v("Grabar")]
-    ),
-    _vm._v(" "),
     _c("table", [
       _c(
         "thead",
@@ -45102,35 +45103,65 @@ var render = function() {
         })
       ),
       _vm._v(" "),
-      _c("tbody", [
-        _c("div", { staticClass: "row" }, [
-          _c(
-            "textarea",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.item.texto,
-                  expression: "item.texto"
-                }
-              ],
-              class: _vm.rowclass(_vm.item),
-              attrs: { rows: "6", wrap: "hard", align: _vm.item.align },
-              domProps: { value: _vm.item.texto },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.item, "texto", $event.target.value)
-                }
-              }
-            },
-            [_vm._v(_vm._s(_vm.item.texto))]
-          )
-        ])
-      ])
+      _c(
+        "tbody",
+        [
+          _vm._l(_vm.items, function(fila) {
+            return _c("tr", [
+              _c(
+                "div",
+                { staticClass: "row" },
+                _vm._l(fila.data, function(item) {
+                  return _c("span", [
+                    _c(
+                      "textarea",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: item.texto,
+                            expression: "item.texto"
+                          }
+                        ],
+                        class: _vm.rowclass(item),
+                        attrs: { rows: "6", wrap: "hard", align: item.align },
+                        domProps: { value: item.texto },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(item, "texto", $event.target.value)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(item.texto))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default",
+                        attrs: { type: "submit" },
+                        on: {
+                          click: function($event) {
+                            _vm.grabar(item)
+                          }
+                        }
+                      },
+                      [_vm._v("Grabar")]
+                    )
+                  ])
+                })
+              )
+            ])
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" })
+        ],
+        2
+      )
     ])
   ])
 }
@@ -45811,6 +45842,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", [
+    _vm.loading
+      ? _c("img", { attrs: { src: "/images/if_Loading_throbber_103105.png" } })
+      : _vm._e(),
+    _vm._v(" "),
     _c(
       "button",
       {
@@ -46041,7 +46076,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
         columnas: ['10%', '15%', '15%', '10%', '15%', '10%', '15%', '10%'],
 
-        status: 'vista'
+        status: 'vista',
+        loading: true
 
         /*
                 {
@@ -46085,25 +46121,33 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i] = linea;
         },
-        sortLineas: function sortLineas(state, tipo) {
+        sortLineasRow: function sortLineasRow(state) {
+            //var array = state.lineas;
+            /* sortByRow  */
+            //var items = rows.sort(function (a, b){
+            state.lineas.sort(function (a, b) {
+                return a.row - b.row;
+            });
+        },
+        sortLineasWeek: function sortLineasWeek(state, tipo) {
             var array = state.lineas;
             var rows = array.filter(function (linea) {
                 return linea.tipo == tipo;
             });
-            console.log('sortLineas rows: ', rows);
+            console.log('sortLineasWeek rows: ', rows);
 
             /* sortByWeek  */
             var numLinea = rows[0].row;
             var items = rows.sort(function (a, b) {
                 return a.data[0].texto - b.data[0].texto;
             });
-            console.log('sortLineas-1 items: ', items);
+            console.log('sortLineasWeek-1 items: ', items);
 
             /* Renumber row */
             items.forEach(function (elemento, indice) {
                 items[indice].row = numLinea++;
             });
-            console.log('sortLineas-2 items: ', items);
+            console.log('sortLineasWeek-2 items: ', items);
 
             /* SortByRow */
             state.lineas.sort(function (a, b) {
@@ -46112,6 +46156,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         setLineas: function setLineas(state, lineas) {
             state.lineas = lineas;
+        },
+        loaded: function loaded(state) {
+            state.loading = false;
         }
     },
     getters: {
@@ -46127,7 +46174,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var item = array.filter(function (linea) {
                 return linea.tipo == 'sumillas';
             });
-            return item[0].data[0];
+            return item;
         },
         contenidos: function contenidos(state) {
             var array = state.lineas;
@@ -46147,9 +46194,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         grabarContenido: function grabarContenido(context, linea) {
             context.commit('saveLinea', linea);
-            context.commit('sortLineas', 'contenidos');
+            context.commit('sortLineasWeek', 'contenidos');
             context.commit('switchEditingContenido', linea);
+        },
+        loaded: function loaded(context) {
+            context.commit('loaded');
         }
+
     }
 
     /*

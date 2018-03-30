@@ -40,9 +40,10 @@
             // Reemplazar chr(13) con <br>
             //
             viewTexto(item){
-console.log('viewTexto: ',item);                            
-                var newText = item.texto.replace(/\n/g, '<br>');
+//console.log('viewTexto typeof(item.texto): ', typeof item.texto );                          
+                var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
+//return item.texto;
             },
         }    
     }

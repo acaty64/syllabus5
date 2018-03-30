@@ -1,5 +1,6 @@
 <template>
     <main>
+        <img src="/images/if_Loading_throbber_103105.png" v-if="loading" />
         <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
         <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
         <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
@@ -54,7 +55,7 @@
         components: {
             vista, generales, sumillas, competencias, contenidos, estrategias, evaluaciones, bibliografias
         },
-        computed: mapState(['status']),
+        computed: mapState(['status', 'loading']),
         methods:{
             view(tipo){
                 this.$store.commit('view', tipo);
@@ -70,6 +71,13 @@
                     console.log('response: ',response.data.data);
                     //this.lineas = response.data.data;
                     this.$store.commit('setLineas', response.data.data);
+                    this.$store.commit('sortLineasRow');
+                    this.$store.commit('loaded');
+                    //this.loading = false;
+                }).catch(function (error) {
+                    console.log(error);
+                    //this.loading = false;
+                    this.$store.commit('loaded');
                 });
             },
         },

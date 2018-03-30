@@ -3,7 +3,7 @@
 use App\Titulo;
 use Illuminate\Database\Seeder;
 
-class TitulosTablesSeeder extends Seeder
+class TitulosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

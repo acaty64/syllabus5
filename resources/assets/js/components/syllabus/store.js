@@ -86,6 +86,8 @@ export const store = new Vuex.Store({
         ],
 
         status: 'vista',
+        loading: true,
+
         
 /*
         {
@@ -130,23 +132,33 @@ export const store = new Vuex.Store({
             state.lineas[i] = linea;
         },
 
-        sortLineas(state, tipo){
+        sortLineasRow(state){
+            //var array = state.lineas;
+            /* sortByRow  */
+            //var items = rows.sort(function (a, b){
+            state.lineas.sort(function (a, b){
+                return (a.row - b.row);
+            });
+
+        },
+
+        sortLineasWeek(state, tipo){
             var array = state.lineas;
             var rows = array.filter( (linea) => linea.tipo == tipo );            
-console.log('sortLineas rows: ', rows);
+console.log('sortLineasWeek rows: ', rows);
             
             /* sortByWeek  */
             var numLinea = rows[0].row;
             var items = rows.sort(function (a, b){
                 return (a.data[0].texto - b.data[0].texto);
             });
-console.log('sortLineas-1 items: ', items);
+console.log('sortLineasWeek-1 items: ', items);
             
             /* Renumber row */
             items.forEach(function (elemento, indice) {
                 items[indice].row = numLinea++;
             });
-console.log('sortLineas-2 items: ', items);
+console.log('sortLineasWeek-2 items: ', items);
 
             /* SortByRow */
             state.lineas.sort(function (a, b){
@@ -159,6 +171,10 @@ console.log('sortLineas-2 items: ', items);
             state.lineas = lineas;
         },
 
+        loaded(state){
+            state.loading = false;
+        },
+
 	},
 	getters: {
         generales: (state) => {
@@ -169,7 +185,7 @@ console.log('sortLineas-2 items: ', items);
         sumillas: (state) => {
             var array = state.lineas;
             var item = array.filter( (linea) => linea.tipo == 'sumillas' );
-            return item[0].data[0];
+            return item;
         },
         contenidos: (state) => {
             var array = state.lineas;
@@ -187,9 +203,13 @@ console.log('sortLineas-2 items: ', items);
         },
         grabarContenido: (context, linea) => {
             context.commit('saveLinea', linea);
-            context.commit('sortLineas', 'contenidos');
+            context.commit('sortLineasWeek', 'contenidos');
             context.commit('switchEditingContenido', linea);
         },
+        loaded: (context) => {
+            context.commit('loaded');
+        },
+
     },
 
 /*

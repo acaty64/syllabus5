@@ -3,7 +3,7 @@
 use App\General;
 use Illuminate\Database\Seeder;
 
-class GeneralesTablesSeeder extends Seeder
+class GeneralesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
