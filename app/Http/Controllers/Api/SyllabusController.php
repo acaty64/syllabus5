@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Curso;
 use App\General;
 use App\Http\Controllers\Controller;
+use App\Sumilla;
 use App\Titulo;
 use Illuminate\Http\Request;
 
@@ -37,9 +38,9 @@ class SyllabusController extends Controller
         $generales = General::all()->where('semestre', $request->semestre)
             ->sortBy('orden')->toArray();
 
-        $sumillas = [
-            ['tipo' => 'sumillas', 'orden' => 1 , 'texto' => 'El curso tiene como propósito integrar las teorías, las técnicas y las herramientas adquiridas en las materias de contabilidad general y administración que le permita llegar al alumno a desarrollar las habilidades de análisis, integración de la información para la construcción de propuestas y soluciones que llevan al logro de los objetivos de la organización. Se pondrá énfasis en el análisis financiero de los estados financieros y su relación con los costos empresariales.']
-        ];
+        $sumillas = Sumilla::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
 
         $unidades = [
             [
