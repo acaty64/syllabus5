@@ -15,7 +15,6 @@ class CreateBibliografiasTable extends Migration
     {
         Schema::create('bibliografias', function (Blueprint $table) {
             $table->increments('id');
-            $table->increments('id');
             $table->char('semestre',6);
             $table->char('cod_curso',6);
             $table->char('tipo',3);

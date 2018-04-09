@@ -62,11 +62,12 @@
             },
             getData: function() {
                 var request = {
-                      'cod_curso': '100048'
+                      'cod_curso': '100048',
+                      'semestre' : '20181'
                   };
                 var URLdomain = window.location.host;
                 var protocol = window.location.protocol;
-                var url = protocol+'//'+URLdomain+'/index/';
+                var url = protocol+'//'+URLdomain+'/api/index/';
                 axios.post(url, request).then(response=>{
                     console.log('response: ',response.data.data);
                     //this.lineas = response.data.data;

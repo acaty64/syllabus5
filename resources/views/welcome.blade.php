@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Syllabus</title>
+        <title>Syllabus5</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -83,8 +83,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="http://syllabus.test/show">Visualizar</a>
-                    <a href="http://syllabus.test/edit">Edit</a>
+                    <a href="http://syllabus5.test/show">Visualizar</a>
+                    <a href="http://syllabus5.test/edit">Edit</a>
                 </div>
             </div>
         </div>

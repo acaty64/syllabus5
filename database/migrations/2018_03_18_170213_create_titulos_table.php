@@ -16,7 +16,6 @@ class CreateTitulosTable extends Migration
         Schema::create('titulos', function (Blueprint $table) {
             $table->increments('id');
             $table->char('semestre',6);
-            $table->char('cod_curso',6);
             $table->char('tipo',3);
             $table->char('subtipo',20);
             $table->char('texto', 100);

@@ -44586,11 +44586,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var request = {
-                'cod_curso': '100048'
+                'cod_curso': '100048',
+                'semestre': '20181'
             };
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
-            var url = protocol + '//' + URLdomain + '/index/';
+            var url = protocol + '//' + URLdomain + '/api/index/';
             __WEBPACK_IMPORTED_MODULE_9_axios___default.a.post(url, request).then(function (response) {
                 console.log('response: ', response.data.data);
                 //this.lineas = response.data.data;

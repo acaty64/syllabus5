@@ -14,42 +14,42 @@ class GeneralesTableSeeder extends Seeder
     {
         General::create([
             'semestre' => '20181', 
-            'texto' => 'Código: '
+            'texto' => 'Código: ',
             'modelo' => 'request',
             'campo' => 'cod_curso',
             'orden' => 1,
         ]);
         General::create([
             'semestre' => '20181', 
-            'texto' => 'Pre-requisito: '
+            'texto' => 'Pre-requisito: ',
             'modelo' => 'curso',
             'campo' => 'wprereq',
             'orden' => 2,
         ]);
         General::create([
             'semestre' => '20181', 
-            'texto' => 'Créditos: '
+            'texto' => 'Créditos: ',
             'modelo' => 'curso',
             'campo' => 'creditos',
             'orden' => 3,
         ]);
         General::create([
             'semestre' => '20181', 
-            'texto' => 'Horas: '
+            'texto' => 'Horas: ',
             'modelo' => 'curso',
             'campo' => 'horas',
             'orden' => 4,
         ]);
         General::create([
             'semestre' => '20181', 
-            'texto' => 'Semestre Académico: '
+            'texto' => 'Semestre Académico: ',
             'modelo' => 'request',
             'campo' => 'semestre',
             'orden' => 5,
         ]);
     	General::create([
 			'semestre' => '20181', 
-            'texto' => 'Ciclo: '
+            'texto' => 'Ciclo: ',
 			'modelo' => 'curso',
 			'campo' => 'ciclo',
 			'orden' => 6,

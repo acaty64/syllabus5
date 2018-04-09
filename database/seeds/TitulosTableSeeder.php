@@ -14,7 +14,6 @@ class TitulosTableSeeder extends Seeder
     {
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'generales', 
 			'texto' => 'I. DATOS GENERALES',
@@ -23,7 +22,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'sumillas', 
 			'texto' => 'II. SUMILLA',
@@ -32,7 +30,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'competencias', 
 			'texto' => 'III. SISTEMA DE COMPETENCIAS',
@@ -41,7 +38,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
 			'texto' => 'COMPETENCIAS GENERALES',
@@ -50,7 +46,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
 			'texto' => 'COMPETENCIAS ESPECÍFICAS',
@@ -59,7 +54,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'contenidos', 
 			'texto' => 'IV. PROGRAMACIÓN DE CONTENIDOS',
@@ -68,7 +62,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'SEMANA',
@@ -77,7 +70,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'CONCEPTUAL' ,
@@ -86,7 +78,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'PROCEDIMENTAL',
@@ -95,7 +86,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'ACTIVIDAD DE APRENDIZAJE',
@@ -104,7 +94,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'estrategias', 
 			'texto' => 'V. ESTRATEGIAS METODOLÓGICAS',
@@ -113,7 +102,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'evaluaciones', 
 			'texto' => 'VI. EVALUACIÓN',
@@ -122,7 +110,6 @@ class TitulosTableSeeder extends Seeder
 
     	Titulo::create([
 			'semestre' => '20181', 
-			'cod_curso' => '100048', 
 			'tipo' => '1',
 			'subtipo' => 'bibliografia', 
 			'texto' => 'VII. BIBLIOGRAFÍA',

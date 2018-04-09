@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Route::resource('syllabus', 'Api\SyllabusController');
+
+
+Route::post('/index', [
+	'as'	=> 'index',
+	'uses'	=> 'Api\SyllabusController@index'
+]);
