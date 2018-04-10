@@ -40,6 +40,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
+			'item' => '1',
 			'texto' => 'COMPETENCIAS GENERALES',
 			'orden' => 4,
 		]);
@@ -48,6 +49,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
+			'item' => '2',
 			'texto' => 'COMPETENCIAS ESPECÍFICAS',
 			'orden' => 5,
 		]);

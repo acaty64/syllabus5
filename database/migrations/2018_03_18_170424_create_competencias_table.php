@@ -17,7 +17,7 @@ class CreateCompetenciasTable extends Migration
             $table->increments('id');
             $table->char('semestre',6);
             $table->char('cod_curso',6);
-            $table->char('tipo',3);
+            $table->char('item',1);
             $table->mediumText('texto');
             $table->integer('orden');
             $table->timestamps();

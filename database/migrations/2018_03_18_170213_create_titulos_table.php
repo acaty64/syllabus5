@@ -18,6 +18,7 @@ class CreateTitulosTable extends Migration
             $table->char('semestre',6);
             $table->char('tipo',3);
             $table->char('subtipo',20);
+            $table->char('item',1)->default('0');
             $table->char('texto', 100);
             $table->integer('orden');
             $table->timestamps();
