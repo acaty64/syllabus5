@@ -54,7 +54,7 @@ class EvaluacionesTableSeeder extends Seeder
             'semana' => 0,
             'tipo' => '2',
             'texto' => 'Evaluacion Continua',
-            'porcentaje' => 30,
+            'porcentaje' => 20,
             'orden' => 5,
         ]);
     }

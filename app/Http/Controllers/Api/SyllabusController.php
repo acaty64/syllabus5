@@ -62,29 +62,6 @@ class SyllabusController extends Controller
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 
-/*
-        $evaluaciones = [
-            [
-                'id'    => 1,
-                'semestre' => '20181', 
-                'cod_curso' => '100048', 
-                'semana' => 1,
-                'texto' => 'Primer Examen Parcial',
-                'porcentaje' => 10,
-                'orden' => 1,                
-            ],
-            [
-                'id'    => 1,
-                'semestre' => '20181', 
-                'cod_curso' => '100048', 
-                'semana' => 8,
-                'texto' => 'Segundo Examen Parcial',
-                'porcentaje' => 10,
-                'orden' => 1,                
-            ],
-        ];
-*/
-
         /************************* GENERACIÓN DE DATOS UNO A UNO  **********************/
 
         $datos = [];
@@ -354,6 +331,47 @@ class SyllabusController extends Controller
 
         /* Estrategias */
         /* Evaluaciones */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'evaluaciones');
+        $row_titulo = $collection->first()['row'];        
+
+        $collection = collect($evaluaciones);
+
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'evaluaciones';
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
+            //$new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [
+                [
+                    'col' => 2,
+                    'cols' => 2,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['texto'],
+                ],
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['porcentaje'] . '%',
+                ],
+                [
+                    'col' => 1,
+                    'cols' => 2,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => ($collection[$key]['tipo'] == '1' ?
+                                'semana ' . $collection[$key]['semana'] : '' ),
+                ],
+
+            ];
+            array_push($datos, $new_data); 
+        }         
         /* Bibliografia */
 
 
