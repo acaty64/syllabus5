@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Competencia;
+use App\Contenido;
 use App\Curso;
 use App\General;
 use App\Http\Controllers\Controller;
@@ -51,26 +52,32 @@ class SyllabusController extends Controller
         $unidades = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
-/*
-        $unidades = [
+
+        $contenidos = Contenido::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+        $evaluaciones = [
             [
+                'id'    => 1,
                 'semestre' => '20181', 
                 'cod_curso' => '100048', 
                 'semana' => 1,
-                'texto' => 'LA CONTABILIDAD GERENCIAL.',
-                'logro' => '',
-                'orden' => 1,
+                'texto' => 'Primer Examen Parcial',
+                'porcentaje' => 10,
+                'orden' => 1,                
             ],
             [
+                'id'    => 1,
                 'semestre' => '20181', 
                 'cod_curso' => '100048', 
-                'semana' => 6,
-                'texto' => 'ANALISIS E INTERPRETACION DE LOS ESTADOS FINANCIEROS.',
-                'logro' => '',
-                'orden' => 2,
+                'semana' => 8,
+                'texto' => 'Segundo Examen Parcial',
+                'porcentaje' => 10,
+                'orden' => 1,                
             ],
         ];
-*/
+
 
         /************************* GENERACIÓN DE DATOS UNO A UNO  **********************/
 
@@ -81,7 +88,7 @@ class SyllabusController extends Controller
         $new_data = [];
         $new_data['id'] = 0; 
         $new_data['row'] = 0;
-        $new_data['week'] = '';
+        //$new_data['week'] = '';
         $new_data['editing'] = false;
         $new_data['tipo'] = 'titulo0';
         $new_data['subtipo'] = '';
@@ -104,7 +111,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['row'] = $collection[$key]['orden'] * 10000;
-            $new_data['week'] = '';
+            //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $collection[$key]['tipo'];
             $new_data['subtipo'] = $collection[$key]['subtipo'];
@@ -132,7 +139,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
-            $new_data['week'] = '';
+            //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $collection[$key]['tipo'];
             $new_data['subtipo'] = $collection[$key]['subtipo'];
@@ -163,7 +170,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $data1[$key]['id'];
             $new_data['row'] = $data1[$key]['orden'] * 1000 + $row_titulo;
-            $new_data['week'] = '';
+            //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $data;
             $new_data['data'] = [
@@ -197,7 +204,7 @@ class SyllabusController extends Controller
         $new_data = [];
         $new_data['id'] = $data1[0]['id'];
         $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
-        $new_data['week'] = '';
+        //$new_data['week'] = '';
         $new_data['editing'] = false;
         $new_data['tipo'] = $data;
         $new_data['data'] = [
@@ -221,7 +228,7 @@ class SyllabusController extends Controller
                 $new_data = [];
                 $new_data['id'] = $collection[$key2]['id'];
                 $new_data['row'] = $collection[$key2]['orden'] * 100 + $row_titulo;
-                $new_data['week'] = '';
+                //$new_data['week'] = '';
                 $new_data['editing'] = false;
                 $new_data['item'] = $collection[$key2]['item'];
                 $new_data['data'] = [
@@ -248,7 +255,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'unidades';
-            $new_data['row'] = $collection[$key]['orden'] * 100 + $row_titulo;
+            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
             $new_data['semana'] = $collection[$key]['semana'];
             $new_data['logro'] = $collection[$key]['logro'];
             $new_data['editing'] = true;
@@ -266,6 +273,83 @@ class SyllabusController extends Controller
         }
 
         /* contenidos  */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'contenidos');
+        $row_titulo = $collection->first()['row'];
+
+        $collection = collect($contenidos);
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'contenidos';
+            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 10;
+            $new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'center',
+                    'texto' => $collection[$key]['semana'],
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 3,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['concepto'],
+                ],
+                [
+                    'col' => 4,
+                    'cols' => 2,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['procedimiento'],
+                ],
+                [
+                    'col' => 6,
+                    'cols' => 2,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['actividad'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+        }        
+
+        /* examenes */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'contenidos');
+        $row_titulo = $collection->first()['row'];        
+
+        $collection = collect($evaluaciones);
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'examenes';
+            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 99;
+            $new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [
+                [
+                    'col' => 2,
+                    'cols' => 7,
+                    'offset' => 2,
+                    'align' => 'center',
+                    'texto' => $collection[$key]['texto'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+        }           
+
+        /* Estrategias */
+        /* Evaluaciones */
+        /* Bibliografia */
+
+
 
 
         return [

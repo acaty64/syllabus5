@@ -45430,8 +45430,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.$store.dispatch('grabarContenido', linea);
         },
         viewTexto: function viewTexto(item) {
-            var newText = item.texto.replace(/\n/g, '<br>');
+            var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
+            //var newText = item.texto.replace(/\n/g, '<br>');
+            //return newText;
         }
     }
 });

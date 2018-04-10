@@ -17,8 +17,10 @@ class CreateEvaluacionesTable extends Migration
             $table->increments('id');
             $table->char('semestre',6);
             $table->char('cod_curso',6);
+            $table->integer('semana');
             $table->char('tipo',3);
             $table->mediumText('texto');
+            $table->integer('porcentaje');
             $table->integer('orden');
             $table->timestamps();
         });

@@ -21,7 +21,7 @@ class CreateContenidosTable extends Migration
             $table->mediumText('concepto');
             $table->mediumText('procedimiento');
             $table->mediumText('actividad');
-            $table->integer('orden');
+            $table->integer('orden')->nullable();
             $table->timestamps();
         });
     }

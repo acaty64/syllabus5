@@ -56,8 +56,10 @@
                 this.$store.dispatch('grabarContenido', linea);
             },
             viewTexto(item){
-                var newText = item.texto.replace(/\n/g, '<br>');
+                var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
+                //var newText = item.texto.replace(/\n/g, '<br>');
+                //return newText;
             },
         } 
     }
