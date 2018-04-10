@@ -8,6 +8,7 @@ use App\General;
 use App\Http\Controllers\Controller;
 use App\Sumilla;
 use App\Titulo;
+use App\Unidad;
 use Illuminate\Http\Request;
 
 class SyllabusController extends Controller
@@ -46,91 +47,11 @@ class SyllabusController extends Controller
         $competencias = Competencia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
-//return $competencias;
+
+        $unidades = Unidad::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
 /*
-        $competencias = [
-            [
-                'id' => 1,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 1,
-                'item' => '1', 
-                'texto' => 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.',
-            ],
-            [
-                'id' => 2,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 2,
-                'item' => '1', 
-                'texto' =>  'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.',
-            ],
-            [
-                'id' => 3,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 3,
-                'item' => '1', 
-                'texto' => 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.',
-            ],
-            [
-                'id' => 4,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 4,
-                'item' => '1',
-                'texto' => 'Planifica la gestión de la empresa a futuro.',
-            ],
-            [
-                'id' => 5,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 5,
-                'item' => '1', 
-                'texto' => 'Capacidad de trabajo en equipo.',
-            ],
-            [
-                'id' => 6,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 1,
-                'item' => '2', 
-                'texto' => 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.'
-            ],
-            [
-                'id' => 7,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 2,
-                'item' => '2', 
-                'texto' => 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros. '
-            ],
-            [
-                'id' => 8,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 3,
-                'item' => '2', 
-                'texto' => 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.'
-            ],
-            [
-                'id' => 9,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 4,
-                'item' => '2', 
-                'texto' => 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.'
-            ],
-            [
-                'id' => 10,
-                'semestre' => '20181', 
-                'cod_curso' => '100048',
-                'orden' => 5,
-                'item' => '2',
-                'texto' => 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.'
-            ],
-        ];
-*/
         $unidades = [
             [
                 'semestre' => '20181', 
@@ -149,7 +70,7 @@ class SyllabusController extends Controller
                 'orden' => 2,
             ],
         ];
-
+*/
 
         /************************* GENERACIÓN DE DATOS UNO A UNO  **********************/
 
@@ -264,7 +185,6 @@ class SyllabusController extends Controller
             array_push($datos, $new_data);          
         }
 
-
         /* Sumillas */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -293,8 +213,6 @@ class SyllabusController extends Controller
 
         /* Competencias */
         $collect_items = collect($datos)->where('tipo', 'titulo2');
-
-
         foreach ($collect_items as $key1 => $value1) {
             $row_titulo = $collect_items[$key1]['row'];
             $xitem = $collect_items[$key1]['item'];
@@ -318,10 +236,36 @@ class SyllabusController extends Controller
                 array_push($datos, $new_data); 
             }
         }
-        
+
         /* unidades */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'contenidos');
+        $row_titulo = $collection->first()['row'];
 
+        $collection = collect($unidades);
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'unidades';
+            $new_data['row'] = $collection[$key]['orden'] * 100 + $row_titulo;
+            $new_data['semana'] = $collection[$key]['semana'];
+            $new_data['logro'] = $collection[$key]['logro'];
+            $new_data['editing'] = true;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 8,
+                    'offset' => 1,
+                    'align' => 'center',
+                    'texto' => $collection[$key]['texto'],
+                    'logro' => $collection[$key]['logro']
+                ],
+            ];
+            array_push($datos, $new_data); 
+        }
 
+        /* contenidos  */
 
 
         return [
