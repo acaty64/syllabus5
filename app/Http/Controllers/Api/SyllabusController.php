@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Competencia;
 use App\Contenido;
 use App\Curso;
+use App\Evaluacion;
 use App\General;
 use App\Http\Controllers\Controller;
 use App\Sumilla;
@@ -57,6 +58,11 @@ class SyllabusController extends Controller
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 
+        $evaluaciones = Evaluacion::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+/*
         $evaluaciones = [
             [
                 'id'    => 1,
@@ -77,7 +83,7 @@ class SyllabusController extends Controller
                 'orden' => 1,                
             ],
         ];
-
+*/
 
         /************************* GENERACIÓN DE DATOS UNO A UNO  **********************/
 
@@ -325,7 +331,8 @@ class SyllabusController extends Controller
                     ->where('subtipo', 'contenidos');
         $row_titulo = $collection->first()['row'];        
 
-        $collection = collect($evaluaciones);
+        $collection = collect($evaluaciones)->where('tipo','1');
+
         foreach ($collection as $key => $value) {
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
