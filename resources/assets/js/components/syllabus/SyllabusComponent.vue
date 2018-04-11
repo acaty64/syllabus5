@@ -94,6 +94,7 @@
     .titulo1 {
         font-size: 15px;
         font-weight: bold;
+        margin-top: 20px;
     }
     .unidades {
         border: 1px solid black;
@@ -101,7 +102,7 @@
 
     .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
     .col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,
-    .col-3.generales 
+    .col-3.generales, .col-2.bibliografias
     {
         margin-left: 0px;
     }

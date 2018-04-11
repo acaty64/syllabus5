@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bibliografia;
 use App\Competencia;
 use App\Contenido;
 use App\Curso;
@@ -64,6 +65,10 @@ class SyllabusController extends Controller
                     ->toArray();
 
         $estrategias = Estrategia::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+        $bibliografias = Bibliografia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 
@@ -426,8 +431,116 @@ class SyllabusController extends Controller
             array_push($datos, $new_data); 
         }         
         /* Bibliografia */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'bibliografia');
+        $row_titulo = $collection->first()['row'];        
 
+        $collection = collect($bibliografias);
 
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'bibliografias';
+
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 1;
+            //$new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => $collection[$key]['orden'],
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 6,
+                    'offset' => 1,
+                    'align' => 'left',
+                    'texto' => 'Autor(es): ' . $collection[$key]['autor'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 2;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => '',
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 8,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => 'Título: ' . $collection[$key]['titulo'],
+                ],
+            ];
+            array_push($datos, $new_data);
+
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 3;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => '',
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 8,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => 'Editorial: ' . $collection[$key]['editorial'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+           
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 4;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => '',
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 4,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => 'Año: ' . $collection[$key]['year'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+           
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 5;
+            $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => '',
+                ],
+                [
+                    'col' => 2,
+                    'cols' => 6,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => 'Ubicación: ' . $collection[$key]['codigo'],
+                ],
+            ];
+            array_push($datos, $new_data); 
+
+        }
 
 
         return [

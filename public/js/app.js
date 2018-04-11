@@ -44455,7 +44455,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
+exports.push([module.i, "\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n    margin-top: 20px;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales, .col-2.bibliografias\n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
 
 // exports
 
@@ -44694,7 +44694,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n#viewTexto {\n    white-space: pre-wrap;\n}\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
+exports.push([module.i, "\n#viewTexto {\n    white-space: pre-wrap;\n}\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales,  .col-2.bibliografias\n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
 
 // exports
 
