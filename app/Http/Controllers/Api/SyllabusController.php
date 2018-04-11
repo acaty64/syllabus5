@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Competencia;
 use App\Contenido;
 use App\Curso;
+use App\Estrategia;
 use App\Evaluacion;
 use App\General;
 use App\Http\Controllers\Controller;
@@ -59,6 +60,10 @@ class SyllabusController extends Controller
                     ->toArray();
 
         $evaluaciones = Evaluacion::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+        $estrategias = Estrategia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 
@@ -252,7 +257,28 @@ class SyllabusController extends Controller
                     'logro' => $collection[$key]['logro']
                 ],
             ];
-            array_push($datos, $new_data); 
+            array_push($datos, $new_data);
+
+            /* Agrega titulo3 */
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'titulo3';
+            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 1;
+            $new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [];
+            $titulo3 = collect($titulos)->where('tipo','titulo3')->sortBy('orden');
+            foreach ($titulo3 as $key2 => $value2) {
+                $new_data_col = [
+                    'col' => $titulo3[$key2]['col'],
+                    'cols' =>  $titulo3[$key2]['columns'],
+                    'offset' => 1,
+                    'align' => 'center',
+                    'texto' => $titulo3[$key2]['texto'],
+                ];
+                array_push($new_data['data'], $new_data_col);                 
+            }
+            array_push($datos, $new_data);
         }
 
         /* contenidos  */
@@ -330,6 +356,33 @@ class SyllabusController extends Controller
         }           
 
         /* Estrategias */
+        /* Sumillas */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'estrategias');
+        $row_titulo = $collection->first()['row']; 
+
+        $data = 'estrategias';
+        $data1 = $$data;
+
+        $new_data = [];
+        $new_data['id'] = $data1[0]['id'];
+        $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+        //$new_data['week'] = '';
+        $new_data['editing'] = false;
+        $new_data['tipo'] = $data;
+        $new_data['data'] = [
+                [
+                    'col' => 1,
+                    'cols' => 8,
+                    'offset' => 2,
+                    'align' => 'justify',
+                    'texto' => $$data[0]['texto']
+                ],
+        ];
+        array_push($datos, $new_data);
+
+
         /* Evaluaciones */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')

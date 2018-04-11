@@ -21,6 +21,8 @@ class CreateTitulosTable extends Migration
             $table->char('item',1)->default('0');
             $table->char('texto', 100);
             $table->integer('orden');
+            $table->integer('col')->nullable();
+            $table->integer('columns')->nullable();
             $table->timestamps();
         });
     }

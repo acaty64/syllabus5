@@ -67,7 +67,9 @@ class TitulosTableSeeder extends Seeder
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'SEMANA',
-			'orden' => 7,
+			'orden' => 1,
+			'col' => 1,
+			'columns' => 1,
 		]);
 
     	Titulo::create([
@@ -75,7 +77,9 @@ class TitulosTableSeeder extends Seeder
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'CONCEPTUAL' ,
-			'orden' => 8,
+			'orden' => 2,
+			'col' => 2,
+			'columns' => 3,
 		]);
 
     	Titulo::create([
@@ -83,7 +87,9 @@ class TitulosTableSeeder extends Seeder
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'PROCEDIMENTAL',
-			'orden' => 9,
+			'orden' => 3,
+			'col' => 4,
+			'columns' => 2,
 		]);
 
     	Titulo::create([
@@ -91,7 +97,9 @@ class TitulosTableSeeder extends Seeder
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'ACTIVIDAD DE APRENDIZAJE',
-			'orden' => 10,
+			'orden' => 4,
+			'col' => 6,
+			'columns' => 2,
 		]);
 
     	Titulo::create([
