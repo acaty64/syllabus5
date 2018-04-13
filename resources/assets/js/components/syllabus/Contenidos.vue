@@ -52,7 +52,12 @@
                 this.$store.dispatch('editarContenido', linea);
             },            
             grabar(linea) {
-                linea.week = linea.data[0].texto + 0.5;
+                //linea.week = linea.data[0].texto + 0.5;
+                var rowUnidades = lineas.filter(function (linea) {
+                    return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
+                });
+                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
+console.log('rowTitulo1: ', rowTitulo1);
                 this.$store.dispatch('grabarContenido', linea);
             },
             viewTexto(item){

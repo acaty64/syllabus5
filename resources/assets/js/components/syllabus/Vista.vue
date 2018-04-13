@@ -39,11 +39,9 @@
             //
             // Reemplazar chr(13) con <br>
             //
-            viewTexto(item){
-//console.log('viewTexto typeof(item.texto): ', typeof item.texto );                          
+            viewTexto(item){                         
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
-//return item.texto;
             },
         }    
     }
@@ -54,7 +52,7 @@
     #viewTexto {
         white-space: pre-wrap;
     }
-
+/*
     .titulo0 {
         font-size: 25px;
         font-weight: bold;
@@ -77,5 +75,5 @@
     .examenes {
         border: 0.5px solid black;
     }
-
+*/
 </style>
