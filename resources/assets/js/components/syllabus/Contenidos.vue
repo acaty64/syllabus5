@@ -52,13 +52,23 @@
                 this.$store.dispatch('editarContenido', linea);
             },            
             grabar(linea) {
-                //linea.week = linea.data[0].texto + 0.5;
-                var rowUnidades = lineas.filter(function (linea) {
-                    return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
-                });
-                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-console.log('rowTitulo1: ', rowTitulo1);
-                this.$store.dispatch('grabarContenido', linea);
+console.log('linea antes: ', linea);
+                var week = linea.data[0].texto;
+                if(!isNaN(week)){                
+                    var week = parseInt(linea.data[0].texto);
+                    //linea.week = linea.data[0].texto + 0.5;
+                    var rowUnidades = this.lineas.filter(function (linea) {
+                        return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
+                    });
+                    var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
+    //console.log('rowTitulo1: ', rowTitulo1);
+                    var row = rowTitulo1 + (week * 100) + 10;
+                    linea.row = row ; 
+console.log('linea despues: ', linea);
+                    this.$store.dispatch('grabarContenido', linea);
+                }else{
+                    alert('La semana debe ser un número entero.');
+                }
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');

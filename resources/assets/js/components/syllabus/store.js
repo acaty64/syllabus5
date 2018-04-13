@@ -52,19 +52,20 @@ export const store = new Vuex.Store({
             var array = state.lineas;
             var rows = array.filter( (linea) => linea.tipo == tipo );            
 console.log('sortLineasWeek rows: ', rows);
-            
-            /* sortByWeek  */
+/*
+            /* sortByWeek  
             var numLinea = rows[0].row;
             var items = rows.sort(function (a, b){
                 return (a.data[0].texto - b.data[0].texto);
             });
 console.log('sortLineasWeek-1 items: ', items);
             
-            /* Renumber row */
+            /* Renumber row 
             items.forEach(function (elemento, indice) {
                 items[indice].row = numLinea++;
             });
 console.log('sortLineasWeek-2 items: ', items);
+*/
 
             /* SortByRow */
             state.lineas.sort(function (a, b){
