@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="http://syllabus5.test/show">Visualizar</a>
+                    <a href="http://syllabus5.test/show/20181/100048">Visualizar</a>
                     <a href="http://syllabus5.test/edit">Edit</a>
                 </div>
             </div>

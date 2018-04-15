@@ -104,10 +104,10 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['row'] = $collection[$key]['orden'] * 10000;
-            //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $collection[$key]['tipo'];
             $new_data['subtipo'] = $collection[$key]['subtipo'];
+            $new_data['orden'] = $collection[$key]['orden'];
             $new_data['data'] = [
                     [
                         'col' => 1,

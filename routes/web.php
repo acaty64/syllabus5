@@ -4,7 +4,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/show', [
+Route::get('/show/{semestre}/{cod_curso}', [
 	'as'	=> 'show',
 	'uses'	=> 'SyllabusController@show'
 ]);

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>I. SUMILLA (editable)</h1>
+        <h1>{{ titulo }}</h1>
         <table>
             <thead>
                 <tr v-for="columna in columnas">
@@ -23,18 +23,22 @@
     </div>
 </template>
 <script>
-    import {mapState} from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     export default {
         mounted() {
             console.log('Sumillas.vue mounted');
+            this.setTitulo('sumillas');
         },
         computed: {
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
+                titulo: (state) => state.titulo,
             }),
+
             items(){ return this.$store.getters.sumillas },
+
         },
         methods: {
             rowclass(item) {
@@ -42,6 +46,9 @@
             },
             grabar(item) {
                 this.$store.dispatch('grabarSumilla', item);
+            },
+            setTitulo(subtipo) {
+                this.$store.dispatch('setTitulo', subtipo);
             }
         } 
     }

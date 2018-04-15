@@ -21,11 +21,14 @@ export const store = new Vuex.Store({
         status: 'vista',
         loading: true,
 
+        romanos: [ '','I','II','III','IV','V','VI','VII','VIII','IX','X' ],
+
+        titulo: ''
 	},
 
 	mutations:{
         view(state, tipo){
-            state.status = tipo
+            state.status = tipo;
         },
         saveSumilla(state, item){
             var i = findByTipo(state.lineas, 'sumillas');
@@ -51,21 +54,6 @@ export const store = new Vuex.Store({
         sortLineasWeek(state, tipo){
             var array = state.lineas;
             var rows = array.filter( (linea) => linea.tipo == tipo );            
-console.log('sortLineasWeek rows: ', rows);
-/*
-            /* sortByWeek  
-            var numLinea = rows[0].row;
-            var items = rows.sort(function (a, b){
-                return (a.data[0].texto - b.data[0].texto);
-            });
-console.log('sortLineasWeek-1 items: ', items);
-            
-            /* Renumber row 
-            items.forEach(function (elemento, indice) {
-                items[indice].row = numLinea++;
-            });
-console.log('sortLineasWeek-2 items: ', items);
-*/
 
             /* SortByRow */
             state.lineas.sort(function (a, b){
@@ -81,6 +69,10 @@ console.log('sortLineasWeek-2 items: ', items);
         loaded(state){
             state.loading = false;
         },
+
+        setTitulo(state, titulo){
+            state.titulo = titulo;
+        }
 
 	},
 	getters: {
@@ -116,17 +108,13 @@ console.log('sortLineasWeek-2 items: ', items);
         loaded: (context) => {
             context.commit('loaded');
         },
+        setTitulo: ( context , subtipo) => {
+            var linea = context.state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == subtipo);
+            var titulo = context.state.romanos[linea[0].orden]+'. '+linea[0].data[0].texto;
+            context.commit('setTitulo', titulo);
+        }
 
     },
-
-/*
-    sortByWeek(lineas){
-        lineas.sort(function (a, b){
-            return (a.semana - b.semana)
-        });
-        return lineas;
-    },
-*/
 });
 
 function findByTipo(items, tipo) {

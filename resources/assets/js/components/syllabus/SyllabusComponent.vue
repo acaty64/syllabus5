@@ -48,6 +48,7 @@
     import axios from 'axios'
 
     export default {
+        props:['semestre', 'cod_curso'],
         mounted() {
             console.log('SyllabusComponent.vue mounted.');
             this.getData();
@@ -62,9 +63,10 @@
             },
             getData: function() {
                 var request = {
-                      'cod_curso': '100048',
-                      'semestre' : '20181'
+                      'cod_curso': this.cod_curso,
+                      'semestre' : this.semestre
                   };
+console.log('request: ',request);
                 var URLdomain = window.location.host;
                 var protocol = window.location.protocol;
                 var url = protocol+'//'+URLdomain+'/api/index/';

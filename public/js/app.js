@@ -44568,6 +44568,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['semestre', 'cod_curso'],
     mounted: function mounted() {
         console.log('SyllabusComponent.vue mounted.');
         this.getData();
@@ -44586,9 +44587,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var request = {
-                'cod_curso': '100048',
-                'semestre': '20181'
+                'cod_curso': this.cod_curso,
+                'semestre': this.semestre
             };
+            console.log('request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/index/';
@@ -45059,6 +45061,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         console.log('Sumillas.vue mounted');
+        this.setTitulo('sumillas');
     },
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
@@ -45067,6 +45070,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         columnas: function columnas(state) {
             return state.columnas;
+        },
+        titulo: function titulo(state) {
+            return state.titulo;
         }
     }), {
         items: function items() {
@@ -45079,6 +45085,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         grabar: function grabar(item) {
             this.$store.dispatch('grabarSumilla', item);
+        },
+        setTitulo: function setTitulo(subtipo) {
+            this.$store.dispatch('setTitulo', subtipo);
         }
     }
 });
@@ -45092,7 +45101,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("I. SUMILLA (editable)")]),
+    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
     _vm._v(" "),
     _c("table", [
       _c(
@@ -46026,8 +46035,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         columnas: ['10%', '15%', '15%', '10%', '15%', '10%', '15%', '10%'],
 
         status: 'vista',
-        loading: true
+        loading: true,
 
+        romanos: ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'],
+
+        titulo: ''
     },
 
     mutations: {
@@ -46057,21 +46069,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var rows = array.filter(function (linea) {
                 return linea.tipo == tipo;
             });
-            console.log('sortLineasWeek rows: ', rows);
-            /*
-                        /* sortByWeek  
-                        var numLinea = rows[0].row;
-                        var items = rows.sort(function (a, b){
-                            return (a.data[0].texto - b.data[0].texto);
-                        });
-            console.log('sortLineasWeek-1 items: ', items);
-                        
-                        /* Renumber row 
-                        items.forEach(function (elemento, indice) {
-                            items[indice].row = numLinea++;
-                        });
-            console.log('sortLineasWeek-2 items: ', items);
-            */
 
             /* SortByRow */
             state.lineas.sort(function (a, b) {
@@ -46083,6 +46080,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         loaded: function loaded(state) {
             state.loading = false;
+        },
+        setTitulo: function setTitulo(state, titulo) {
+            state.titulo = titulo;
         }
     },
     getters: {
@@ -46123,18 +46123,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         loaded: function loaded(context) {
             context.commit('loaded');
+        },
+        setTitulo: function setTitulo(context, subtipo) {
+            var linea = context.state.lineas.filter(function (linea) {
+                return linea.tipo == 'titulo1' && linea.subtipo == subtipo;
+            });
+            var titulo = context.state.romanos[linea[0].orden] + '. ' + linea[0].data[0].texto;
+            context.commit('setTitulo', titulo);
         }
 
     }
-
-    /*
-        sortByWeek(lineas){
-            lineas.sort(function (a, b){
-                return (a.semana - b.semana)
-            });
-            return lineas;
-        },
-    */
 });
 
 function findByTipo(items, tipo) {
