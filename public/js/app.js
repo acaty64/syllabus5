@@ -45857,7 +45857,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", [
+  return _c("main", { staticClass: "SyllabusComponent" }, [
     _vm.loading
       ? _c("img", { attrs: { src: "/images/if_Loading_throbber_103105.png" } })
       : _vm._e(),

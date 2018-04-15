@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class="SyllabusComponent">
         <img src="/images/if_Loading_throbber_103105.png" v-if="loading" />
         <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
         <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
