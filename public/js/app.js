@@ -44559,6 +44559,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -46191,7 +46192,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "SyllabusComponent" }, [
     _vm.loading
-      ? _c("img", { attrs: { src: "/images/if_Loading_throbber_103105.png" } })
+      ? _c("img", { attrs: { src: "/images/loading.gif" } })
       : _vm._e(),
     _vm._v(" "),
     !_vm.loading
