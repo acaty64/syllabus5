@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>I. DATOS GENERALES (no editable)</h1>
+        <h1>{{ titulo }}</h1>
         <table>
             <thead>
                 <tr v-for="columna in columnas">
@@ -27,15 +27,20 @@
     export default {
     	mounted() {
     		console.log('Generales.vue mounted');
+            this.setTitulo('generales');
     	},
         computed: {
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
+                titulo: (state) => state.titulo,
             }),
             items(){ return this.$store.getters.generales },
         },
         methods: {
+            setTitulo(subtipo) {
+                this.$store.dispatch('setTitulo', subtipo);
+            },
             rowclass(item) {
                 return 'col-'+item.col+' '+item.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },

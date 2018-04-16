@@ -9,8 +9,15 @@
             <tbody>
                 <tr v-for="fila in items">
                     <div class="row">
-                        <span v-for="item in fila.data">                            
-                            <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                        <span v-if="fila['tipo'] == 'titulo1'">
+                            <span v-for="item in fila.data">                            
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="getTitulo(fila)"></span>
+                            </span>    
+                        </span>
+                        <span v-else>
+                            <span v-for="item in fila.data">                            
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                            </span>
                         </span>
                     </div>
                 </tr>
@@ -29,10 +36,14 @@
             ...mapState({
                 items: (state) => state.lineas,
                 columnas: (state) => state.columnas,
+                romanos: (state) => state.romanos,
             }),
-
         },
         methods: {
+            getTitulo(linea){
+                var titulo = this.romanos[linea.orden]+'. '+linea.data[0].texto; 
+                return titulo;
+            },
             rowclass(item, tipo){
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
@@ -52,28 +63,5 @@
     #viewTexto {
         white-space: pre-wrap;
     }
-/*
-    .titulo0 {
-        font-size: 25px;
-        font-weight: bold;
-    }
-    .titulo1 {
-        font-size: 15px;
-        font-weight: bold;
-    }
-    .unidades {
-        border: 1px solid black;
-    }
 
-    .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
-    .col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,
-    .col-3.generales,  .col-2.bibliografias
-    {
-        margin-left: 0px;
-    }
-
-    .examenes {
-        border: 0.5px solid black;
-    }
-*/
 </style>

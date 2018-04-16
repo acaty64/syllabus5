@@ -24,3 +24,8 @@ Route::post('/index', [
 	'as'	=> 'index',
 	'uses'	=> 'Api\SyllabusController@index'
 ]);
+
+Route::post('/saveSumilla', [
+	'as'	=> 'saveSumilla',
+	'uses'	=> 'Api\SyllabusController@saveSumilla'
+]);

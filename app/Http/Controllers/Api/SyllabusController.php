@@ -17,11 +17,38 @@ use Illuminate\Http\Request;
 
 class SyllabusController extends Controller
 {
-    public function pruebaApi(Request $request)
-    {
+    public function saveSumilla(Request $request)
+    {     
+        switch ($request->data['tipo']) {
+            case 'sumillas' :
+                $id = $request->data['id'];
+                $sumilla = Sumilla::find($id);
+                $sumilla->texto = $request->data['data'][0]['texto'];
+                $sumilla->save();
+                $proceso = 'sumillas' ;
+                break;
+            case 'unidades' :
+                $proceso = 'unidades';
+                break;
+            case 'contenidos' :
+                $proceso = 'contenidos';
+                break;
+            case 'competencias' :
+                $proceso = 'competencias';
+                break;
+            case 'evaluaciones' :
+                $proceso = 'evaluaciones';
+                break;
+            case 'generales' :
+                $proceso = 'generales';
+                break;
+            case 'bibliografias' :
+                $proceso = 'bibliografias';
+                break;
+        };
         return [
             'success'=>true,
-            'data'=>$request->cod_curso,
+            'data'=>['request'=>$request, 'proceso' => $proceso],
         ]; 
     }
     /**
@@ -251,7 +278,7 @@ class SyllabusController extends Controller
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
             $new_data['semana'] = $collection[$key]['semana'];
             $new_data['logro'] = $collection[$key]['logro'];
-            $new_data['editing'] = true;
+            $new_data['editing'] = false;
             $new_data['data'] = [
                 [
                     'col' => 1,

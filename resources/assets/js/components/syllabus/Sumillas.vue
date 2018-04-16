@@ -8,11 +8,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="fila in items">
+                <tr v-for="linea in items">
                     <div class="row">
-                        <span v-for="item in fila.data">
+                        <span v-for="item in linea.data">
                             <textarea rows="6" wrap="hard" :class="rowclass(item)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
-                            <button type="submit" class="btn btn-default" @click='grabar(item)'>Grabar</button>
+                            <button type="submit" class="btn btn-default" @click='grabar(linea)'>Grabar</button>
                         </span>
                     </div>
                 </tr>
@@ -41,15 +41,15 @@
 
         },
         methods: {
+            setTitulo(subtipo) {
+                this.$store.dispatch('setTitulo', subtipo);
+            },
             rowclass(item) {
                 return 'col-'+item.col+' '+item.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
-            grabar(item) {
-                this.$store.dispatch('grabarSumilla', item);
+            grabar(linea) {
+                this.$store.dispatch('grabarSumilla', linea);
             },
-            setTitulo(subtipo) {
-                this.$store.dispatch('setTitulo', subtipo);
-            }
         } 
     }
 </script>

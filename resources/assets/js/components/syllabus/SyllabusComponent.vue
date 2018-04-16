@@ -1,14 +1,16 @@
 <template>
     <main class="SyllabusComponent">
         <img src="/images/if_Loading_throbber_103105.png" v-if="loading" />
-        <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
-        <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
-        <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
-        <button type="button" class="btn btn-default" @click='view("unidades")'>Unidades</button>
-        <button type="button" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
-        <button type="button" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
-        <button type="button" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
-        <button type="button" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+        <span v-if="!loading">        
+            <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
+            <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
+            <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
+            <button type="button" class="btn btn-default" @click='view("unidades")'>Unidades</button>
+            <button type="button" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
+            <button type="button" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
+            <button type="button" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
+            <button type="button" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+        </span>
         <div v-if="status == 'vista'">
             <vista></vista>
         </div>
@@ -39,6 +41,7 @@
     import vista from './Vista';
 	import generales from './Generales';
     import sumillas  from './Sumillas';
+    import unidades  from './Unidades';
     import competencias  from './Competencias';
     import contenidos  from './Contenidos';
     import estrategias from './Estrategias';
@@ -54,7 +57,7 @@
             this.getData();
         },
         components: {
-            vista, generales, sumillas, competencias, contenidos, estrategias, evaluaciones, bibliografias
+            vista, generales, sumillas, unidades, competencias, contenidos, estrategias, evaluaciones, bibliografias
         },
         computed: mapState(['status', 'loading']),
         methods:{
@@ -66,20 +69,18 @@
                       'cod_curso': this.cod_curso,
                       'semestre' : this.semestre
                   };
-console.log('request: ',request);
+//console.log('request: ',request);
                 var URLdomain = window.location.host;
                 var protocol = window.location.protocol;
                 var url = protocol+'//'+URLdomain+'/api/index/';
                 axios.post(url, request).then(response=>{
-                    console.log('response: ',response.data.data);
+//console.log('response: ',response.data.data);
                     //this.lineas = response.data.data;
                     this.$store.commit('setLineas', response.data.data);
                     this.$store.commit('sortLineasRow');
                     this.$store.commit('loaded');
-                    //this.loading = false;
                 }).catch(function (error) {
                     console.log(error);
-                    //this.loading = false;
                     this.$store.commit('loaded');
                 });
             },

@@ -30,15 +30,18 @@ export const store = new Vuex.Store({
         view(state, tipo){
             state.status = tipo;
         },
-        saveSumilla(state, item){
+
+        saveSumilla(state, linea){
             var i = findByTipo(state.lineas, 'sumillas');
-            state.lineas[i].data[0].texto = item.texto;
+            state.lineas[i].data[0].texto = linea.data[0].texto;
             state.status = 'vista';
         },
+
         switchEditingContenido(state, linea){
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i].editing = !state.lineas[i].editing;
         },
+
         saveLinea(state, linea){
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i] = linea;
@@ -72,7 +75,7 @@ export const store = new Vuex.Store({
 
         setTitulo(state, titulo){
             state.titulo = titulo;
-        }
+        },
 
 	},
 	getters: {
@@ -88,14 +91,35 @@ export const store = new Vuex.Store({
         },
         contenidos: (state) => {
             var array = state.lineas;
-            var items = array.filter( (linea) => linea.tipo == 'contenidos' || linea.tipo == 'examenes');
+            var items = array.filter( (linea) => linea.tipo == 'contenidos' 
+                                                || linea.tipo == 'examenes'
+                                                || linea.tipo == 'unidades');
+            return items;
+        },
+        unidades: (state) => {
+            var array = state.lineas;
+            var items = array.filter( (linea) => linea.tipo == 'unidades' );
+//console.log('store.getters.unidades: ',items);
             return items;
         },
     },
 
     actions: {
-        grabarSumilla: (context, item) => {
-            context.commit('saveSumilla',item);
+        grabarSumilla: (context, linea) => {
+            var request = {
+                  'data': linea,
+              };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/saveSumilla/';
+            axios.post(url, request).then(response=>{
+console.log('Grabando linea: ', linea);
+//console.log('response: ',response.data);
+                context.commit('saveSumilla', linea);
+            }).catch(function (error) {
+                console.log('error grabarSumilla: ', error);
+            });
+
         },
         editarContenido: (context, linea) => {
             context.commit('switchEditingContenido', linea);
@@ -108,7 +132,8 @@ export const store = new Vuex.Store({
         loaded: (context) => {
             context.commit('loaded');
         },
-        setTitulo: ( context , subtipo) => {
+
+        setTitulo: (context , subtipo) => {
             var linea = context.state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == subtipo);
             var titulo = context.state.romanos[linea[0].orden]+'. '+linea[0].data[0].texto;
             context.commit('setTitulo', titulo);
