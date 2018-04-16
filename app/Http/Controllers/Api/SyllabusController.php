@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 
 class SyllabusController extends Controller
 {
-    public function saveSumilla(Request $request)
+    public function saveData(Request $request)
     {     
         switch ($request->data['tipo']) {
             case 'sumillas' :
@@ -36,19 +36,26 @@ class SyllabusController extends Controller
             case 'competencias' :
                 $proceso = 'competencias';
                 break;
+            case 'estrategias' :
+                $id = $request->data['id'];
+                $sumilla = Estrategia::find($id);
+                $sumilla->texto = $request->data['data'][0]['texto'];
+                $sumilla->save();
+                $proceso = 'estrategias';
+                break;
             case 'evaluaciones' :
                 $proceso = 'evaluaciones';
-                break;
-            case 'generales' :
-                $proceso = 'generales';
                 break;
             case 'bibliografias' :
                 $proceso = 'bibliografias';
                 break;
+            case 'generales' :
+                $proceso = 'generales';
+                break;
         };
         return [
             'success'=>true,
-            'data'=>['request'=>$request, 'proceso' => $proceso],
+            'proceso' => $proceso,
         ]; 
     }
     /**

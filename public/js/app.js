@@ -45126,7 +45126,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return 'col-' + item.col + ' ' + item.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         grabar: function grabar(linea) {
-            this.$store.dispatch('grabarSumilla', linea);
+            this.$store.dispatch('saveData', linea);
         }
     }
 });
@@ -45735,6 +45735,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         console.log('Contenidos.vue mounted');
+        this.setTitulo('contenidos');
     },
 
     computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(_extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
@@ -45743,6 +45744,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         columnas: function columnas(state) {
             return state.columnas;
+        },
+        titulo: function titulo(state) {
+            return state.titulo;
         }
     }), {
         items: function items() {
@@ -45750,9 +45754,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     })),
     methods: {
-        rowclass: function rowclass(item, tipo) {
-            return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-        },
         editar: function editar(linea) {
             this.$store.dispatch('editarContenido', linea);
         },
@@ -45778,8 +45779,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
-            //var newText = item.texto.replace(/\n/g, '<br>');
-            //return newText;
+        },
+        rowclass: function rowclass(item, tipo) {
+            return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        },
+        setTitulo: function setTitulo(subtipo) {
+            this.$store.dispatch('setTitulo', subtipo);
         }
     }
 });
@@ -45793,7 +45798,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("I. CONTENIDOS (editable)")]),
+    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
     _vm._v(" "),
     _c("table", [
       _c(
@@ -45966,6 +45971,25 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -45975,11 +45999,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	mounted: function mounted() {
-		console.log('Estrategias.vue mounted');
-	},
+    mounted: function mounted() {
+        console.log('Estrategias.vue mounted');
+        this.setTitulo('estrategias');
+    },
 
-	computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({})
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+        lineas: function lineas(state) {
+            return state.lineas;
+        },
+        columnas: function columnas(state) {
+            return state.columnas;
+        },
+        titulo: function titulo(state) {
+            return state.titulo;
+        }
+    }), {
+        items: function items() {
+            return this.$store.getters.estrategias;
+        }
+    }),
+    methods: {
+        setTitulo: function setTitulo(subtipo) {
+            this.$store.dispatch('setTitulo', subtipo);
+        },
+        rowclass: function rowclass(item) {
+            return 'col-' + item.col + ' ' + item.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        },
+        grabar: function grabar(linea) {
+            this.$store.dispatch('saveData', linea);
+        }
+    }
 });
 
 /***/ }),
@@ -45990,7 +46040,73 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
+    _vm._v(" "),
+    _c("table", [
+      _c(
+        "thead",
+        _vm._l(_vm.columnas, function(columna) {
+          return _c("tr", [_c("th", { attrs: { width: columna } })])
+        })
+      ),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.items, function(linea) {
+          return _c("tr", [
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(linea.data, function(item) {
+                return _c("span", [
+                  _c(
+                    "textarea",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: item.texto,
+                          expression: "item.texto"
+                        }
+                      ],
+                      class: _vm.rowclass(item),
+                      attrs: { rows: "6", wrap: "hard", align: item.align },
+                      domProps: { value: item.texto },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(item, "texto", $event.target.value)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(item.texto))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default",
+                      attrs: { type: "submit" },
+                      on: {
+                        click: function($event) {
+                          _vm.grabar(linea)
+                        }
+                      }
+                    },
+                    [_vm._v("Grabar")]
+                  )
+                ])
+              })
+            )
+          ])
+        })
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -46374,8 +46490,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         view: function view(state, tipo) {
             state.status = tipo;
         },
-        saveSumilla: function saveSumilla(state, linea) {
+        sumillasSave: function sumillasSave(state, linea) {
             var i = findByTipo(state.lineas, 'sumillas');
+            state.lineas[i].data[0].texto = linea.data[0].texto;
+            state.status = 'vista';
+        },
+        estrategiasSave: function estrategiasSave(state, linea) {
+            var i = findByTipo(state.lineas, 'estrategias');
             state.lineas[i].data[0].texto = linea.data[0].texto;
             state.status = 'vista';
         },
@@ -46428,6 +46549,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
             return item;
         },
+        unidades: function unidades(state) {
+            var array = state.lineas;
+            var items = array.filter(function (linea) {
+                return linea.tipo == 'unidades';
+            });
+            return items;
+        },
         contenidos: function contenidos(state) {
             var array = state.lineas;
             var items = array.filter(function (linea) {
@@ -46435,28 +46563,28 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
             return items;
         },
-        unidades: function unidades(state) {
+        estrategias: function estrategias(state) {
             var array = state.lineas;
-            var items = array.filter(function (linea) {
-                return linea.tipo == 'unidades';
+            var item = array.filter(function (linea) {
+                return linea.tipo == 'estrategias';
             });
-            //console.log('store.getters.unidades: ',items);
-            return items;
+            return item;
         }
     },
 
     actions: {
-        grabarSumilla: function grabarSumilla(context, linea) {
+        saveData: function saveData(context, linea) {
             var request = {
                 'data': linea
             };
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
-            var url = protocol + '//' + URLdomain + '/api/saveSumilla/';
+            var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 console.log('Grabando linea: ', linea);
                 //console.log('response: ',response.data);
-                context.commit('saveSumilla', linea);
+                var save = response.data.proceso + 'Save';
+                context.commit(save, linea);
             }).catch(function (error) {
                 console.log('error grabarSumilla: ', error);
             });

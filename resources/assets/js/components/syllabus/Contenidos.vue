@@ -1,6 +1,6 @@
 <template>
 	<div>
-        <h1>I. CONTENIDOS (editable)</h1>
+        <h1>{{ titulo }}</h1>
         <table>
             <thead>
                 <tr v-for="columna in columnas">
@@ -36,18 +36,17 @@
     export default {
     	mounted() {
     		console.log('Contenidos.vue mounted');
+            this.setTitulo('contenidos');
     	},
     	computed: mapState({
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
+                titulo: (state) => state.titulo,
             }),
             items(){ return this.$store.getters.contenidos },
         }),
         methods: {
-            rowclass(item, tipo) {
-                return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-            },
             editar(linea) {
                 this.$store.dispatch('editarContenido', linea);
             },            
@@ -73,8 +72,12 @@ console.log('linea despues: ', linea);
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
-                //var newText = item.texto.replace(/\n/g, '<br>');
-                //return newText;
+            },
+            rowclass(item, tipo) {
+                return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            },
+            setTitulo(subtipo) {
+                this.$store.dispatch('setTitulo', subtipo);
             },
         } 
     }

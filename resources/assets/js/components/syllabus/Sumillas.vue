@@ -48,7 +48,7 @@
                 return 'col-'+item.col+' '+item.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             grabar(linea) {
-                this.$store.dispatch('grabarSumilla', linea);
+                this.$store.dispatch('saveData', linea);
             },
         } 
     }

@@ -31,8 +31,14 @@ export const store = new Vuex.Store({
             state.status = tipo;
         },
 
-        saveSumilla(state, linea){
+        sumillasSave(state, linea){
             var i = findByTipo(state.lineas, 'sumillas');
+            state.lineas[i].data[0].texto = linea.data[0].texto;
+            state.status = 'vista';
+        },
+
+        estrategiasSave(state, linea){
+            var i = findByTipo(state.lineas, 'estrategias');
             state.lineas[i].data[0].texto = linea.data[0].texto;
             state.status = 'vista';
         },
@@ -89,6 +95,11 @@ export const store = new Vuex.Store({
             var item = array.filter( (linea) => linea.tipo == 'sumillas' );
             return item;
         },
+        unidades: (state) => {
+            var array = state.lineas;
+            var items = array.filter( (linea) => linea.tipo == 'unidades' );
+            return items;
+        },
         contenidos: (state) => {
             var array = state.lineas;
             var items = array.filter( (linea) => linea.tipo == 'contenidos' 
@@ -96,26 +107,26 @@ export const store = new Vuex.Store({
                                                 || linea.tipo == 'unidades');
             return items;
         },
-        unidades: (state) => {
+        estrategias: (state) => {
             var array = state.lineas;
-            var items = array.filter( (linea) => linea.tipo == 'unidades' );
-//console.log('store.getters.unidades: ',items);
-            return items;
+            var item = array.filter( (linea) => linea.tipo == 'estrategias' );
+            return item;
         },
     },
 
     actions: {
-        grabarSumilla: (context, linea) => {
+        saveData: (context, linea) => {
             var request = {
-                  'data': linea,
-              };
+                'data': linea,
+            };
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
-            var url = protocol+'//'+URLdomain+'/api/saveSumilla/';
+            var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
 console.log('Grabando linea: ', linea);
 //console.log('response: ',response.data);
-                context.commit('saveSumilla', linea);
+                var save = response.data.proceso + 'Save';
+                context.commit(save, linea);
             }).catch(function (error) {
                 console.log('error grabarSumilla: ', error);
             });
