@@ -60,7 +60,7 @@ export const store = new Vuex.Store({
 
         },
 
-        sortLineasWeek(state, tipo){
+        sortLineasTipo(state, tipo){
             var array = state.lineas;
             var rows = array.filter( (linea) => linea.tipo == tipo );            
 
@@ -115,7 +115,7 @@ export const store = new Vuex.Store({
     },
 
     actions: {
-        saveData: (context, linea) => {
+        SaveLinea: (context, linea) => {
             var request = {
                 'data': linea,
             };
@@ -128,23 +128,26 @@ console.log('Grabando linea: ', linea);
                 var save = response.data.proceso + 'Save';
                 context.commit(save, linea);
             }).catch(function (error) {
-                console.log('error grabarSumilla: ', error);
+                console.log('error SaveLinea: ', error);
             });
+        },
 
-        },
-        editarContenido: (context, linea) => {
+        EditarContenido: (context, linea) => {
             context.commit('switchEditingContenido', linea);
         },
-        grabarContenido: (context, linea) => {
+
+        GrabarContenido: (context, linea) => {
             context.commit('saveLinea', linea);
-            context.commit('sortLineasWeek', 'contenidos');
+            //context.commit('sortLineasTipo', 'contenidos');
+            context.commit('sortLineasRow');
             context.commit('switchEditingContenido', linea);
         },
-        loaded: (context) => {
+
+        Loaded: (context) => {
             context.commit('loaded');
         },
 
-        setTitulo: (context , subtipo) => {
+        SetTitulo: (context , subtipo) => {
             var linea = context.state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == subtipo);
             var titulo = context.state.romanos[linea[0].orden]+'. '+linea[0].data[0].texto;
             context.commit('setTitulo', titulo);

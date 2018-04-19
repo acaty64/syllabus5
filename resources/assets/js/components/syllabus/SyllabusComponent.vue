@@ -3,39 +3,39 @@
         <!--img src="/images/if_Loading_throbber_103105.png" v-if="loading" /-->
         <img src="/images/loading.gif" v-if="loading" />
         <span v-if="!loading">        
-            <button type="button" class="btn btn-default" @click='view("vista")'>Vista</button>
-            <button type="button" class="btn btn-default" @click='view("generales")'>Generalidades</button>
-            <button type="button" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
-            <button type="button" class="btn btn-default" @click='view("unidades")'>Unidades</button>
-            <button type="button" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
-            <button type="button" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
-            <button type="button" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
-            <button type="button" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+            <button type="button" name="vista" class="btn btn-default" @click='view("vista")'>Vista</button>
+            <button type="button" name="generales" class="btn btn-default" @click='view("generales")'>Generalidades</button>
+            <button type="button" name="sumillas" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
+            <button type="button" name="unidades" class="btn btn-default" @click='view("unidades")'>Unidades</button>
+            <button type="button" name="contenidos" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
+            <button type="button" name="estrategias" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
+            <button type="button" name="evaluaciones" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
+            <button type="button" name="bibliografias" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
         </span>
-        <div v-if="status == 'vista'">
+        <span v-if="status == 'vista'">
             <vista></vista>
-        </div>
-        <div v-if="status == 'generales'">
+        </span>
+        <span v-if="status == 'generales'">
             <generales></generales>
-        </div>
-        <div v-if="status == 'sumillas'">
+        </span>
+        <span v-if="status == 'sumillas'">
             <sumillas></sumillas>
-        </div>
-        <div v-if="status == 'unidades'">
+        </span>
+        <span v-if="status == 'unidades'">
             <unidades></unidades>
-        </div>
-        <div v-if="status == 'contenidos'">
+        </span>
+        <span v-if="status == 'contenidos'">
             <contenidos></contenidos>
-        </div>
-        <div v-if="status == 'estrategias'">
+        </span>
+        <span v-if="status == 'estrategias'">
             <estrategias></estrategias>
-        </div>
-        <div v-if="status == 'evaluaciones'">
+        </span>
+        <span v-if="status == 'evaluaciones'">
             <evaluaciones></evaluaciones>
-        </div>
-        <div v-if="status == 'bibliografias'">
+        </span>
+        <span v-if="status == 'bibliografias'">
             <bibliografias></bibliografias>
-        </div>
+        </span>
     </main>
 </template>
 <script>
@@ -105,11 +105,13 @@
     }
 
     .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
-    .col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,
-    .col-3.generales, .col-2.bibliografias
+    .col-2.contenidos, .col-3.contenidos, .col-4.contenidos,  .col-6.contenidos,
+    .col-3.generales, .col-2.bibliografias,
+    .col-2.unidades, .col-3.unidades, .col-4.unidades
     {
         margin-left: 0px;
     }
+
 
     .examenes {
         border: 0.5px solid black;

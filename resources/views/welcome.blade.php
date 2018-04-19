@@ -62,7 +62,20 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .unidades {
+                border: 1px solid black;
+            }
+
+            .col-2, .col-3,  .col-4,
+            {
+                margin-left: 0px;
+            }
+
         </style>
+        <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -88,5 +101,24 @@
                 </div>
             </div>
         </div>
+        <table>
+            <thead>
+                <tr class="row">
+                    <th class="col-1 col-xs-1 unidades">Semana</th>
+                    <th class="col-2 col-xs-4 unidades">Texto</th>
+                    <th class="col-3 col-xs-4 unidades">Logro</th>
+                    <th class="col-4 col-xs-2 unidades">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row">
+                    <td class="col-1 col-xs-1 unidades">data</td>
+                    <td class="col-2 col-xs-4 unidades">data</td>
+                    <td class="col-3 col-xs-4 unidades">data</td>
+                    <td class="col-4 col-xs-2 unidades">data</td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>
+

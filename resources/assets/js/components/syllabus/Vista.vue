@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="Vista">
         <table>
             <thead>
                 <tr v-for="columna in columnas">
@@ -13,6 +13,11 @@
                             <span v-for="item in fila.data">                            
                                 <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="getTitulo(fila)"></span>
                             </span>    
+                        </span>
+                        <span v-else-if="fila['tipo'] == 'unidades'">                            
+                            <span v-for="item in fila.data">                            
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewUnidad(item)"></span>
+                            </span>
                         </span>
                         <span v-else>
                             <span v-for="item in fila.data">                            
@@ -52,6 +57,10 @@
             //
             viewTexto(item){                         
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
+                return newText;
+            },
+            viewUnidad(item){                         
+                var newText = item.texto + '<br> Logro: ' +item.logro;
                 return newText;
             },
         }    

@@ -16,7 +16,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'generales', 
-			'texto' => 'I. DATOS GENERALES',
+			'texto' => 'DATOS GENERALES',
 			'orden' => 1,
 		]);
 
@@ -24,7 +24,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'sumillas', 
-			'texto' => 'II. SUMILLA',
+			'texto' => 'SUMILLA',
 			'orden' => 2,
 		]);
 
@@ -32,7 +32,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'competencias', 
-			'texto' => 'III. SISTEMA DE COMPETENCIAS',
+			'texto' => 'SISTEMA DE COMPETENCIAS',
 			'orden' => 3,
 		]);
 
@@ -42,7 +42,7 @@ class TitulosTableSeeder extends Seeder
 			'subtipo' => 'competencias', 
 			'item' => '1',
 			'texto' => 'COMPETENCIAS GENERALES',
-			'orden' => 4,
+			'orden' => 1,
 		]);
 
     	Titulo::create([
@@ -51,15 +51,15 @@ class TitulosTableSeeder extends Seeder
 			'subtipo' => 'competencias', 
 			'item' => '2',
 			'texto' => 'COMPETENCIAS ESPECÍFICAS',
-			'orden' => 5,
+			'orden' => 2,
 		]);
 
     	Titulo::create([
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'contenidos', 
-			'texto' => 'IV. PROGRAMACIÓN DE CONTENIDOS',
-			'orden' => 6,
+			'texto' => 'PROGRAMACIÓN DE CONTENIDOS',
+			'orden' => 4,
 		]);
 
     	Titulo::create([
@@ -106,24 +106,24 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'estrategias', 
-			'texto' => 'V. ESTRATEGIAS METODOLÓGICAS',
-			'orden' => 11,
+			'texto' => 'ESTRATEGIAS METODOLÓGICAS',
+			'orden' => 5,
 		]);
 
     	Titulo::create([
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'evaluaciones', 
-			'texto' => 'VI. EVALUACIÓN',
-			'orden' => 12,
+			'texto' => 'EVALUACIÓN',
+			'orden' => 6,
 		]);
 
     	Titulo::create([
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'bibliografia', 
-			'texto' => 'VII. BIBLIOGRAFÍA',
-			'orden' => 13,
+			'texto' => 'BIBLIOGRAFÍA',
+			'orden' => 7,
 		]);
 
     }

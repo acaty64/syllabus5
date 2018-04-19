@@ -48,7 +48,7 @@
         }),
         methods: {
             editar(linea) {
-                this.$store.dispatch('editarContenido', linea);
+                this.$store.dispatch('EditarContenido', linea);
             },            
             grabar(linea) {
 console.log('linea antes: ', linea);
@@ -64,7 +64,7 @@ console.log('linea antes: ', linea);
                     var row = rowTitulo1 + (week * 100) + 10;
                     linea.row = row ; 
 console.log('linea despues: ', linea);
-                    this.$store.dispatch('grabarContenido', linea);
+                    this.$store.dispatch('GrabarContenido', linea);
                 }else{
                     alert('La semana debe ser un número entero.');
                 }
@@ -77,7 +77,7 @@ console.log('linea despues: ', linea);
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             setTitulo(subtipo) {
-                this.$store.dispatch('setTitulo', subtipo);
+                this.$store.dispatch('SetTitulo', subtipo);
             },
         } 
     }

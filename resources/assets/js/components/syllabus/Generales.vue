@@ -39,7 +39,7 @@
         },
         methods: {
             setTitulo(subtipo) {
-                this.$store.dispatch('setTitulo', subtipo);
+                this.$store.dispatch('SetTitulo', subtipo);
             },
             rowclass(item) {
                 return 'col-'+item.col+' '+item.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;

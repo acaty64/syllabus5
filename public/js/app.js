@@ -1431,133 +1431,6 @@ var index_esm = {
 /* 3 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(25);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(10);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -1637,7 +1510,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1856,6 +1729,133 @@ function applyToTag (styleElement, obj) {
   }
 }
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(25);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(10);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(10);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 7 */
@@ -13136,14 +13136,14 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(83);
+module.exports = __webpack_require__(85);
 
 
 /***/ }),
@@ -13152,7 +13152,7 @@ module.exports = __webpack_require__(83);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(84);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -30330,7 +30330,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(19)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(19)(module)))
 
 /***/ }),
 /* 19 */
@@ -43124,7 +43124,7 @@ if (typeof jQuery === 'undefined') {
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(8);
 var Axios = __webpack_require__(24);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -43207,7 +43207,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(33);
 var dispatchRequest = __webpack_require__(34);
@@ -43748,7 +43748,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(35);
 var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 var isAbsoluteURL = __webpack_require__(36);
 var combineURLs = __webpack_require__(37);
 
@@ -44248,7 +44248,7 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(9)))
 
 /***/ }),
 /* 42 */
@@ -44382,7 +44382,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(81)
+var __vue_template__ = __webpack_require__(83)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44431,7 +44431,7 @@ var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("29067685", content, false);
+var update = __webpack_require__(4)("29067685", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -44450,12 +44450,12 @@ if(false) {
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n    margin-top: 20px;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales, .col-2.bibliografias\n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
+exports.push([module.i, "\n.titulo0 {\n    font-size: 25px;\n    font-weight: bold;\n}\n.titulo1 {\n    font-size: 15px;\n    font-weight: bold;\n    margin-top: 20px;\n}\n.unidades {\n    border: 1px solid black;\n}\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos, .col-3.contenidos, .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales, .col-2.bibliografias,\n.col-2.unidades, .col-3.unidades, .col-4.unidades\n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
 
 // exports
 
@@ -44507,15 +44507,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Sumillas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Sumillas__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Unidades__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Unidades___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Unidades__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Competencias__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Competencias__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Competencias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__Competencias__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Contenidos__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Contenidos__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Contenidos___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Contenidos__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Estrategias__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Estrategias__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Estrategias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Estrategias__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Evaluaciones__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Evaluaciones__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Evaluaciones___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__Evaluaciones__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__Bibliografias__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios__ = __webpack_require__(7);
@@ -44676,7 +44676,7 @@ var content = __webpack_require__(52);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("6fb61184", content, false);
+var update = __webpack_require__(4)("6fb61184", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -44695,7 +44695,7 @@ if(false) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -44714,6 +44714,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44775,6 +44780,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
+        },
+        viewUnidad: function viewUnidad(item) {
+            var newText = item.texto + '<br> Logro: ' + item.logro;
+            return newText;
         }
     }
 });
@@ -44787,7 +44796,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "Vista" }, [
     _c("table", [
       _c(
         "thead",
@@ -44814,18 +44823,33 @@ var render = function() {
                       ])
                     })
                   )
-                : _c(
-                    "span",
-                    _vm._l(fila.data, function(item) {
-                      return _c("span", [
-                        _c("span", {
-                          class: _vm.rowclass(item, fila.tipo),
-                          attrs: { align: item.align },
-                          domProps: { innerHTML: _vm._s(_vm.viewTexto(item)) }
-                        })
-                      ])
-                    })
-                  )
+                : fila["tipo"] == "unidades"
+                  ? _c(
+                      "span",
+                      _vm._l(fila.data, function(item) {
+                        return _c("span", [
+                          _c("span", {
+                            class: _vm.rowclass(item, fila.tipo),
+                            attrs: { align: item.align },
+                            domProps: {
+                              innerHTML: _vm._s(_vm.viewUnidad(item))
+                            }
+                          })
+                        ])
+                      })
+                    )
+                  : _c(
+                      "span",
+                      _vm._l(fila.data, function(item) {
+                        return _c("span", [
+                          _c("span", {
+                            class: _vm.rowclass(item, fila.tipo),
+                            attrs: { align: item.align },
+                            domProps: { innerHTML: _vm._s(_vm.viewTexto(item)) }
+                          })
+                        ])
+                      })
+                    )
             ])
           ])
         })
@@ -44948,7 +44972,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: {
         setTitulo: function setTitulo(subtipo) {
-            this.$store.dispatch('setTitulo', subtipo);
+            this.$store.dispatch('SetTitulo', subtipo);
         },
         rowclass: function rowclass(item) {
             return 'col-' + item.col + ' ' + item.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
@@ -45120,13 +45144,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: {
         setTitulo: function setTitulo(subtipo) {
-            this.$store.dispatch('setTitulo', subtipo);
+            this.$store.dispatch('SetTitulo', subtipo);
         },
         rowclass: function rowclass(item) {
             return 'col-' + item.col + ' ' + item.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         grabar: function grabar(linea) {
-            this.$store.dispatch('saveData', linea);
+            this.$store.dispatch('SaveLinea', linea);
         }
     }
 });
@@ -45227,15 +45251,19 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(62)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(62)
+var __vue_script__ = __webpack_require__(64)
 /* template */
-var __vue_template__ = __webpack_require__(63)
+var __vue_template__ = __webpack_require__(65)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -45271,6 +45299,46 @@ module.exports = Component.exports
 
 /***/ }),
 /* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(63);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("6a14fc7b", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-cf9a37f0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Unidades.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-cf9a37f0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Unidades.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.unidades {\n        border: 0px solid black;\n}\n/*\n    .col-2, .col-3,  .col-4,\n    {\n        margin-left: 0px;\n    }\n*/\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45278,10 +45346,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-//
-//
-//
-//
 //
 //
 //
@@ -45331,11 +45395,42 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         columnas: function columnas(state) {
             return state.columnas;
         }
-        //                titulo: (state) => state.titulo,
     }), {
         items: function items() {
-            var items = this.$store.getters.unidades;
+            var lineas = this.$store.getters.unidades;
+            console.log('Unidades.lineas: ', lineas);
             /* Reconstruir campos 'semana', 'texto', 'logro'  */
+            var items = [];
+            for (var linea in lineas) {
+                console.log('Unidades.items.linea: ', lineas[linea]);
+                var datos = {
+                    editing: false,
+                    id: lineas[linea].id,
+                    row: lineas[linea].row,
+                    tipo: lineas[linea].tipo,
+                    data: [{
+                        align: "left",
+                        col: 1,
+                        cols: 1,
+                        offset: 1,
+                        texto: lineas[linea].semana
+                    }, {
+                        align: "left",
+                        col: 2,
+                        cols: 4,
+                        offset: 2,
+                        texto: lineas[linea].data[0].texto
+                    }, {
+                        align: "left",
+                        col: 3,
+                        cols: 4,
+                        offset: 3,
+                        texto: lineas[linea].data[0].logro
+                    }]
+                };
+                items.push(datos);
+            };
+
             console.log('items: ', items);
             return items;
         }
@@ -45348,23 +45443,24 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         */
         rowclass: function rowclass(item, tipo) {
             return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
         },
         grabar: function grabar(item) {
             /* Reconstruir lineas */
-            this.$store.dispatch('grabarSumilla', item);
+            this.$store.dispatch('GrabarSumilla', item);
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
         },
         editar: function editar(linea) {
-            this.$store.dispatch('editarContenido', linea);
+            this.$store.dispatch('EditarContenido', linea);
         }
     }
 });
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45375,111 +45471,104 @@ var render = function() {
     _c("h1", [_vm._v("UNIDADES")]),
     _vm._v(" "),
     _c("table", [
-      _c("thead", [
-        _c(
-          "tr",
-          _vm._l(_vm.columnas, function(columna) {
-            return _c("th", { attrs: { width: columna } })
-          })
-        ),
-        _vm._v(" "),
-        _vm._m(0)
-      ]),
+      _vm._m(0),
       _vm._v(" "),
       _c(
         "tbody",
-        [
-          _vm._l(_vm.items, function(linea) {
-            return _c("tr", [
-              _c("div", { staticClass: "row" }, [
-                linea.editing
-                  ? _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", [
-                            _c(
-                              "textarea",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: item.texto,
-                                    expression: "item.texto"
-                                  }
-                                ],
-                                class: _vm.rowclass(item, linea.tipo),
-                                attrs: { align: item.align },
-                                domProps: { value: item.texto },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(item, "texto", $event.target.value)
-                                  }
+        _vm._l(_vm.items, function(linea) {
+          return _c("tr", [
+            _c("div", { staticClass: "row" }, [
+              linea.editing
+                ? _c(
+                    "span",
+                    [
+                      _vm._l(linea.data, function(item) {
+                        return _c("span", [
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: item.texto,
+                                  expression: "item.texto"
                                 }
-                              },
-                              [_vm._v(_vm._s(item.texto))]
-                            )
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-default",
-                            attrs: { type: "submit" },
-                            on: {
-                              click: function($event) {
-                                _vm.grabar(linea)
-                              }
-                            }
-                          },
-                          [_vm._v("Grabar")]
-                        )
-                      ],
-                      2
-                    )
-                  : _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", [
-                            _c("span", {
+                              ],
                               class: _vm.rowclass(item, linea.tipo),
-                              attrs: { align: item.align },
-                              domProps: {
-                                innerHTML: _vm._s(_vm.viewTexto(item))
+                              attrs: {
+                                rows: "6",
+                                wrap: "hard",
+                                align: item.align
+                              },
+                              domProps: { value: item.texto },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(item, "texto", $event.target.value)
+                                }
                               }
-                            })
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-default",
-                            attrs: { type: "submit" },
-                            on: {
-                              click: function($event) {
-                                _vm.editar(linea)
-                              }
+                            },
+                            [_vm._v(_vm._s(item.texto))]
+                          )
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-default col-4 unidades col-xs-push-8",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.grabar(linea)
                             }
-                          },
-                          [_vm._v("Editar")]
-                        )
-                      ],
-                      2
-                    )
-              ])
+                          }
+                        },
+                        [_vm._v("Grabar")]
+                      )
+                    ],
+                    2
+                  )
+                : _c(
+                    "span",
+                    [
+                      _vm._l(linea.data, function(item) {
+                        return _c("span", [
+                          _c("span", {
+                            class: _vm.rowclass(item, linea.tipo),
+                            attrs: {
+                              rows: "6",
+                              wrap: "hard",
+                              align: item.align
+                            },
+                            domProps: { innerHTML: _vm._s(_vm.viewTexto(item)) }
+                          })
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.editar(linea)
+                            }
+                          }
+                        },
+                        [_vm._v("Editar")]
+                      )
+                    ],
+                    2
+                  )
             ])
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" })
-        ],
-        2
+          ])
+        })
       )
     ])
   ])
@@ -45489,12 +45578,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", { staticClass: "col-1 col-xs-1" }, [_vm._v("Semana")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "col-2 col-xs-6" }, [_vm._v("Texto")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "col-7 col-xs-2" }, [_vm._v("Logro")])
+    return _c("thead", [
+      _c("tr", { staticClass: "row" }, [
+        _c("th", { staticClass: "col-1 col-xs-1 unidades" }, [
+          _vm._v("Semana")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "col-2 col-xs-4 unidades" }, [_vm._v("Texto")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "col-3 col-xs-4 unidades" }, [_vm._v("Logro")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "col-4 col-xs-2 unidades" }, [_vm._v("Acción")])
+      ])
     ])
   }
 ]
@@ -45508,15 +45603,15 @@ if (false) {
 }
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(65)
+var __vue_script__ = __webpack_require__(67)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(68)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45555,7 +45650,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45578,7 +45673,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45598,19 +45693,19 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(68)
+  __webpack_require__(70)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(70)
+var __vue_script__ = __webpack_require__(72)
 /* template */
-var __vue_template__ = __webpack_require__(71)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45649,17 +45744,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(69);
+var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("f75229fc", content, false);
+var update = __webpack_require__(4)("f75229fc", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -45675,10 +45770,10 @@ if(false) {
 }
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -45689,7 +45784,7 @@ exports.push([module.i, "\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .co
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45755,7 +45850,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     })),
     methods: {
         editar: function editar(linea) {
-            this.$store.dispatch('editarContenido', linea);
+            this.$store.dispatch('EditarContenido', linea);
         },
         grabar: function grabar(linea) {
             console.log('linea antes: ', linea);
@@ -45771,7 +45866,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 var row = rowTitulo1 + week * 100 + 10;
                 linea.row = row;
                 console.log('linea despues: ', linea);
-                this.$store.dispatch('grabarContenido', linea);
+                this.$store.dispatch('GrabarContenido', linea);
             } else {
                 alert('La semana debe ser un número entero.');
             }
@@ -45784,13 +45879,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         setTitulo: function setTitulo(subtipo) {
-            this.$store.dispatch('setTitulo', subtipo);
+            this.$store.dispatch('SetTitulo', subtipo);
         }
     }
 });
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45918,15 +46013,15 @@ if (false) {
 }
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(73)
+var __vue_script__ = __webpack_require__(75)
 /* template */
-var __vue_template__ = __webpack_require__(74)
+var __vue_template__ = __webpack_require__(76)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45965,7 +46060,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46021,19 +46116,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: {
         setTitulo: function setTitulo(subtipo) {
-            this.$store.dispatch('setTitulo', subtipo);
+            this.$store.dispatch('SetTitulo', subtipo);
         },
         rowclass: function rowclass(item) {
             return 'col-' + item.col + ' ' + item.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         grabar: function grabar(linea) {
-            this.$store.dispatch('saveData', linea);
+            this.$store.dispatch('SaveLinea', linea);
         }
     }
 });
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46119,15 +46214,15 @@ if (false) {
 }
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(76)
+var __vue_script__ = __webpack_require__(78)
 /* template */
-var __vue_template__ = __webpack_require__(77)
+var __vue_template__ = __webpack_require__(79)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46166,7 +46261,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46189,7 +46284,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46209,15 +46304,15 @@ if (false) {
 }
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(79)
+var __vue_script__ = __webpack_require__(81)
 /* template */
-var __vue_template__ = __webpack_require__(80)
+var __vue_template__ = __webpack_require__(82)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46256,7 +46351,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46279,7 +46374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46299,7 +46394,7 @@ if (false) {
 }
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46317,7 +46412,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "vista" },
               on: {
                 click: function($event) {
                   _vm.view("vista")
@@ -46331,7 +46426,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "generales" },
               on: {
                 click: function($event) {
                   _vm.view("generales")
@@ -46345,7 +46440,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "sumillas" },
               on: {
                 click: function($event) {
                   _vm.view("sumillas")
@@ -46359,7 +46454,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "unidades" },
               on: {
                 click: function($event) {
                   _vm.view("unidades")
@@ -46373,7 +46468,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "contenidos" },
               on: {
                 click: function($event) {
                   _vm.view("contenidos")
@@ -46387,7 +46482,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "estrategias" },
               on: {
                 click: function($event) {
                   _vm.view("estrategias")
@@ -46401,7 +46496,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "evaluaciones" },
               on: {
                 click: function($event) {
                   _vm.view("evaluaciones")
@@ -46415,7 +46510,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-default",
-              attrs: { type: "button" },
+              attrs: { type: "button", name: "bibliografias" },
               on: {
                 click: function($event) {
                   _vm.view("bibliografias")
@@ -46427,24 +46522,24 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.status == "vista" ? _c("div", [_c("vista")], 1) : _vm._e(),
+    _vm.status == "vista" ? _c("span", [_c("vista")], 1) : _vm._e(),
     _vm._v(" "),
-    _vm.status == "generales" ? _c("div", [_c("generales")], 1) : _vm._e(),
+    _vm.status == "generales" ? _c("span", [_c("generales")], 1) : _vm._e(),
     _vm._v(" "),
-    _vm.status == "sumillas" ? _c("div", [_c("sumillas")], 1) : _vm._e(),
+    _vm.status == "sumillas" ? _c("span", [_c("sumillas")], 1) : _vm._e(),
     _vm._v(" "),
-    _vm.status == "unidades" ? _c("div", [_c("unidades")], 1) : _vm._e(),
+    _vm.status == "unidades" ? _c("span", [_c("unidades")], 1) : _vm._e(),
     _vm._v(" "),
-    _vm.status == "contenidos" ? _c("div", [_c("contenidos")], 1) : _vm._e(),
+    _vm.status == "contenidos" ? _c("span", [_c("contenidos")], 1) : _vm._e(),
     _vm._v(" "),
-    _vm.status == "estrategias" ? _c("div", [_c("estrategias")], 1) : _vm._e(),
+    _vm.status == "estrategias" ? _c("span", [_c("estrategias")], 1) : _vm._e(),
     _vm._v(" "),
     _vm.status == "evaluaciones"
-      ? _c("div", [_c("evaluaciones")], 1)
+      ? _c("span", [_c("evaluaciones")], 1)
       : _vm._e(),
     _vm._v(" "),
     _vm.status == "bibliografias"
-      ? _c("div", [_c("bibliografias")], 1)
+      ? _c("span", [_c("bibliografias")], 1)
       : _vm._e()
   ])
 }
@@ -46459,7 +46554,7 @@ if (false) {
 }
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46513,7 +46608,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 return a.row - b.row;
             });
         },
-        sortLineasWeek: function sortLineasWeek(state, tipo) {
+        sortLineasTipo: function sortLineasTipo(state, tipo) {
             var array = state.lineas;
             var rows = array.filter(function (linea) {
                 return linea.tipo == tipo;
@@ -46573,7 +46668,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
-        saveData: function saveData(context, linea) {
+        SaveLinea: function SaveLinea(context, linea) {
             var request = {
                 'data': linea
             };
@@ -46586,22 +46681,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 var save = response.data.proceso + 'Save';
                 context.commit(save, linea);
             }).catch(function (error) {
-                console.log('error grabarSumilla: ', error);
+                console.log('error SaveLinea: ', error);
             });
         },
-        editarContenido: function editarContenido(context, linea) {
+
+        EditarContenido: function EditarContenido(context, linea) {
             context.commit('switchEditingContenido', linea);
         },
-        grabarContenido: function grabarContenido(context, linea) {
+
+        GrabarContenido: function GrabarContenido(context, linea) {
             context.commit('saveLinea', linea);
-            context.commit('sortLineasWeek', 'contenidos');
+            //context.commit('sortLineasTipo', 'contenidos');
+            context.commit('sortLineasRow');
             context.commit('switchEditingContenido', linea);
         },
-        loaded: function loaded(context) {
+
+        Loaded: function Loaded(context) {
             context.commit('loaded');
         },
 
-        setTitulo: function setTitulo(context, subtipo) {
+        SetTitulo: function SetTitulo(context, subtipo) {
             var linea = context.state.lineas.filter(function (linea) {
                 return linea.tipo == 'titulo1' && linea.subtipo == subtipo;
             });
@@ -46631,7 +46730,7 @@ function findByRow(lineas, row) {
 }
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

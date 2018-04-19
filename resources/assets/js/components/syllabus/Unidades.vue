@@ -3,13 +3,11 @@
         <h1>UNIDADES</h1>
         <table>
             <thead>
-                <tr>
-                    <th v-for="columna in columnas" :width="columna"></th>
-                </tr>
-                <tr>
-                    <th class="col-1 col-xs-1">Semana</th>
-                    <th class="col-2 col-xs-6">Texto</th>
-                    <th class="col-7 col-xs-2">Logro</th>
+                <tr class="row">
+                    <th class="col-1 col-xs-1 unidades">Semana</th>
+                    <th class="col-2 col-xs-4 unidades">Texto</th>
+                    <th class="col-3 col-xs-4 unidades">Logro</th>
+                    <th class="col-4 col-xs-2 unidades">Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,20 +15,18 @@
                     <div class="row">
                         <span v-if="linea.editing">
                             <span v-for="item in linea.data">                            
-                                <textarea :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                                <textarea rows="6" wrap="hard" :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
-                            <button type="submit" class="btn btn-default" @click='grabar(linea)'>Grabar</button>
+                            <button type="submit" class="btn btn-default col-4 unidades col-xs-push-8" @click='grabar(linea)'>Grabar</button>
                         </span>
                         <span v-else>
                             <span v-for="item in linea.data">                            
-                                <span :class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                                <span rows="6" wrap="hard":class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
                             <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>
                         </span>
                     </div>
                 </tr>
-                <div class="row">                            
-                </div>
             </tbody>
         </table>        
     </div>
@@ -47,12 +43,47 @@
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
-//                titulo: (state) => state.titulo,
             }),
 
             items(){ 
-                var items = this.$store.getters.unidades; 
+                var lineas = this.$store.getters.unidades; 
+console.log('Unidades.lineas: ', lineas);
                 /* Reconstruir campos 'semana', 'texto', 'logro'  */
+                var items = [];
+                for(var linea in lineas){
+console.log('Unidades.items.linea: ', lineas[linea]);
+                    var datos = { 
+                        editing: false,
+                        id: lineas[linea].id,
+                        row: lineas[linea].row,
+                        tipo: lineas[linea].tipo,
+                        data: [
+                            {
+                                align: "left",
+                                col: 1,
+                                cols: 1,
+                                offset: 1,
+                                texto: lineas[linea].semana,
+                            },
+                            {
+                                align: "left",
+                                col: 2,
+                                cols: 4,
+                                offset: 2,
+                                texto: lineas[linea].data[0].texto,
+                            },
+                            {
+                                align: "left",
+                                col: 3,
+                                cols: 4,
+                                offset: 3,
+                                texto: lineas[linea].data[0].logro,
+                            },
+                        ],
+                    };
+                    items.push(datos);
+                };
+                
 console.log('items: ', items);
                 return items; 
             },
@@ -66,18 +97,31 @@ console.log('items: ', items);
 */
             rowclass(item, tipo) {
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
             },
             grabar(item) {
                 /* Reconstruir lineas */
-                this.$store.dispatch('grabarSumilla', item);
+                this.$store.dispatch('GrabarSumilla', item);
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
             },
             editar(linea) {
-                this.$store.dispatch('editarContenido', linea);
+                this.$store.dispatch('EditarContenido', linea);
             },            
         } 
     }
 </script>
+
+<style>
+    .unidades {
+        border: 0px solid black;
+    }
+/*
+    .col-2, .col-3,  .col-4,
+    {
+        margin-left: 0px;
+    }
+*/
+</style>
