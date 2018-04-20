@@ -31,13 +31,17 @@ export const store = new Vuex.Store({
             state.status = tipo;
         },
 
-        sumillasSave(state, linea){
+        sumillasSaved(state, linea){
             var i = findByTipo(state.lineas, 'sumillas');
             state.lineas[i].data[0].texto = linea.data[0].texto;
             state.status = 'vista';
         },
 
-        estrategiasSave(state, linea){
+        unidadesSaved(state, linea){
+            state.status = 'vista';
+        },
+
+        estrategiasSaved(state, linea){
             var i = findByTipo(state.lineas, 'estrategias');
             state.lineas[i].data[0].texto = linea.data[0].texto;
             state.status = 'vista';
@@ -49,7 +53,7 @@ export const store = new Vuex.Store({
         },
 
         saveLinea(state, linea){
-            var i = findByRow(state.lineas, linea.row);
+            var i = findByRow(state.lineas, linea.pre_row);
             state.lineas[i] = linea;
         },
 
@@ -82,7 +86,9 @@ export const store = new Vuex.Store({
         setTitulo(state, titulo){
             state.titulo = titulo;
         },
-
+        changePre_row(state, row){
+            state.pre_row = row;
+        }
 	},
 	getters: {
         generales: (state) => {
@@ -119,14 +125,17 @@ export const store = new Vuex.Store({
             var request = {
                 'data': linea,
             };
+console.log('SaveLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-console.log('Grabando linea: ', linea);
+console.log('SaveLinea linea : ', linea);
 //console.log('response: ',response.data);
-                var save = response.data.proceso + 'Save';
+                var save = response.data.proceso + 'Saved';
+console.log('SaveLinea response: ', response.data);
                 context.commit(save, linea);
+                context.commit('changePre_row', linea.row);
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
             });
@@ -137,7 +146,9 @@ console.log('Grabando linea: ', linea);
         },
 
         GrabarContenido: (context, linea) => {
+console.log('GrabarContenido: ', linea);
             context.commit('saveLinea', linea);
+            context.dispatch("SaveLinea", linea);
             //context.commit('sortLineasTipo', 'contenidos');
             context.commit('sortLineasRow');
             context.commit('switchEditingContenido', linea);

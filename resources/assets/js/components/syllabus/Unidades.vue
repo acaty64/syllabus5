@@ -3,18 +3,13 @@
         <h1>UNIDADES</h1>
         <table>
             <thead>
-                <tr class="row">
-                    <th class="col-1 col-xs-1 unidades">Semana</th>
-                    <th class="col-2 col-xs-4 unidades">Texto</th>
-                    <th class="col-3 col-xs-4 unidades">Logro</th>
-                    <th class="col-4 col-xs-2 unidades">Acción</th>
-                </tr>
+
             </thead>
             <tbody>
                 <tr v-for="linea in items">
                     <div class="row">
                         <span v-if="linea.editing">
-                            <span v-for="item in linea.data">                            
+                            <span v-for="item in linea.data">                        
                                 <textarea rows="6" wrap="hard" :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
                             <button type="submit" class="btn btn-default col-4 unidades col-xs-push-8" @click='grabar(linea)'>Grabar</button>
@@ -53,9 +48,10 @@ console.log('Unidades.lineas: ', lineas);
                 for(var linea in lineas){
 console.log('Unidades.items.linea: ', lineas[linea]);
                     var datos = { 
-                        editing: false,
+                        editing: lineas[linea].editing,
                         id: lineas[linea].id,
                         row: lineas[linea].row,
+                        pre_row: lineas[linea].pre_row,
                         tipo: lineas[linea].tipo,
                         data: [
                             {
@@ -99,9 +95,46 @@ console.log('items: ', items);
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
                 //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
             },
-            grabar(item) {
+            grabar(linea) {
                 /* Reconstruir lineas */
-                this.$store.dispatch('GrabarSumilla', item);
+console.log("linea: ", linea);
+                var xlinea = {
+                    editing: false,
+                    id: linea.id,
+                    logro: linea.data[2].texto,
+                    row: linea.row,
+                    pre_row: linea.pre_row,
+                    semana: linea.data[0].texto,
+                    tipo: linea.tipo,
+                    data: [
+                        {
+                            align: "center",
+                            col: 1,
+                            cols: 8,
+                            offset: 1,
+                            texto: linea.data[1].texto,
+                            logro: linea.data[2].texto,
+                        }
+                    ]
+                };
+
+console.log('linea antes: ', xlinea);
+                /* Renumera row */
+                var week = xlinea.semana;
+                if(!isNaN(week)){                
+                    var week = parseInt(xlinea.semana);
+                    var rowUnidades = this.lineas.filter(function (linea) {
+                        return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
+                    });
+                    var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
+                    var row = rowTitulo1 + (week * 100);
+                    xlinea.row = row ;
+                    xlinea.semana = week; 
+console.log('linea despues: ', xlinea);
+                    this.$store.dispatch('GrabarContenido', xlinea);
+                }else{
+                    alert('La semana debe ser un número entero.');
+                };
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\General;
 use App\Titulo;
 
-class SyllabusController extends Controller
+class xxSyllabusController extends Controller
 {
     /**
      * Display a listing of the resource.
