@@ -45509,7 +45509,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.unidades {\n        border: 0px solid black;\n}\n/*\n    .col-2, .col-3,  .col-4,\n    {\n        margin-left: 0px;\n    }\n*/\n", ""]);
+exports.push([module.i, "\n.unid {\n        border: 0px solid black;\n}\n.editing {\n        background: yellow;\n        margin-left: 0px;\n}\n.notEditing {\n        background: white;\n        margin-left: 0px;\n}\n/*\n    .col-2, .col-3,  .col-4,\n    {\n        margin-left: 0px;\n    }\n*/\n", ""]);
 
 // exports
 
@@ -45570,11 +45570,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }), {
         items: function items() {
             var lineas = this.$store.getters.unidades;
-            console.log('Unidades.lineas: ', lineas);
             /* Reconstruir campos 'semana', 'texto', 'logro'  */
             var items = [];
             for (var linea in lineas) {
-                console.log('Unidades.items.linea: ', lineas[linea]);
                 var datos = {
                     editing: lineas[linea].editing,
                     id: lineas[linea].id,
@@ -45603,8 +45601,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 };
                 items.push(datos);
             };
-
-            console.log('items: ', items);
+            console.log("items: ", items);
             return items;
         }
     }),
@@ -45614,21 +45611,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         this.$store.dispatch('setTitulo', subtipo);
                     },
         */
-        rowclass: function rowclass(item, tipo) {
-            return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        rowclass: function rowclass(item, linea) {
+            if (linea.editing) {
+                return 'editing col-' + item.col + ' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            } else {
+                return 'notEditing col-' + item.col + ' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            }
             //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
         },
         grabar: function grabar(linea) {
             /* Reconstruir lineas */
-            console.log("linea: ", linea);
             var xlinea = {
-                editing: false,
-                id: linea.id,
-                logro: linea.data[2].texto,
-                row: linea.row,
-                pre_row: linea.pre_row,
-                semana: linea.data[0].texto,
-                tipo: linea.tipo,
                 data: [{
                     align: "center",
                     col: 1,
@@ -45636,10 +45629,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     offset: 1,
                     texto: linea.data[1].texto,
                     logro: linea.data[2].texto
-                }]
-            };
+                }],
+                editing: linea.editing,
+                id: linea.id,
+                logro: linea.data[2].texto,
+                pre_row: linea.pre_row,
+                row: linea.row,
+                semana: linea.data[0].texto,
+                tipo: linea.tipo
 
-            console.log('linea antes: ', xlinea);
+            };
             /* Renumera row */
             var week = xlinea.semana;
             if (!isNaN(week)) {
@@ -45651,7 +45650,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 var row = rowTitulo1 + week * 100;
                 xlinea.row = row;
                 xlinea.semana = week;
-                console.log('linea despues: ', xlinea);
                 this.$store.dispatch('GrabarContenido', xlinea);
             } else {
                 alert('La semana debe ser un número entero.');
@@ -45663,6 +45661,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         editar: function editar(linea) {
             this.$store.dispatch('EditarContenido', linea);
+            console.log("this.items", this.items);
         }
     }
 });
@@ -45703,7 +45702,7 @@ var render = function() {
                                   expression: "item.texto"
                                 }
                               ],
-                              class: _vm.rowclass(item, linea.tipo),
+                              class: _vm.rowclass(item, linea),
                               attrs: {
                                 rows: "6",
                                 wrap: "hard",
@@ -45745,9 +45744,9 @@ var render = function() {
                     "span",
                     [
                       _vm._l(linea.data, function(item) {
-                        return _c("span", [
+                        return _c("span", { staticClass: "notEdit" }, [
                           _c("span", {
-                            class: _vm.rowclass(item, linea.tipo),
+                            class: _vm.rowclass(item, linea),
                             attrs: {
                               rows: "6",
                               wrap: "hard",
@@ -46790,10 +46789,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         switchEditingContenido: function switchEditingContenido(state, linea) {
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i].editing = !state.lineas[i].editing;
+            console.log('switchEditingContenido state.lineas[i]: ', state.lineas[i]);
         },
         saveLinea: function saveLinea(state, linea) {
             var i = findByRow(state.lineas, linea.pre_row);
             state.lineas[i] = linea;
+            state.lineas[i].pre_row = linea.row;
         },
         sortLineasRow: function sortLineasRow(state) {
             state.lineas.sort(function (a, b) {
@@ -46867,15 +46868,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var request = {
                 'data': linea
             };
-            console.log('SaveLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
-                console.log('SaveLinea linea : ', linea);
                 //console.log('response: ',response.data);
                 var save = response.data.proceso + 'Saved';
-                console.log('SaveLinea response: ', response.data);
                 context.commit(save, linea);
                 context.commit('changePre_row', linea.row);
             }).catch(function (error) {
@@ -46888,7 +46886,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
 
         GrabarContenido: function GrabarContenido(context, linea) {
-            console.log('GrabarContenido: ', linea);
             context.commit('saveLinea', linea);
             context.dispatch("SaveLinea", linea);
             //context.commit('sortLineasTipo', 'contenidos');

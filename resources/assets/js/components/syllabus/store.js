@@ -50,11 +50,13 @@ export const store = new Vuex.Store({
         switchEditingContenido(state, linea){
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i].editing = !state.lineas[i].editing;
+console.log('switchEditingContenido state.lineas[i]: ', state.lineas[i]);
         },
 
         saveLinea(state, linea){
             var i = findByRow(state.lineas, linea.pre_row);
             state.lineas[i] = linea;
+            state.lineas[i].pre_row = linea.row;
         },
 
         sortLineasRow(state){
@@ -125,15 +127,12 @@ export const store = new Vuex.Store({
             var request = {
                 'data': linea,
             };
-console.log('SaveLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-console.log('SaveLinea linea : ', linea);
 //console.log('response: ',response.data);
                 var save = response.data.proceso + 'Saved';
-console.log('SaveLinea response: ', response.data);
                 context.commit(save, linea);
                 context.commit('changePre_row', linea.row);
             }).catch(function (error) {
@@ -146,7 +145,6 @@ console.log('SaveLinea response: ', response.data);
         },
 
         GrabarContenido: (context, linea) => {
-console.log('GrabarContenido: ', linea);
             context.commit('saveLinea', linea);
             context.dispatch("SaveLinea", linea);
             //context.commit('sortLineasTipo', 'contenidos');
