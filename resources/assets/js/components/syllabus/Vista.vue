@@ -10,17 +10,19 @@
                 <tr v-for="fila in items">
                     <div class="row">
                         <span v-if="fila['tipo'] == 'titulo1'">
-                            <span v-for="item in fila.data">                            
+                            <span v-for="item in fila.data">
                                 <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="getTitulo(fila)"></span>
                             </span>    
                         </span>
-                        <span v-else-if="fila['tipo'] == 'unidades'">                            
-                            <span v-for="item in fila.data">                            
-                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewUnidad(item)"></span>
+                        <span v-else-if="fila['tipo'] == 'unidades'">
+                            <span v-for="item in fila.data">
+                                <span v-if="item['view']==true">
+                                    <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewUnidad(item)"></span>
+                                </span>
                             </span>
                         </span>
                         <span v-else>
-                            <span v-for="item in fila.data">                            
+                            <span v-for="item in fila.data">
                                 <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
                         </span>

@@ -41,44 +41,14 @@
             }),
 
             items(){ 
-                var lineas = this.$store.getters.unidades; 
-                /* Reconstruir campos 'semana', 'texto', 'logro'  */
-                var items = [];
+                var lineas = this.$store.getters.unidades;
+                /* Modifica col y cols del texto */
                 for(var linea in lineas){
-                    var datos = { 
-                        editing: lineas[linea].editing,
-                        id: lineas[linea].id,
-                        row: lineas[linea].row,
-                        pre_row: lineas[linea].pre_row,
-                        tipo: lineas[linea].tipo,
-                        data: [
-                            {
-                                align: "left",
-                                col: 1,
-                                cols: 1,
-                                offset: 1,
-                                texto: lineas[linea].semana,
-                            },
-                            {
-                                align: "left",
-                                col: 2,
-                                cols: 4,
-                                offset: 2,
-                                texto: lineas[linea].data[0].texto,
-                            },
-                            {
-                                align: "left",
-                                col: 3,
-                                cols: 4,
-                                offset: 3,
-                                texto: lineas[linea].data[0].logro,
-                            },
-                        ],
-                    };
-                    items.push(datos);
-                };
-console.log("items: ", items);
-                return items; 
+                    lineas[linea]['data'][1].col = 2;
+                    lineas[linea]['data'][1].cols = 4;
+                    lineas[linea]['data'][1].offset = 2;
+                } 
+                return lineas; 
             },
 
         },
@@ -97,39 +67,27 @@ console.log("items: ", items);
                 //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
             },
             grabar(linea) {
-                /* Reconstruir lineas */
-                var xlinea = {
-                    data: [
-                        {
-                            align: "center",
-                            col: 1,
-                            cols: 8,
-                            offset: 1,
-                            texto: linea.data[1].texto,
-                            logro: linea.data[2].texto,
-                        }
-                    ],
-                    editing: linea.editing,
-                    id: linea.id,
-                    logro: linea.data[2].texto,
-                    pre_row: linea.pre_row,
-                    row: linea.row,
-                    semana: linea.data[0].texto,
-                    tipo: linea.tipo,
-                    
-                };
                 /* Renumera row */
-                var week = xlinea.semana;
+                var week = linea.semana;
                 if(!isNaN(week)){                
-                    var week = parseInt(xlinea.semana);
-                    var rowUnidades = this.lineas.filter(function (linea) {
-                        return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
+                    var week = parseInt(linea.semana);
+                    var rowUnidades = this.lineas.filter(function (xlinea) {
+                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'contenidos';
                     });
                     var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
                     var row = rowTitulo1 + (week * 100);
-                    xlinea.row = row ;
-                    xlinea.semana = week; 
-                    this.$store.dispatch('GrabarContenido', xlinea);
+                    linea.row = row ;
+                    linea.semana = week; 
+                    /* Modifica col y cols del texto */
+console.log('Unidades.grabar.lineas: ', this.lineas);
+                    for(var xlinea in this.lineas){
+console.log('Unidades.grabar.xlinea: ', xlinea);
+console.log('Unidades.grabar.this.lineas[xlinea]: ', this.lineas[xlinea]);
+                        this.lineas[xlinea]['data'][1].col = 1;
+                        this.lineas[xlinea]['data'][1].cols = 8;
+                        this.lineas[xlinea]['data'][1].offset = 1;
+                    }
+                    this.$store.dispatch('GrabarContenido', linea);
                 }else{
                     alert('La semana debe ser un número entero.');
                 };

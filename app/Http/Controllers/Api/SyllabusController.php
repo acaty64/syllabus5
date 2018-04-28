@@ -31,9 +31,9 @@ class SyllabusController extends Controller
                 $id = $request->data['id'];
                 $unidad = Unidad::find($id);
                 if(!empty($unidad)){                
-                    $unidad->semana = $request->data['semana'];
-                    $unidad->texto = $request->data['data'][0]['texto'];
-                    $unidad->logro = $request->data['logro'];
+                    $unidad->semana = $request->data['data'][0]['texto'];
+                    $unidad->texto  = $request->data['data'][1]['texto'];
+                    $unidad->logro  = $request->data['data'][2]['texto'];
                     $unidad->save();
                     $proceso = 'unidades';
                 }else{
@@ -131,6 +131,7 @@ class SyllabusController extends Controller
         $new_data['subtipo'] = '';
         $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 8,
                     'offset' => 1,
@@ -155,6 +156,7 @@ class SyllabusController extends Controller
             $new_data['orden'] = $collection[$key]['orden'];
             $new_data['data'] = [
                     [
+                        'view' => true,
                         'col' => 1,
                         'cols' => 8,
                         'offset' => 1,
@@ -185,6 +187,7 @@ class SyllabusController extends Controller
             $new_data['item'] = $collection[$key]['item'];
             $new_data['data'] = [
                     [
+                        'view' => true,
                         'col' => 1,
                         'cols' => 8,
                         'offset' => 1,
@@ -215,6 +218,7 @@ class SyllabusController extends Controller
             $new_data['tipo'] = $data;
             $new_data['data'] = [
                     [
+                        'view' => true,
                         'col' => 2,
                         'cols' => 2,
                         'offset' => 2,
@@ -222,6 +226,7 @@ class SyllabusController extends Controller
                         'texto' => $$data[$key]['texto']
                     ],
                     [
+                        'view' => true,
                         'col' => 3,
                         'cols' => 2,
                         'offset' => 1,
@@ -250,6 +255,7 @@ class SyllabusController extends Controller
         $new_data['tipo'] = $data;
         $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 8,
                     'offset' => 2,
@@ -275,6 +281,7 @@ class SyllabusController extends Controller
                 $new_data['item'] = $collection[$key2]['item'];
                 $new_data['data'] = [
                         [
+                            'view' => true,
                             'col' => 2,
                             'cols' => 8,
                             'offset' => 2,
@@ -300,16 +307,32 @@ class SyllabusController extends Controller
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
-            $new_data['logro'] = $collection[$key]['logro'];
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
+                    'view' => false,
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'center',
+                    'texto' => $collection[$key]['semana'],
+                ],
+                [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 8,
                     'offset' => 1,
                     'align' => 'center',
                     'texto' => $collection[$key]['texto'],
-                    'logro' => $collection[$key]['logro']
+                    'logro' => $collection[$key]['logro'],
+                ],
+                [
+                    'view' => false,
+                    'col' => 3,
+                    'cols' => 4,
+                    'offset' => 3,
+                    'align' => 'center',
+                    'texto' => $collection[$key]['logro'],
                 ],
             ];
             array_push($datos, $new_data);
@@ -354,6 +377,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -361,6 +385,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['semana'],
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 3,
                     'offset' => 1,
@@ -368,6 +393,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['concepto'],
                 ],
                 [
+                    'view' => true,
                     'col' => 4,
                     'cols' => 2,
                     'offset' => 1,
@@ -375,6 +401,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['procedimiento'],
                 ],
                 [
+                    'view' => true,
                     'col' => 6,
                     'cols' => 2,
                     'offset' => 1,
@@ -403,6 +430,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 7,
                     'offset' => 2,
@@ -431,6 +459,7 @@ class SyllabusController extends Controller
         $new_data['tipo'] = $data;
         $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 8,
                     'offset' => 2,
@@ -458,6 +487,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 2,
                     'offset' => 2,
@@ -465,6 +495,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['texto'],
                 ],
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -472,6 +503,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['porcentaje'] . '%',
                 ],
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 2,
                     'offset' => 1,
@@ -501,6 +533,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -508,6 +541,7 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['orden'],
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 6,
                     'offset' => 1,
@@ -521,6 +555,7 @@ class SyllabusController extends Controller
             $new_data['pre_row'] = $new_data['row'];
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -528,6 +563,7 @@ class SyllabusController extends Controller
                     'texto' => '',
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 8,
                     'offset' => 2,
@@ -541,6 +577,7 @@ class SyllabusController extends Controller
             $new_data['pre_row'] = $new_data['row'];
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -548,6 +585,7 @@ class SyllabusController extends Controller
                     'texto' => '',
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 8,
                     'offset' => 2,
@@ -561,6 +599,7 @@ class SyllabusController extends Controller
             $new_data['pre_row'] = $new_data['row'];
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -568,6 +607,7 @@ class SyllabusController extends Controller
                     'texto' => '',
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 4,
                     'offset' => 2,
@@ -581,6 +621,7 @@ class SyllabusController extends Controller
             $new_data['pre_row'] = $new_data['row'];
             $new_data['data'] = [
                 [
+                    'view' => true,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
@@ -588,6 +629,7 @@ class SyllabusController extends Controller
                     'texto' => '',
                 ],
                 [
+                    'view' => true,
                     'col' => 2,
                     'cols' => 6,
                     'offset' => 2,

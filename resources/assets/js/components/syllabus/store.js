@@ -50,7 +50,8 @@ export const store = new Vuex.Store({
         switchEditingContenido(state, linea){
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i].editing = !state.lineas[i].editing;
-console.log('switchEditingContenido state.lineas[i]: ', state.lineas[i]);
+//console.log('switchEditingContenido state.lineas[i]: ', i + '/' + state.lineas[i]);
+//console.log('switchEditingContenido state.lineas: ', state.lineas);
         },
 
         saveLinea(state, linea){
