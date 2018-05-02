@@ -62,6 +62,9 @@ class SyllabusController extends Controller
             case 'generales' :
                 $proceso = 'generales';
                 break;
+            case 'titulo3' :
+                $proceso = 'titulo3';
+                break;
         };
         return [
             'success'=>true,

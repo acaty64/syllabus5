@@ -52,7 +52,11 @@
                 return titulo;
             },
             rowclass(item, tipo){
-                return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                if(tipo == 'unidades'){
+                    return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                }else{
+                    return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                }
             },
             //
             // Reemplazar chr(13) con <br>
@@ -62,7 +66,7 @@
                 return newText;
             },
             viewUnidad(item){                         
-                var newText = item.texto + '<br> Logro: ' +item.logro;
+                var newText = item.texto + '<br>Logro: ' +item.logro;
                 return newText;
             },
         }    

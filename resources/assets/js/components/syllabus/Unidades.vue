@@ -68,26 +68,30 @@
             },
             grabar(linea) {
                 /* Renumera row */
-                var week = linea.semana;
+                var week = linea.data[0].texto;
+                var oldWeek = linea.semana;
                 if(!isNaN(week)){                
-                    var week = parseInt(linea.semana);
+                    var week = parseInt(linea.data[0].texto);
                     var rowUnidades = this.lineas.filter(function (xlinea) {
                         return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'contenidos';
                     });
                     var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
                     var row = rowTitulo1 + (week * 100);
                     linea.row = row ;
-                    linea.semana = week; 
-                    /* Modifica col y cols del texto */
-console.log('Unidades.grabar.lineas: ', this.lineas);
-                    for(var xlinea in this.lineas){
-console.log('Unidades.grabar.xlinea: ', xlinea);
-console.log('Unidades.grabar.this.lineas[xlinea]: ', this.lineas[xlinea]);
-                        this.lineas[xlinea]['data'][1].col = 1;
-                        this.lineas[xlinea]['data'][1].cols = 8;
-                        this.lineas[xlinea]['data'][1].offset = 1;
-                    }
+                    linea.semana = week;
                     this.$store.dispatch('GrabarContenido', linea);
+                    /* Renumerar titulo3 */
+                    var oldRow = linea.pre_row + 1;
+                    var newRow = linea.row + 1;
+                    for (var i in this.lineas) {
+                        if (this.lineas[i].row == oldRow) {
+                            var ylinea = this.lineas[i];
+                        }
+                    }
+                    ylinea.semana = week;
+                    ylinea.row = newRow;
+                    this.$store.dispatch('GrabarContenido', ylinea);
+
                 }else{
                     alert('La semana debe ser un número entero.');
                 };
@@ -98,7 +102,7 @@ console.log('Unidades.grabar.this.lineas[xlinea]: ', this.lineas[xlinea]);
             },
             editar(linea) {
                 this.$store.dispatch('EditarContenido', linea);
-console.log("this.items", this.items);
+//console.log("this.items", this.items);
             },           
         } 
     };
