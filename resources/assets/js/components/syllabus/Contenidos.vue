@@ -17,8 +17,10 @@
                             <button type="submit" class="btn btn-default" @click='grabar(linea)'>Grabar</button>
                         </span>
                         <span v-else>
-                            <span v-for="item in linea.data">                            
-                                <span :class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                            <span v-for="item in linea.data">    
+                                <span v-if="item.view">
+                                    <span :class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                                </span>                        
                             </span>
                             <span v-if="linea.tipo == 'contenidos'">
                                 <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>                            
@@ -74,7 +76,11 @@ console.log('linea despues: ', linea);
                 return newText;
             },
             rowclass(item, tipo) {
-                return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                if(tipo == 'unidades'){
+                    return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                }else{
+                    return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                }
             },
             setTitulo(subtipo) {
                 this.$store.dispatch('SetTitulo', subtipo);
