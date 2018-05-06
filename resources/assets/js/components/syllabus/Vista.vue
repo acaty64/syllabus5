@@ -21,6 +21,16 @@
                                 </span>
                             </span>
                         </span>
+                        <span v-else-if="fila['tipo'] == 'evaluaciones'">
+                            <span v-for="item in fila.data">
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewEvaluacion(item)"></span>
+                            </span>                            
+                        </span>
+                        <span v-else-if="fila['tipo'] == 'bibliografias'">
+                            <span v-for="item in fila.data">
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewBibliografia(item)"></span>
+                            </span>                            
+                        </span>
                         <span v-else>
                             <span v-for="item in fila.data">
                                 <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
@@ -69,6 +79,55 @@
                 var newText = item.texto + '<br>Logro: ' +item.logro;
                 return newText;
             },
+            viewEvaluacion(item){
+                switch(item.tipo){
+                    case 'texto': {
+                        return item.texto;
+                        break;
+                    };
+                    case 'porcentaje': {
+                        return item.texto + ' %';
+                        break;
+                    };
+                    case 'semana': {
+                        return 'semana ' + item.texto;
+                        break;
+                    };
+                }
+            },
+            viewBibliografia(item){
+                switch(item.tipo){
+                    case '': {
+                        return '';
+                        break;
+                    };
+                    case 'orden': {
+                        return item.texto;
+                        break;
+                    };
+                    case 'autor': {
+                        return 'Autor(es): ' + item.texto;
+                        break;
+                    };
+                    case 'titulo': {
+                        return 'Título: ' + item.texto;
+                        break;
+                    };
+                    case 'editorial': {
+                        return 'Editorial: '+ item.texto;
+                        break;
+                    };
+                    case 'año': {
+                        return 'Año: ' + item.texto;
+                        break;
+                    };
+                    case 'ubicacion': {
+                        return 'Ubicacion: '+ item.texto;
+                        break;
+                    };
+                }
+            },
+
         }    
     }
 </script>

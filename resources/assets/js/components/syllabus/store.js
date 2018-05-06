@@ -23,7 +23,8 @@ export const store = new Vuex.Store({
 
         romanos: [ '','I','II','III','IV','V','VI','VII','VIII','IX','X' ],
 
-        titulo: ''
+        titulo: '',
+        switchEdit: false, 
 	},
 
 	mutations:{
@@ -89,7 +90,12 @@ export const store = new Vuex.Store({
         },
         changePre_row(state, row){
             state.pre_row = row;
-        }
+        },
+
+        switchEdit(state){
+            state.switchEdit = !state.switchEdit;
+        },
+        
 	},
 	getters: {
         generales: (state) => {

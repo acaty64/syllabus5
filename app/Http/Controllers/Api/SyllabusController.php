@@ -496,6 +496,7 @@ class SyllabusController extends Controller
                     'offset' => 2,
                     'align' => 'left',
                     'texto' => $collection[$key]['texto'],
+                    'tipo' => 'texto',
                 ],
                 [
                     'view' => true,
@@ -503,7 +504,9 @@ class SyllabusController extends Controller
                     'cols' => 1,
                     'offset' => 1,
                     'align' => 'left',
-                    'texto' => $collection[$key]['porcentaje'] . '%',
+                    //'texto' => $collection[$key]['porcentaje'] . '%',
+                    'texto' => $collection[$key]['porcentaje'],
+                    'tipo' => 'porcentaje',
                 ],
                 [
                     'view' => true,
@@ -511,8 +514,10 @@ class SyllabusController extends Controller
                     'cols' => 2,
                     'offset' => 1,
                     'align' => 'left',
-                    'texto' => ($collection[$key]['tipo'] == '1' ?
-                                'semana ' . $collection[$key]['semana'] : '' ),
+                    //'texto' => ($collection[$key]['tipo'] == '1' ?
+                    //            'semana ' . $collection[$key]['semana'] : '' ),
+                    'texto' => $collection[$key]['semana'],
+                    'tipo' => 'semana',
                 ],
 
             ];
@@ -542,6 +547,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => $collection[$key]['orden'],
+                    'tipo' => 'orden',
                 ],
                 [
                     'view' => true,
@@ -549,7 +555,8 @@ class SyllabusController extends Controller
                     'cols' => 6,
                     'offset' => 1,
                     'align' => 'left',
-                    'texto' => 'Autor(es): ' . $collection[$key]['autor'],
+                    'texto' => $collection[$key]['autor'],
+                    'tipo' => 'autor',
                 ],
             ];
             array_push($datos, $new_data); 
@@ -564,6 +571,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => '',
+                    'tipo' => '',
                 ],
                 [
                     'view' => true,
@@ -571,7 +579,8 @@ class SyllabusController extends Controller
                     'cols' => 8,
                     'offset' => 2,
                     'align' => 'left',
-                    'texto' => 'Título: ' . $collection[$key]['titulo'],
+                    'texto' => $collection[$key]['titulo'],
+                    'tipo' => 'titulo',
                 ],
             ];
             array_push($datos, $new_data);
@@ -586,6 +595,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => '',
+                    'tipo' => '',
                 ],
                 [
                     'view' => true,
@@ -593,7 +603,9 @@ class SyllabusController extends Controller
                     'cols' => 8,
                     'offset' => 2,
                     'align' => 'left',
-                    'texto' => 'Editorial: ' . $collection[$key]['editorial'],
+                    'texto' => $collection[$key]['editorial'],
+                    'tipo' => 'editorial',
+                    'tipo' => '',
                 ],
             ];
             array_push($datos, $new_data); 
@@ -608,6 +620,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => '',
+                    'tipo' => '',
                 ],
                 [
                     'view' => true,
@@ -615,7 +628,8 @@ class SyllabusController extends Controller
                     'cols' => 4,
                     'offset' => 2,
                     'align' => 'left',
-                    'texto' => 'Año: ' . $collection[$key]['year'],
+                    'texto' => $collection[$key]['year'],
+                    'tipo' => 'año',
                 ],
             ];
             array_push($datos, $new_data); 
@@ -630,6 +644,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => '',
+                    'tipo' => '',
                 ],
                 [
                     'view' => true,
@@ -637,13 +652,13 @@ class SyllabusController extends Controller
                     'cols' => 6,
                     'offset' => 2,
                     'align' => 'left',
-                    'texto' => 'Ubicación: ' . $collection[$key]['codigo'],
+                    'texto' => $collection[$key]['codigo'],
+                    'tipo' => 'ubicacion',
                 ],
             ];
             array_push($datos, $new_data); 
 
         }
-
 
         return [
             'status'=>true,

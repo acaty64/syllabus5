@@ -3,7 +3,13 @@
         <h1>UNIDADES</h1>
         <table>
             <thead>
-
+                <tr>                    
+                    <div class="row">                
+                        <span class="notEditing col-1 unid col-xs-1 col-xs-offset-1" align='center'><b>Semana</b></span>
+                        <span class="notEditing col-2 unid col-xs-4 col-xs-offset-2" align='center'><b>Unidad</b></span>
+                        <span class="notEditing col-3 unid col-xs-4 col-xs-offset-3" align='center'><b>Logro</b></span>
+                    </div>                
+                </tr>                
             </thead>
             <tbody>
                 <tr v-for="linea in items">
@@ -18,7 +24,9 @@
                             <span v-for="item in linea.data" class="notEdit">                   
                                 <span rows="6" wrap="hard":class="rowclass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
-                            <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>
+                            <div v-if="!switchEdit">
+                                <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>
+                            </div>
                         </span>
                     </div>
                 </tr>
@@ -32,12 +40,12 @@
     export default {
         mounted() {
             console.log('Unidades.vue mounted');
-//            this.setTitulo('unidades');
         },
         computed: {
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
+                switchEdit: (state) => state.switchEdit,
             }),
 
             items(){ 
@@ -47,24 +55,21 @@
                     lineas[linea]['data'][1].col = 2;
                     lineas[linea]['data'][1].cols = 4;
                     lineas[linea]['data'][1].offset = 2;
+                    lineas[linea]['data'][1].align = 'left';
+
+                    lineas[linea]['data'][2].align = 'justify';
                 } 
                 return lineas; 
             },
 
         },
         methods: {
-/*
-            setTitulo(subtipo) {
-                this.$store.dispatch('setTitulo', subtipo);
-            },
-*/
             rowclass(item, linea) {
                 if (linea.editing){
                     return 'editing col-'+item.col+' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
                 }else{
                     return 'notEditing col-'+item.col+' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;                    
                 }
-                //return 'col-'+item.col+' '+ tipo+' col-xs-' + item.cols;
             },
             grabar(linea) {
                 /* Renumera row */
@@ -91,7 +96,7 @@
                     ylinea.semana = week;
                     ylinea.row = newRow;
                     this.$store.dispatch('GrabarContenido', ylinea);
-
+                    this.$store.commit('switchEdit');
                 }else{
                     alert('La semana debe ser un número entero.');
                 };
@@ -102,7 +107,7 @@
             },
             editar(linea) {
                 this.$store.dispatch('EditarContenido', linea);
-//console.log("this.items", this.items);
+                this.$store.commit('switchEdit');
             },           
         } 
     };
@@ -121,12 +126,6 @@
         background: white;
         margin-left: 0px;
     }
-/*
-    .col-2, .col-3,  .col-4,
-    {
-        margin-left: 0px;
-    }
-*/
 </style>
 
 
