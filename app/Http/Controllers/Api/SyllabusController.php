@@ -54,6 +54,12 @@ class SyllabusController extends Controller
                 $proceso = 'estrategias';
                 break;
             case 'evaluaciones' :
+                $id = $request->data['id'];
+                $evaluacion = Evaluacion::find($id);
+                $evaluacion->texto = $request->data['data'][0]['texto'];
+                $evaluacion->porcentaje = $request->data['data'][1]['texto'];
+                $evaluacion->semana = $request->data['data'][2]['texto'];
+                $evaluacion->save();
                 $proceso = 'evaluaciones';
                 break;
             case 'bibliografias' :
@@ -109,6 +115,7 @@ class SyllabusController extends Controller
 
         $evaluaciones = Evaluacion::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
+                    ->sortBy('tipo . semana')
                     ->toArray();
 
         $estrategias = Estrategia::all()->where('semestre', $request->semestre)
@@ -128,7 +135,6 @@ class SyllabusController extends Controller
         $new_data = [];
         $new_data['id'] = 0; 
         $new_data['row'] = 0;
-        //$new_data['week'] = '';
         $new_data['editing'] = false;
         $new_data['tipo'] = 'titulo0';
         $new_data['subtipo'] = '';
@@ -485,7 +491,11 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'evaluaciones';
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
+            if($collection[$key]['semana'] > 0){
+                $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
+            }else{
+                $new_data['row'] = 99 * 100 + $row_titulo;
+            }
             $new_data['pre_row'] = $new_data['row'];
             $new_data['editing'] = false;
             $new_data['data'] = [
@@ -496,7 +506,7 @@ class SyllabusController extends Controller
                     'offset' => 2,
                     'align' => 'left',
                     'texto' => $collection[$key]['texto'],
-                    'tipo' => 'texto',
+                    'type' => 'texto',
                 ],
                 [
                     'view' => true,
@@ -506,7 +516,7 @@ class SyllabusController extends Controller
                     'align' => 'left',
                     //'texto' => $collection[$key]['porcentaje'] . '%',
                     'texto' => $collection[$key]['porcentaje'],
-                    'tipo' => 'porcentaje',
+                    'type' => 'porcentaje',
                 ],
                 [
                     'view' => true,
@@ -517,7 +527,7 @@ class SyllabusController extends Controller
                     //'texto' => ($collection[$key]['tipo'] == '1' ?
                     //            'semana ' . $collection[$key]['semana'] : '' ),
                     'texto' => $collection[$key]['semana'],
-                    'tipo' => 'semana',
+                    'type' => 'semana',
                 ],
 
             ];

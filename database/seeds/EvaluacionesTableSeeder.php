@@ -19,7 +19,6 @@ class EvaluacionesTableSeeder extends Seeder
             'tipo' => '1',
             'texto' => 'Primer Examen Parcial',
             'porcentaje' => 10,
-            'orden' => 1,
         ]);
         Evaluacion::create([
             'semestre' => '20181',
@@ -28,7 +27,6 @@ class EvaluacionesTableSeeder extends Seeder
             'tipo' => '1',
             'texto' => 'Segundo Examen Parcial',
             'porcentaje' => 20,
-            'orden' => 2,
         ]);
         Evaluacion::create([
             'semestre' => '20181',
@@ -37,7 +35,6 @@ class EvaluacionesTableSeeder extends Seeder
             'tipo' => '1',
             'texto' => 'Tercer Examen Parcial',
             'porcentaje' => 20,
-            'orden' => 3,
         ]);
         Evaluacion::create([
             'semestre' => '20181',
@@ -46,7 +43,6 @@ class EvaluacionesTableSeeder extends Seeder
             'tipo' => '1',
             'texto' => 'Examen Final',
             'porcentaje' => 30,
-            'orden' => 4,
         ]);
         Evaluacion::create([
             'semestre' => '20181',
@@ -55,7 +51,6 @@ class EvaluacionesTableSeeder extends Seeder
             'tipo' => '2',
             'texto' => 'Evaluacion Continua',
             'porcentaje' => 20,
-            'orden' => 5,
         ]);
     }
 }

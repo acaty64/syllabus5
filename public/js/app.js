@@ -13143,7 +13143,7 @@ module.exports = Vue$3;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(85);
+module.exports = __webpack_require__(87);
 
 
 /***/ }),
@@ -13152,7 +13152,7 @@ module.exports = __webpack_require__(85);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(86);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -44382,7 +44382,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(83)
+var __vue_template__ = __webpack_require__(85)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44515,7 +44515,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Estrategias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Estrategias__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Evaluaciones__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Evaluaciones___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__Evaluaciones__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Bibliografias___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__Bibliografias__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios__ = __webpack_require__(7);
@@ -44802,7 +44802,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return newText;
         },
         viewEvaluacion: function viewEvaluacion(item) {
-            switch (item.tipo) {
+            switch (item.type) {
                 case 'texto':
                     {
                         return item.texto;
@@ -44815,7 +44815,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     };
                 case 'semana':
                     {
-                        return 'semana ' + item.texto;
+                        var texto = 'semana ' + item.texto;
+                        if (item.texto == 0) {
+                            texto = '';
+                        }
+                        return texto;
                         break;
                     };
             }
@@ -45442,7 +45446,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.unid {\n        border: 0px solid black;\n}\n.editing {\n        background: yellow;\n        margin-left: 0px;\n}\n.notEditing {\n        background: white;\n        margin-left: 0px;\n}\n/*\n    .col-2, .col-3,  .col-4,\n    {\n        margin-left: 0px;\n    }\n*/\n", ""]);
+exports.push([module.i, "\n.unid {\n    border: 0px solid black;\n}\n.editing {\n    background: yellow;\n    margin-left: 0px;\n}\n.notEditing {\n    background: white;\n    margin-left: 0px;\n}\n", ""]);
 
 // exports
 
@@ -45498,7 +45502,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         console.log('Unidades.vue mounted');
-        //            this.setTitulo('unidades');
     },
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
@@ -45569,10 +45572,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return newText;
         },
         editar: function editar(linea) {
-            console.log('switchEdit 1: ', this.switchEdit);
-            this.$store.commit('switchEdit');
-            console.log('switchEdit 2: ', this.switchEdit);
             this.$store.dispatch('EditarContenido', linea);
+            this.$store.commit('switchEdit');
         }
     }
 });
@@ -46371,15 +46372,19 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(78)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(78)
+var __vue_script__ = __webpack_require__(80)
 /* template */
-var __vue_template__ = __webpack_require__(79)
+var __vue_template__ = __webpack_require__(81)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -46415,11 +46420,88 @@ module.exports = Component.exports
 
 /***/ }),
 /* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(79);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("2061cb1e", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c414db44\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Evaluaciones.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c414db44\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Evaluaciones.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.evaluaciones {\n    border: 0px solid black;\n}\n.editing {\n    background: yellow;\n    margin-left: 0px;\n}\n.notEditing {\n    background: white;\n    margin-left: 0px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -46429,24 +46511,259 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	mounted: function mounted() {
-		console.log('Evaluaciones.vue mounted');
-	},
+    mounted: function mounted() {
+        console.log('Evaluaciones.vue mounted');
+    },
 
-	computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({})
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+        lineas: function lineas(state) {
+            return state.lineas;
+        },
+        columnas: function columnas(state) {
+            return state.columnas;
+        },
+        titulo: function titulo(state) {
+            return state.titulo;
+        },
+        switchEdit: function switchEdit(state) {
+            return state.switchEdit;
+        }
+    }), {
+        items: function items() {
+            var lineas = this.$store.getters.evaluaciones;
+            /* Modifica col y cols del texto */
+            for (var linea in lineas) {
+                lineas[linea]['data'][0].col = 2;
+                lineas[linea]['data'][0].cols = 4;
+                lineas[linea]['data'][0].offset = 1;
+                lineas[linea]['data'][0].align = 'left';
+
+                lineas[linea]['data'][1].col = 3;
+                lineas[linea]['data'][1].cols = 2;
+                lineas[linea]['data'][1].offset = 1;
+                lineas[linea]['data'][1].align = 'center';
+
+                lineas[linea]['data'][2].col = 4;
+                lineas[linea]['data'][2].cols = 2;
+                lineas[linea]['data'][2].offset = 1;
+                lineas[linea]['data'][2].align = 'center';
+            }
+            return lineas;
+        }
+    }),
+    methods: {
+        rowclass: function rowclass(item, linea) {
+            if (linea.editing) {
+                return 'editing col-' + item.col + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            } else {
+                return 'notEditing col-' + item.col + ' evaluaciones col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            }
+        },
+        grabar: function grabar(linea) {
+            /* Renumera row */
+            var week = linea.data[2].texto;
+            var oldWeek = linea.semana;
+            if (!isNaN(week)) {
+                var week = parseInt(linea.data[2].texto);
+                var rowUnidades = this.lineas.filter(function (xlinea) {
+                    return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'evaluaciones';
+                });
+                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0, 1)) * 10000;
+                var row = rowTitulo1 + week * 100;
+                linea.row = row;
+                linea.semana = week;
+                this.$store.dispatch('GrabarContenido', linea);
+                this.$store.commit('switchEdit');
+            } else {
+                alert('La semana debe ser un número entero.');
+            };
+        },
+        viewTexto: function viewTexto(item) {
+            var newText = item.texto.toString().replace(/\n/g, '<br>');
+            return newText;
+        },
+        editar: function editar(linea) {
+            this.$store.dispatch('EditarContenido', linea);
+            this.$store.commit('switchEdit');
+        }
+    }
 });
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
+    _vm._v(" "),
+    _c("table", [
+      _c(
+        "thead",
+        _vm._l(_vm.columnas, function(columna) {
+          return _c("tr", [_c("th", { attrs: { width: columna } })])
+        })
+      ),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.items, function(linea) {
+            return _c("tr", [
+              _c("div", { staticClass: "row" }, [
+                linea.editing
+                  ? _c(
+                      "span",
+                      [
+                        _vm._l(linea.data, function(item) {
+                          return _c("span", [
+                            _c(
+                              "textarea",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: item.texto,
+                                    expression: "item.texto"
+                                  }
+                                ],
+                                class: _vm.rowclass(item, linea),
+                                attrs: {
+                                  rows: "1",
+                                  wrap: "hard",
+                                  align: item.align
+                                },
+                                domProps: { value: item.texto },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(item, "texto", $event.target.value)
+                                  }
+                                }
+                              },
+                              [_vm._v(_vm._s(item.texto))]
+                            )
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "btn btn-default col-4 unidades col-xs-push-8",
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.grabar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Grabar")]
+                        )
+                      ],
+                      2
+                    )
+                  : _c(
+                      "span",
+                      [
+                        _vm._l(linea.data, function(item) {
+                          return _c("span", { staticClass: "notEdit" }, [
+                            _c("span", {
+                              class: _vm.rowclass(item, linea),
+                              attrs: {
+                                rows: "1",
+                                wrap: "hard",
+                                align: item.align
+                              },
+                              domProps: {
+                                innerHTML: _vm._s(_vm.viewTexto(item))
+                              }
+                            })
+                          ])
+                        }),
+                        _vm._v(" "),
+                        !_vm.switchEdit
+                          ? _c("div", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-default",
+                                  attrs: { type: "submit" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.editar(linea)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Editar")]
+                              )
+                            ])
+                          : _vm._e()
+                      ],
+                      2
+                    )
+              ])
+            ])
+          })
+        ],
+        2
+      )
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-2 col-xs-4 col-xs-offset-1 evaluaciones",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("Evaluación")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-3 col-xs-2 col-xs-offset-1 evaluaciones",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("Porcentaje")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-4 col-xs-2 col-xs-offset-1 evaluaciones",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("Semana")])]
+        ),
+        _vm._v(" "),
+        _c("span", {
+          staticClass: "notEditing col-5 col-xs-1 col-xs-offset-1 evaluaciones",
+          attrs: { align: "center" }
+        })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46457,15 +46774,15 @@ if (false) {
 }
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(81)
+var __vue_script__ = __webpack_require__(83)
 /* template */
-var __vue_template__ = __webpack_require__(82)
+var __vue_template__ = __webpack_require__(84)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46504,7 +46821,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46527,7 +46844,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46547,7 +46864,7 @@ if (false) {
 }
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46707,7 +47024,7 @@ if (false) {
 }
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46750,6 +47067,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         estrategiasSaved: function estrategiasSaved(state, linea) {
             var i = findByTipo(state.lineas, 'estrategias');
             state.lineas[i].data[0].texto = linea.data[0].texto;
+            state.status = 'vista';
+        },
+        evaluacionesSaved: function evaluacionesSaved(state, linea) {
             state.status = 'vista';
         },
         switchEditingContenido: function switchEditingContenido(state, linea) {
@@ -46828,6 +47148,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 return linea.tipo == 'estrategias';
             });
             return item;
+        },
+        evaluaciones: function evaluaciones(state) {
+            var array = state.lineas;
+            var item = array.filter(function (linea) {
+                return linea.tipo == 'evaluaciones';
+            });
+            return item;
         }
     },
 
@@ -46896,7 +47223,7 @@ function findByRow(lineas, row) {
 }
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

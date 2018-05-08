@@ -48,6 +48,10 @@ export const store = new Vuex.Store({
             state.status = 'vista';
         },
 
+        evaluacionesSaved(state, linea){
+            state.status = 'vista';
+        },
+
         switchEditingContenido(state, linea){
             var i = findByRow(state.lineas, linea.row);
             state.lineas[i].editing = !state.lineas[i].editing;
@@ -88,6 +92,7 @@ export const store = new Vuex.Store({
         setTitulo(state, titulo){
             state.titulo = titulo;
         },
+        
         changePre_row(state, row){
             state.pre_row = row;
         },
@@ -95,7 +100,7 @@ export const store = new Vuex.Store({
         switchEdit(state){
             state.switchEdit = !state.switchEdit;
         },
-        
+
 	},
 	getters: {
         generales: (state) => {
@@ -123,6 +128,11 @@ export const store = new Vuex.Store({
         estrategias: (state) => {
             var array = state.lineas;
             var item = array.filter( (linea) => linea.tipo == 'estrategias' );
+            return item;
+        },
+        evaluaciones: (state) => {
+            var array = state.lineas;
+            var item = array.filter( (linea) => linea.tipo == 'evaluaciones' );
             return item;
         },
     },

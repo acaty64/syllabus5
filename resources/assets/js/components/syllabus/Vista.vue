@@ -80,7 +80,7 @@
                 return newText;
             },
             viewEvaluacion(item){
-                switch(item.tipo){
+                switch(item.type){
                     case 'texto': {
                         return item.texto;
                         break;
@@ -90,7 +90,11 @@
                         break;
                     };
                     case 'semana': {
-                        return 'semana ' + item.texto;
+                        var texto = 'semana ' + item.texto;
+                        if(item.texto == 0){
+                            texto = '';
+                        }
+                        return texto;
                         break;
                     };
                 }

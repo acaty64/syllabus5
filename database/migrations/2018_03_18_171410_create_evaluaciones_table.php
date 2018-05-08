@@ -21,7 +21,6 @@ class CreateEvaluacionesTable extends Migration
             $table->char('tipo',3);
             $table->mediumText('texto');
             $table->integer('porcentaje');
-            $table->integer('orden');
             $table->timestamps();
         });
     }
