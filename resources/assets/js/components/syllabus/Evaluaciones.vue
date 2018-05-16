@@ -98,6 +98,7 @@
                     linea.row = row ;
                     linea.semana = week;
                     this.$store.dispatch('GrabarContenido', linea);
+                    this.$store.dispatch('RenumeraExamen', linea);
                     this.$store.commit('switchEdit');
                 }else{
                     alert('La semana debe ser un número entero.');

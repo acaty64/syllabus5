@@ -176,7 +176,27 @@ console.log('GrabarContenido.linea 1: ', linea);
             var linea = context.state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == subtipo);
             var titulo = context.state.romanos[linea[0].orden]+'. '+linea[0].data[0].texto;
             context.commit('setTitulo', titulo);
-        }
+        },
+
+        RenumeraExamen: (context, linea) => {
+            /* Busca evaluacion en Contenidos */
+            for(var xlinea in context.state.lineas){
+                if(context.state.lineas[xlinea].tipo == 'examenes' 
+                    && context.state.lineas[xlinea].id == linea.id){
+                    var ylinea = context.state.lineas[xlinea];
+                }
+                if(context.state.lineas[xlinea].tipo == 'titulo1' 
+                    && context.state.lineas[xlinea].subtipo == 'contenidos'){
+                    var row_titulo = context.state.lineas[xlinea].row;
+                }
+            }
+
+            ylinea.data[0].texto = linea.data[0].texto;
+            ylinea.row = linea.semana * 100 + row_titulo + 99;
+
+            context.commit('saveLinea', ylinea);
+            context.commit('sortLineasRow');
+        },
 
     },
 });

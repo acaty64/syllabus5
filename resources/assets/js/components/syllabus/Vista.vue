@@ -46,21 +46,24 @@
     import { mapState } from 'vuex';
 
     export default {
-    	mounted() {
-    		console.log('Vista.vue mounted');
-    	},
-    	computed: {
+        mounted() {
+            console.log('Vista.vue mounted');
+        },
+
+        computed: {
             ...mapState({
                 items: (state) => state.lineas,
                 columnas: (state) => state.columnas,
                 romanos: (state) => state.romanos,
             }),
         },
+
         methods: {
             getTitulo(linea){
                 var titulo = this.romanos[linea.orden]+'. '+linea.data[0].texto; 
                 return titulo;
             },
+
             rowclass(item, tipo){
                 if(tipo == 'unidades'){
                     return 'col-1 unidades col-xs-8 col-xs-offset-1';
@@ -68,17 +71,17 @@
                     return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
                 }
             },
-            //
-            // Reemplazar chr(13) con <br>
-            //
+
             viewTexto(item){                         
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
             },
+
             viewUnidad(item){                         
                 var newText = item.texto + '<br>Logro: ' +item.logro;
                 return newText;
             },
+
             viewEvaluacion(item){
                 switch(item.type){
                     case 'texto': {
@@ -99,6 +102,7 @@
                     };
                 }
             },
+
             viewBibliografia(item){
                 switch(item.tipo){
                     case '': {
@@ -131,8 +135,8 @@
                     };
                 }
             },
-
-        }    
+        },
+            
     }
 </script>
 
