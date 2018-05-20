@@ -107,7 +107,8 @@
     .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
     .col-2.contenidos, .col-3.contenidos, .col-4.contenidos,  .col-6.contenidos,
     .col-3.generales, .col-2.bibliografias,
-    .col-2.unidades, .col-3.unidades, .col-4.unidades
+    .col-2.unidades, .col-3.unidades, .col-4.unidades,
+    .col-2.bibliografias, .col-3.bibliografias, .col-4.bibliografias, .col-5.bibliografias, .col-6.bibliografias
     {
         margin-left: 0px;
     }

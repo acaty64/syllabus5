@@ -28,8 +28,8 @@
                         </span>
                         <span v-else-if="fila['tipo'] == 'bibliografias'">
                             <span v-for="item in fila.data">
-                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewBibliografia(item)"></span>
-                            </span>                            
+                                <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewBibliografia(fila, item)"></span>
+                            </span>
                         </span>
                         <span v-else>
                             <span v-for="item in fila.data">
@@ -103,7 +103,8 @@
                 }
             },
 
-            viewBibliografia(item){
+            viewBibliografia(fila, item){
+
                 switch(item.tipo){
                     case '': {
                         return '';
@@ -114,11 +115,21 @@
                         break;
                     };
                     case 'autor': {
-                        return 'Autor(es): ' + item.texto;
+                        return 'Autor(es): ' + fila.data[1].texto + '<br>' + 
+                            'Título: ' + fila.data[2].texto + '<br>' + 
+                            'Editorial: ' + fila.data[3].texto + '<br>' + 
+                            'Año: ' + fila.data[4].texto + '<br>' + 
+                            'Ubicación: ' + fila.data[5].texto ;
                         break;
                     };
+                    default: {
+                        return '';
+                        break;
+                    };
+                }
+/*
                     case 'titulo': {
-                        return 'Título: ' + item.texto;
+                        return 'Título: ' + item.texto; 
                         break;
                     };
                     case 'editorial': {
@@ -130,10 +141,11 @@
                         break;
                     };
                     case 'ubicacion': {
-                        return 'Ubicacion: '+ item.texto;
+                        return 'Ubicación: '+ item.texto;
                         break;
                     };
                 }
+*/
             },
         },
             

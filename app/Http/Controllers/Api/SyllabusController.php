@@ -451,7 +451,6 @@ class SyllabusController extends Controller
         }           
 
         /* Estrategias */
-        /* Sumillas */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'estrategias');
@@ -532,15 +531,82 @@ class SyllabusController extends Controller
 
             ];
             array_push($datos, $new_data); 
-        }         
-        /* Bibliografia */
+        }
+
+        /* Bibliografias */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'bibliografia');
         $row_titulo = $collection->first()['row'];        
 
         $collection = collect($bibliografias);
+        foreach ($collection as $key => $value) {
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'bibliografias';
 
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
+            $new_data['pre_row'] = $new_data['row'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [
+                [
+                    'view' => true,
+                    'col' => 1,
+                    'cols' => 1,
+                    'offset' => 1,
+                    'align' => 'right',
+                    'texto' => $collection[$key]['orden'],
+                    'tipo' => 'orden',                    
+                ],
+                [
+                    'view' => true,
+                    'col' => 2,
+                    'cols' => 6,
+                    'offset' => 2,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['autor'],
+                    'tipo' => 'autor',
+                ],
+                [
+                    'view' => true,
+                    'col' => 0,
+                    'cols' => 0,
+                    'offset' => 0,
+                    'align' => 'justify',
+                    'texto' => $collection[$key]['titulo'],
+                    'tipo' => 'titulo',
+                ],
+                [
+                    'view' => true,
+                    'col' => 0,
+                    'cols' => 0,
+                    'offset' => 0,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['editorial'],
+                    'tipo' => 'editorial',
+                ],
+                [
+                    'view' => true,
+                    'col' => 0,
+                    'cols' => 0,
+                    'offset' => 0,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['year'],
+                    'tipo' => 'año',
+                ],                                                                                
+                [
+                    'view' => true,
+                    'col' => 0,
+                    'cols' => 0,
+                    'offset' => 0,
+                    'align' => 'left',
+                    'texto' => $collection[$key]['codigo'],
+                    'tipo' => 'ubicacion',
+                ],                                                                                
+            ];
+            array_push($datos, $new_data); 
+        };
+/*
         foreach ($collection as $key => $value) {
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
@@ -669,6 +735,7 @@ class SyllabusController extends Controller
             array_push($datos, $new_data); 
 
         }
+*/
 
         return [
             'status'=>true,

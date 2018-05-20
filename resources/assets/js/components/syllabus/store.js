@@ -135,6 +135,11 @@ export const store = new Vuex.Store({
             var item = array.filter( (linea) => linea.tipo == 'evaluaciones' );
             return item;
         },
+        bibliografias: (state) => {
+            var array = state.lineas;
+            var item = array.filter( (linea) => linea.tipo == 'bibliografias' );
+            return item;
+        },
     },
 
     actions: {
