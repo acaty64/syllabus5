@@ -53,12 +53,12 @@ export const store = new Vuex.Store({
         },
 
         switchEditingContenido(state, linea){
-            var i = findByRow(state.lineas, linea.row);
+            var i = findByRow(state.lineas, linea.row, linea.id);
             state.lineas[i].editing = !state.lineas[i].editing;
         },
 
         saveLinea(state, linea){
-            var i = findByRow(state.lineas, linea.pre_row);
+            var i = findByRow(state.lineas, linea.pre_row, linea.id);
             state.lineas[i] = linea;
             state.lineas[i].pre_row = linea.row;
         },
@@ -165,10 +165,7 @@ export const store = new Vuex.Store({
         },
 
         GrabarContenido: (context, linea) => {
-console.log('GrabarContenido.linea 1: ', linea);
-            //context.commit('saveLinea', linea);
             context.dispatch("SaveLinea", linea);
-            //context.commit('sortLineasTipo', 'contenidos');
             context.commit('sortLineasRow');
             context.commit('switchEditingContenido', linea);
         },
@@ -215,9 +212,9 @@ function findByTipo(items, tipo) {
         return null;
     }
 
-function findByRow(lineas, row) {
+function findByRow(lineas, row, id) {
         for (var i in lineas) {
-            if (lineas[i].row == row) {
+            if (lineas[i].row == row && lineas[i].id == id) {
                 return i;
             }
         }

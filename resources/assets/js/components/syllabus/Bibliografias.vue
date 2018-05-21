@@ -104,17 +104,15 @@
             },
             grabar(linea) {
                 /* Renumera row */
-                var week = linea.data[0].texto;
-                var oldWeek = linea.semana;
-                if(!isNaN(week)){                
-                    var week = parseInt(linea.data[0].texto);
-                    var rowUnidades = this.lineas.filter(function (xlinea) {
-                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
+                var orden = linea.data[0].texto;
+                if(!isNaN(orden)){                
+                    var orden = parseInt(linea.data[0].texto);
+                    var rowTitulo1 = this.lineas.filter(function (xlinea) {
+                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografia';
                     });
-                    var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-                    var row = rowTitulo1 + (week * 100);
+                    var row = rowTitulo1[0].row + (orden * 100);
                     linea.row = row ;
-                    linea.semana = week;
+                    /* Grabar datos */
                     this.$store.dispatch('GrabarContenido', linea);
                     this.$store.commit('switchEdit');
                 }else{

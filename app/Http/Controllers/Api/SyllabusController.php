@@ -63,6 +63,15 @@ class SyllabusController extends Controller
                 $proceso = 'evaluaciones';
                 break;
             case 'bibliografias' :
+                $id = $request->data['id'];
+                $evaluacion = Bibliografia::find($id);
+                $evaluacion->orden = $request->data['data'][0]['texto'];
+                $evaluacion->autor = $request->data['data'][1]['texto'];
+                $evaluacion->titulo = $request->data['data'][2]['texto'];
+                $evaluacion->editorial = $request->data['data'][3]['texto'];
+                $evaluacion->year = $request->data['data'][4]['texto'];
+                $evaluacion->codigo = $request->data['data'][5]['texto'];
+                $evaluacion->save();
                 $proceso = 'bibliografias';
                 break;
             case 'generales' :
@@ -545,7 +554,7 @@ class SyllabusController extends Controller
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'bibliografias';
 
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
+            $new_data['row'] = $collection[$key]['orden'] * 100 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['editing'] = false;
             $new_data['data'] = [

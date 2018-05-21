@@ -44785,10 +44785,32 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return titulo;
         },
         rowclass: function rowclass(item, tipo) {
-            if (tipo == 'unidades') {
-                return 'col-1 unidades col-xs-8 col-xs-offset-1';
-            } else {
-                return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            switch (tipo) {
+                case 'unidades':
+                    {
+                        return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                    };
+                case 'bibliografias':
+                    {
+                        switch (item.col) {
+                            case 1:
+                                {
+                                    return 'col-1 bibliografias col-xs-1 col-xs-offset-1';
+                                };
+                            case 2:
+                                {
+                                    return 'col-2 bibliografias col-xs-6 col-xs-offset-1';
+                                };
+                            default:
+                                {
+                                    return '';
+                                };
+                        }
+                    };
+                default:
+                    {
+                        return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                    };
             }
         },
         viewTexto: function viewTexto(item) {
@@ -44832,12 +44854,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     };
                 case 'orden':
                     {
-                        return item.texto;
+                        return '</b>' + item.texto + '</b>';
                         break;
                     };
                 case 'autor':
                     {
-                        return 'Autor(es): ' + fila.data[1].texto + '<br>' + 'Título: ' + fila.data[2].texto + '<br>' + 'Editorial: ' + fila.data[3].texto + '<br>' + 'Año: ' + fila.data[4].texto + '<br>' + 'Ubicación: ' + fila.data[5].texto;
+                        return '<b>Autor(es): </b>' + fila.data[1].texto + '<br>' + '<b>Título: </b>' + fila.data[2].texto + '<br>' + '<b>Editorial: </b>' + fila.data[3].texto + '<br>' + '<b>Año: </b>' + fila.data[4].texto + '<br>' + '<b>Ubicación: </b>' + fila.data[5].texto;
                         break;
                     };
                 default:
@@ -44846,25 +44868,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         break;
                     };
             }
-            /*
-                                case 'titulo': {
-                                    return 'Título: ' + item.texto; 
-                                    break;
-                                };
-                                case 'editorial': {
-                                    return 'Editorial: '+ item.texto;
-                                    break;
-                                };
-                                case 'año': {
-                                    return 'Año: ' + item.texto;
-                                    break;
-                                };
-                                case 'ubicacion': {
-                                    return 'Ubicación: '+ item.texto;
-                                    break;
-                                };
-                            }
-            */
         }
     }
 
@@ -46992,17 +46995,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         grabar: function grabar(linea) {
             /* Renumera row */
-            var week = linea.data[0].texto;
-            var oldWeek = linea.semana;
-            if (!isNaN(week)) {
-                var week = parseInt(linea.data[0].texto);
-                var rowUnidades = this.lineas.filter(function (xlinea) {
-                    return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
+            var orden = linea.data[0].texto;
+            if (!isNaN(orden)) {
+                var orden = parseInt(linea.data[0].texto);
+                var rowTitulo1 = this.lineas.filter(function (xlinea) {
+                    return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografia';
                 });
-                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0, 1)) * 10000;
-                var row = rowTitulo1 + week * 100;
+                var row = rowTitulo1[0].row + orden * 100;
                 linea.row = row;
-                linea.semana = week;
+                /* Grabar datos */
                 this.$store.dispatch('GrabarContenido', linea);
                 this.$store.commit('switchEdit');
             } else {
@@ -47445,11 +47446,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             state.status = 'vista';
         },
         switchEditingContenido: function switchEditingContenido(state, linea) {
-            var i = findByRow(state.lineas, linea.row);
+            var i = findByRow(state.lineas, linea.row, linea.id);
             state.lineas[i].editing = !state.lineas[i].editing;
         },
         saveLinea: function saveLinea(state, linea) {
-            var i = findByRow(state.lineas, linea.pre_row);
+            var i = findByRow(state.lineas, linea.pre_row, linea.id);
             state.lineas[i] = linea;
             state.lineas[i].pre_row = linea.row;
         },
@@ -47560,10 +47561,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
 
         GrabarContenido: function GrabarContenido(context, linea) {
-            console.log('GrabarContenido.linea 1: ', linea);
-            //context.commit('saveLinea', linea);
             context.dispatch("SaveLinea", linea);
-            //context.commit('sortLineasTipo', 'contenidos');
             context.commit('sortLineasRow');
             context.commit('switchEditingContenido', linea);
         },
@@ -47610,9 +47608,9 @@ function findByTipo(items, tipo) {
     return null;
 }
 
-function findByRow(lineas, row) {
+function findByRow(lineas, row, id) {
     for (var i in lineas) {
-        if (lineas[i].row == row) {
+        if (lineas[i].row == row && lineas[i].id == id) {
             return i;
         }
     }

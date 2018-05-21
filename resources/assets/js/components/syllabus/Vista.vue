@@ -65,10 +65,26 @@
             },
 
             rowclass(item, tipo){
-                if(tipo == 'unidades'){
-                    return 'col-1 unidades col-xs-8 col-xs-offset-1';
-                }else{
-                    return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                switch (tipo){
+                    case 'unidades': {
+                        return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                    };
+                    case 'bibliografias': {
+                        switch (item.col){
+                            case 1: {
+                                return 'col-1 bibliografias col-xs-1 col-xs-offset-1';
+                            };
+                            case 2: {
+                                return 'col-2 bibliografias col-xs-6 col-xs-offset-1';
+                            };
+                            default: {
+                                return '';
+                            };
+                        }
+                    };
+                    default: {
+                        return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                    };
                 }
             },
 
@@ -111,15 +127,15 @@
                         break;
                     };
                     case 'orden': {
-                        return item.texto;
+                        return '</b>' + item.texto + '</b>';
                         break;
                     };
                     case 'autor': {
-                        return 'Autor(es): ' + fila.data[1].texto + '<br>' + 
-                            'Título: ' + fila.data[2].texto + '<br>' + 
-                            'Editorial: ' + fila.data[3].texto + '<br>' + 
-                            'Año: ' + fila.data[4].texto + '<br>' + 
-                            'Ubicación: ' + fila.data[5].texto ;
+                        return '<b>Autor(es): </b>' + fila.data[1].texto + '<br>' + 
+                            '<b>Título: </b>' + fila.data[2].texto + '<br>' + 
+                            '<b>Editorial: </b>' + fila.data[3].texto + '<br>' + 
+                            '<b>Año: </b>' + fila.data[4].texto + '<br>' + 
+                            '<b>Ubicación: </b>' + fila.data[5].texto ;
                         break;
                     };
                     default: {
@@ -127,25 +143,6 @@
                         break;
                     };
                 }
-/*
-                    case 'titulo': {
-                        return 'Título: ' + item.texto; 
-                        break;
-                    };
-                    case 'editorial': {
-                        return 'Editorial: '+ item.texto;
-                        break;
-                    };
-                    case 'año': {
-                        return 'Año: ' + item.texto;
-                        break;
-                    };
-                    case 'ubicacion': {
-                        return 'Ubicación: '+ item.texto;
-                        break;
-                    };
-                }
-*/
             },
         },
             
