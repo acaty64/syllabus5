@@ -79,7 +79,7 @@ class TitulosTableSeeder extends Seeder
 			'texto' => 'CONCEPTUAL' ,
 			'orden' => 2,
 			'col' => 2,
-			'columns' => 3,
+			'columns' => 4,
 		]);
 
     	Titulo::create([
@@ -121,7 +121,7 @@ class TitulosTableSeeder extends Seeder
     	Titulo::create([
 			'semestre' => '20181', 
 			'tipo' => '1',
-			'subtipo' => 'bibliografia', 
+			'subtipo' => 'bibliografias', 
 			'texto' => 'BIBLIOGRAFÍA',
 			'orden' => 7,
 		]);

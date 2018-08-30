@@ -108,7 +108,7 @@
                 if(!isNaN(orden)){                
                     var orden = parseInt(linea.data[0].texto);
                     var rowTitulo1 = this.lineas.filter(function (xlinea) {
-                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografia';
+                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
                     });
                     var row = rowTitulo1[0].row + (orden * 100);
                     linea.row = row ;

@@ -67,7 +67,7 @@
             rowclass(item, tipo){
                 switch (tipo){
                     case 'unidades': {
-                        return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                        return 'col-1 unidades col-xs-9 col-xs-offset-1';
                     };
                     case 'bibliografias': {
                         switch (item.col){
@@ -121,7 +121,7 @@
 
             viewBibliografia(fila, item){
 
-                switch(item.tipo){
+                switch(item.type){
                     case '': {
                         return '';
                         break;

@@ -41,7 +41,18 @@ class SyllabusController extends Controller
                 }
                 break;
             case 'contenidos' :
-                $proceso = 'contenidos';
+                $id = $request->data['id'];
+                $contenido = Contenido::find($id);
+                if(!empty($contenido)){                
+                    $contenido->semana = $request->data['data'][0]['texto'];
+                    $contenido->concepto  = $request->data['data'][1]['texto'];
+                    $contenido->procedimiento  = $request->data['data'][2]['texto'];
+                    $contenido->actividad  = $request->data['data'][3]['texto'];
+                    $contenido->save();
+                    $proceso = 'contenidos';
+                }else{
+                    $proceso = 'error contenidos';
+                }
                 break;
             case 'competencias' :
                 $proceso = 'competencias';
@@ -64,14 +75,14 @@ class SyllabusController extends Controller
                 break;
             case 'bibliografias' :
                 $id = $request->data['id'];
-                $evaluacion = Bibliografia::find($id);
-                $evaluacion->orden = $request->data['data'][0]['texto'];
-                $evaluacion->autor = $request->data['data'][1]['texto'];
-                $evaluacion->titulo = $request->data['data'][2]['texto'];
-                $evaluacion->editorial = $request->data['data'][3]['texto'];
-                $evaluacion->year = $request->data['data'][4]['texto'];
-                $evaluacion->codigo = $request->data['data'][5]['texto'];
-                $evaluacion->save();
+                $bibliografia = Bibliografia::find($id);
+                $bibliografia->orden = $request->data['data'][0]['texto'];
+                $bibliografia->autor = $request->data['data'][1]['texto'];
+                $bibliografia->titulo = $request->data['data'][2]['texto'];
+                $bibliografia->editorial = $request->data['data'][3]['texto'];
+                $bibliografia->year = $request->data['data'][4]['texto'];
+                $bibliografia->codigo = $request->data['data'][5]['texto'];
+                $bibliografia->save();
                 $proceso = 'bibliografias';
                 break;
             case 'generales' :
@@ -86,6 +97,7 @@ class SyllabusController extends Controller
             'proceso' => $proceso,
         ]; 
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -93,52 +105,66 @@ class SyllabusController extends Controller
      */
     public function index(Request $request)
     {
+        $datos = [];
+        $semestre = $request->semestre;
+        $cod_curso = $request->cod_curso;
+        
+        $curso = Curso::all()->where('cod_curso', $request->cod_curso)->first();
+
+        $new_data = $this->upload_titulo0($request, $curso);
+        $datos = $new_data;
+
+        $new_data = $this->upload_generales($datos, $request, $curso);
+        $datos = $this->insertData($datos, $new_data);
+
+        $new_data = $this->upload_sumillas($datos, $request);
+        array_push($datos, $new_data);
+
+        $new_data = $this->upload_competencias($datos, $request);
+        $datos = $this->insertData($datos, $new_data);
+
+        $new_data = $this->upload_unidades($datos, $request);
+        $datos = $this->insertData($datos, $new_data);
+
+        $new_data = $this->upload_contenidos($datos, $request);
+        $datos = $this->insertData($datos, $new_data);
+
+        $new_data = $this->upload_evaluaciones($datos, $request);
+        $datos = $this->insertData($datos, $new_data);
+
+        $new_data = $this->upload_estrategias($datos, $request);
+        array_push($datos, $new_data);
+
+        $new_data = $this->upload_bibliografias($datos, $request);
+        $datos = $this->insertData($datos, $new_data);
+
+        return [
+            'status'=>true,
+            'data'=>$datos,
+        ];
+
+    }
+
+    public function insertData($datos, $new_data)
+    {
+        foreach ($new_data as $key => $value) {
+            array_push($datos, $value);
+        }
+        return $datos;
+    }
+
+    
+    protected function upload_titulo0($request, $curso)
+    { 
         /* Selecciona los titulos del semestre*/
         $titulos = Titulo::all()->where('semestre', $request->semestre)
                 ->sortBy('orden')->toArray();
 
         foreach ($titulos as $key => $value) {
             $titulos[$key]['tipo'] = 'titulo' . $titulos[$key]['tipo'];
-        } 
+        }
 
-        $curso = Curso::all()->where('cod_curso', $request->cod_curso)->first();
-
-        $generales = General::all()->where('semestre', $request->semestre)
-            ->sortBy('orden')->toArray();
-
-        $sumillas = Sumilla::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        $competencias = Competencia::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        $unidades = Unidad::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        $contenidos = Contenido::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        $evaluaciones = Evaluacion::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->sortBy('tipo . semana')
-                    ->toArray();
-
-        $estrategias = Estrategia::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        $bibliografias = Bibliografia::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        /************************* GENERACIÓN DE DATOS UNO A UNO  **********************/
-
-        $datos = [];
-        
+        $datos0 = [];
         /* titulo0 */
 
         $new_data = [];
@@ -157,8 +183,6 @@ class SyllabusController extends Controller
                     'texto' => $curso['wcurso']
                 ]
             ];
-
-        array_push($datos, $new_data);
 
         /* titulo1 */
         $collection = collect($titulos)->where('tipo', 'titulo1');
@@ -182,11 +206,11 @@ class SyllabusController extends Controller
                         'texto' => $collection[$key]['texto']
                     ]
                 ];
-            array_push($datos, $new_data);          
+            array_push($datos0, $new_data);          
         }
 
         /* titulo2 */
-        $collection = collect($datos)
+        $collection = collect($datos0)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'competencias');
         $row_titulo = $collection->first()['row'];
@@ -213,17 +237,31 @@ class SyllabusController extends Controller
                         'texto' => $collection[$key]['texto']
                     ]
                 ];
-            array_push($datos, $new_data);
+            array_push($datos0, $new_data);
         }
+
+        return $datos0;
+
+    }
+ 
+    protected function upload_generales($datos, $request, $curso)
+    {
+        $datos0 = [];
+
+        $generales = General::all()->where('semestre', $request->semestre)
+            ->sortBy('orden')->toArray();
 
         /* Generalidades */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'generales');
+
+
         $row_titulo = $collection->first()['row']; 
 
         $data = 'generales';
         $data1 = $$data;
+        
         foreach ($data1 as $key => $value) {
             $modelo = $data1[$key]['modelo'];
             $campo = $data1[$key]['campo'];
@@ -234,6 +272,7 @@ class SyllabusController extends Controller
             //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $data;
+            $new_data['subtipo'] = $data;
             $new_data['data'] = [
                     [
                         'view' => true,
@@ -246,14 +285,23 @@ class SyllabusController extends Controller
                     [
                         'view' => true,
                         'col' => 3,
-                        'cols' => 2,
+                        'cols' => 5,
                         'offset' => 1,
                         'align' => 'left',
                         'texto' => $$modelo[$campo]
                     ],
                 ];
-            array_push($datos, $new_data);          
+            array_push($datos0, $new_data);
         }
+        return $datos0;          
+    }
+
+    protected function upload_sumillas($datos, $request)
+    {
+
+        $sumillas = Sumilla::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
 
         /* Sumillas */
         $collection = collect($datos)
@@ -271,18 +319,27 @@ class SyllabusController extends Controller
         //$new_data['week'] = '';
         $new_data['editing'] = false;
         $new_data['tipo'] = $data;
+        $new_data['subtipo'] = $data;
         $new_data['data'] = [
                 [
                     'view' => true,
                     'col' => 1,
-                    'cols' => 8,
+                    'cols' => 7,
                     'offset' => 2,
                     'align' => 'justify',
                     'texto' => $$data[0]['texto']
                 ],
         ];
-        array_push($datos, $new_data);
+        return $new_data;     
+    }
 
+    protected function upload_competencias($datos, $request)
+    {
+        $datos0 = [];
+
+        $competencias = Competencia::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
         /* Competencias */
         $collect_items = collect($datos)->where('tipo', 'titulo2');
         foreach ($collect_items as $key1 => $value1) {
@@ -296,21 +353,36 @@ class SyllabusController extends Controller
                 $new_data['pre_row'] = $new_data['row'];
                 //$new_data['week'] = '';
                 $new_data['editing'] = false;
+                $new_data['tipo'] = 'competencias';
+                $new_data['subtipo'] = 'competencias';
                 $new_data['item'] = $collection[$key2]['item'];
                 $new_data['data'] = [
                         [
                             'view' => true,
                             'col' => 2,
-                            'cols' => 8,
+                            'cols' => 7,
                             'offset' => 2,
                             'align' => 'justify',
                             'texto' => $collection[$key2]['texto']
                         ]
                     ];
-                array_push($datos, $new_data); 
+                array_push($datos0, $new_data); 
             }
         }
+        return $datos0;
+    }
 
+    protected function upload_unidades($datos, $request)
+    {
+
+        $datos0 = [];
+
+        $titulos = Titulo::all()->where('semestre', $request->semestre)
+                ->sortBy('orden')->toArray();
+
+        $unidades = Unidad::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
         /* unidades */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -322,6 +394,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'unidades';
+            $new_data['subtipo'] = 'unidades';
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
@@ -353,18 +426,19 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['logro'],
                 ],
             ];
-            array_push($datos, $new_data);
+            array_push($datos0, $new_data);
 
             /* Agrega titulo3 */
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'titulo3';
+            $new_data['subtipo'] = 'unidades';
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 1;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
             $new_data['editing'] = false;
             $new_data['data'] = [];
-            $titulo3 = collect($titulos)->where('tipo','titulo3')->sortBy('orden');
+            $titulo3 = collect($titulos)->where('tipo','3')->sortBy('orden');
             foreach ($titulo3 as $key2 => $value2) {
                 $new_data_col = [
                     'col' => $titulo3[$key2]['col'],
@@ -375,8 +449,19 @@ class SyllabusController extends Controller
                 ];
                 array_push($new_data['data'], $new_data_col);                 
             }
-            array_push($datos, $new_data);
+            array_push($datos0, $new_data);
         }
+        return $datos0;
+
+    }
+
+    protected function upload_contenidos($datos, $request)
+    {
+        $datos0 = [];
+
+        $contenidos = Contenido::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
 
         /* contenidos  */
         $collection = collect($datos)
@@ -389,6 +474,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'contenidos';
+            $new_data['subtipo'] = 'contenidos';
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 10;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
@@ -405,7 +491,7 @@ class SyllabusController extends Controller
                 [
                     'view' => true,
                     'col' => 2,
-                    'cols' => 3,
+                    'cols' => 4,
                     'offset' => 1,
                     'align' => 'left',
                     'texto' => $collection[$key]['concepto'],
@@ -427,8 +513,19 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['actividad'],
                 ],
             ];
-            array_push($datos, $new_data); 
+            array_push($datos0, $new_data); 
         }        
+        return $datos0;
+    }
+    
+    protected function upload_evaluaciones($datos, $request)
+    {
+        $datos0 = [];
+
+        $evaluaciones = Evaluacion::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->sortBy('tipo . semana')
+                    ->toArray();
 
         /* examenes */
         $collection = collect($datos)
@@ -442,6 +539,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'examenes';
+            $new_data['subtipo'] = 'examenes';
             $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 99;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
@@ -456,36 +554,8 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['texto'],
                 ],
             ];
-            array_push($datos, $new_data); 
+            array_push($datos0, $new_data); 
         }           
-
-        /* Estrategias */
-        $collection = collect($datos)
-                    ->where('tipo', 'titulo1')
-                    ->where('subtipo', 'estrategias');
-        $row_titulo = $collection->first()['row']; 
-
-        $data = 'estrategias';
-        $data1 = $$data;
-
-        $new_data = [];
-        $new_data['id'] = $data1[0]['id'];
-        $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
-        $new_data['pre_row'] = $new_data['row'];
-        $new_data['editing'] = false;
-        $new_data['tipo'] = $data;
-        $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 8,
-                    'offset' => 2,
-                    'align' => 'justify',
-                    'texto' => $$data[0]['texto']
-                ],
-        ];
-        array_push($datos, $new_data);
-
 
         /* Evaluaciones */
         $collection = collect($datos)
@@ -499,6 +569,7 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'evaluaciones';
+            $new_data['subtipo'] = 'evaluaciones';
             if($collection[$key]['semana'] > 0){
                 $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo;
             }else{
@@ -518,34 +589,79 @@ class SyllabusController extends Controller
                 ],
                 [
                     'view' => true,
-                    'col' => 1,
+                    'col' => 4,
                     'cols' => 1,
                     'offset' => 1,
                     'align' => 'left',
-                    //'texto' => $collection[$key]['porcentaje'] . '%',
                     'texto' => $collection[$key]['porcentaje'],
                     'type' => 'porcentaje',
                 ],
                 [
                     'view' => true,
-                    'col' => 1,
-                    'cols' => 2,
+                    'col' => 5,
+                    'cols' => 5,
                     'offset' => 1,
                     'align' => 'left',
-                    //'texto' => ($collection[$key]['tipo'] == '1' ?
-                    //            'semana ' . $collection[$key]['semana'] : '' ),
                     'texto' => $collection[$key]['semana'],
                     'type' => 'semana',
                 ],
 
             ];
-            array_push($datos, $new_data); 
+            array_push($datos0, $new_data); 
         }
+        
+        return $datos0;
+    }
+
+    protected function upload_estrategias($datos, $request)
+    {
+
+        $estrategias = Estrategia::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+        /* Estrategias */
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'estrategias');
+        $row_titulo = $collection->first()['row']; 
+
+        $data = 'estrategias';
+        $data1 = $$data;
+
+        $new_data = [];
+        $new_data['id'] = $data1[0]['id'];
+        $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+        $new_data['pre_row'] = $new_data['row'];
+        $new_data['editing'] = false;
+        $new_data['tipo'] = $data;
+        $new_data['subtipo'] = $data;
+        $new_data['data'] = [
+                [
+                    'view' => true,
+                    'col' => 1,
+                    'cols' => 8,
+                    'offset' => 2,
+                    'align' => 'justify',
+                    'texto' => $$data[0]['texto']
+                ],
+        ];
+        return $new_data;
+
+    }
+
+    protected function upload_bibliografias($datos, $request)
+    {
+        $datos0 = [];
+
+        $bibliografias = Bibliografia::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
 
         /* Bibliografias */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
-                    ->where('subtipo', 'bibliografia');
+                    ->where('subtipo', 'bibliografias');
         $row_titulo = $collection->first()['row'];        
 
         $collection = collect($bibliografias);
@@ -553,8 +669,9 @@ class SyllabusController extends Controller
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'bibliografias';
-
-            $new_data['row'] = $collection[$key]['orden'] * 100 + $row_titulo;
+            $new_data['subtipo'] = 'bibliografias';
+//            $new_data['semana'] = $collection[$key]['orden'];
+            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['editing'] = false;
             $new_data['data'] = [
@@ -565,7 +682,7 @@ class SyllabusController extends Controller
                     'offset' => 1,
                     'align' => 'right',
                     'texto' => $collection[$key]['orden'],
-                    'tipo' => 'orden',                    
+                    'type' => 'orden',                    
                 ],
                 [
                     'view' => true,
@@ -574,7 +691,7 @@ class SyllabusController extends Controller
                     'offset' => 2,
                     'align' => 'left',
                     'texto' => $collection[$key]['autor'],
-                    'tipo' => 'autor',
+                    'type' => 'autor',
                 ],
                 [
                     'view' => true,
@@ -583,7 +700,7 @@ class SyllabusController extends Controller
                     'offset' => 0,
                     'align' => 'justify',
                     'texto' => $collection[$key]['titulo'],
-                    'tipo' => 'titulo',
+                    'type' => 'titulo',
                 ],
                 [
                     'view' => true,
@@ -592,7 +709,7 @@ class SyllabusController extends Controller
                     'offset' => 0,
                     'align' => 'left',
                     'texto' => $collection[$key]['editorial'],
-                    'tipo' => 'editorial',
+                    'type' => 'editorial',
                 ],
                 [
                     'view' => true,
@@ -601,7 +718,7 @@ class SyllabusController extends Controller
                     'offset' => 0,
                     'align' => 'left',
                     'texto' => $collection[$key]['year'],
-                    'tipo' => 'año',
+                    'type' => 'año',
                 ],                                                                                
                 [
                     'view' => true,
@@ -610,148 +727,29 @@ class SyllabusController extends Controller
                     'offset' => 0,
                     'align' => 'left',
                     'texto' => $collection[$key]['codigo'],
-                    'tipo' => 'ubicacion',
+                    'type' => 'ubicacion',
                 ],                                                                                
             ];
-            array_push($datos, $new_data); 
-        };
-/*
-        foreach ($collection as $key => $value) {
-            $new_data = [];
-            $new_data['id'] = $collection[$key]['id'];
-            $new_data['tipo'] = 'bibliografias';
-
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 1;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['editing'] = false;
-            $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 1,
-                    'offset' => 1,
-                    'align' => 'right',
-                    'texto' => $collection[$key]['orden'],
-                    'tipo' => 'orden',
-                ],
-                [
-                    'view' => true,
-                    'col' => 2,
-                    'cols' => 6,
-                    'offset' => 1,
-                    'align' => 'left',
-                    'texto' => $collection[$key]['autor'],
-                    'tipo' => 'autor',
-                ],
-            ];
-            array_push($datos, $new_data); 
-
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 2;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 1,
-                    'offset' => 1,
-                    'align' => 'right',
-                    'texto' => '',
-                    'tipo' => '',
-                ],
-                [
-                    'view' => true,
-                    'col' => 2,
-                    'cols' => 8,
-                    'offset' => 2,
-                    'align' => 'left',
-                    'texto' => $collection[$key]['titulo'],
-                    'tipo' => 'titulo',
-                ],
-            ];
-            array_push($datos, $new_data);
-
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 3;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 1,
-                    'offset' => 1,
-                    'align' => 'right',
-                    'texto' => '',
-                    'tipo' => '',
-                ],
-                [
-                    'view' => true,
-                    'col' => 2,
-                    'cols' => 8,
-                    'offset' => 2,
-                    'align' => 'left',
-                    'texto' => $collection[$key]['editorial'],
-                    'tipo' => 'editorial',
-                    'tipo' => '',
-                ],
-            ];
-            array_push($datos, $new_data); 
-           
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 4;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 1,
-                    'offset' => 1,
-                    'align' => 'right',
-                    'texto' => '',
-                    'tipo' => '',
-                ],
-                [
-                    'view' => true,
-                    'col' => 2,
-                    'cols' => 4,
-                    'offset' => 2,
-                    'align' => 'left',
-                    'texto' => $collection[$key]['year'],
-                    'tipo' => 'año',
-                ],
-            ];
-            array_push($datos, $new_data); 
-           
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo + 5;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 1,
-                    'offset' => 1,
-                    'align' => 'right',
-                    'texto' => '',
-                    'tipo' => '',
-                ],
-                [
-                    'view' => true,
-                    'col' => 2,
-                    'cols' => 6,
-                    'offset' => 2,
-                    'align' => 'left',
-                    'texto' => $collection[$key]['codigo'],
-                    'tipo' => 'ubicacion',
-                ],
-            ];
-            array_push($datos, $new_data); 
-
+            array_push($datos0, $new_data); 
         }
-*/
 
-        return [
-            'status'=>true,
-            'data'=>$datos,
-        ];
-        
+        //$datos0 = $this->sortBibliografias($datos0);
+
+        return $datos0;
+
     }
+
+    protected function sortBibliografias($datos)
+    {
+        usort($datos, function ($a, $b) {return $a['data'][1]['texto'] > $b['data'][1]['texto'];});
+        foreach ($datos as $key => $value) {
+            $datos[$key]['data'][0]['texto'] = $key+1;
+            $datos[$key]['row'] = substr($datos[$key]['row'],0,1)*10000+($key+1)*100;
+            $datos[$key]['pre_row'] = $datos[$key]['row'];
+        }
+        return $datos;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Show the form for creating a new resource.

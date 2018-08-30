@@ -96,8 +96,14 @@
                 </div>
 
                 <div class="links">
-                    <a href="http://syllabus5.test/show/20181/100048">Visualizar</a>
-                    <a href="http://syllabus5.test/edit">Edit</a>
+                    <a href="http://syllabus.test/show/20181/100048">Visualizar</a><br>
+                    <a href="http://syllabus.test/PDF/20181/100048/false">En construccion - view</a><br>
+                    <a href="http://syllabus.test/PDF/20181/100048/true">En construccion - PDF</a><br>
+                    <a href="http://syllabus.test/PDFdompdf">PDF dompdf</a><br>
+                    <a href="http://syllabus.test/PDFshowSimple">Show simple page</a><br>
+                    <a href="http://syllabus.test/PDFSimple">PDF simple page</a><br>
+                    <a href="http://syllabus.test/PDFshowExample">Show example-component</a><br>
+                    <a href="http://syllabus.test/PDFexample">PDF example-component</a><br>
                 </div>
             </div>
         </div>
