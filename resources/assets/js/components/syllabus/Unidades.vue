@@ -18,14 +18,14 @@
                             <span v-for="item in linea.data">                   
                                 <textarea rows="6" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
-                            <button type="submit" class="btn btn-default col-4 unidades col-xs-push-8" @click='grabar(linea)'>Grabar</button>
+                            <button :class="buttonclass('Save', linea)" type="submit"@click='grabar(linea)'>Grabar</button>
                         </span>
                         <span v-else>
                             <span v-for="item in linea.data" class="notEdit">                   
                                 <span rows="6" wrap="hard":class="rowclass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
                             <div v-if="!switchEdit">
-                                <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>
+                                <button :class="buttonclass('Edit', linea)" type="submit" @click='editar(linea)'>Editar</button>
                             </div>
                         </span>
                     </div>
@@ -66,11 +66,16 @@
         methods: {
             rowclass(item, linea) {
                 if (linea.editing){
-                    return 'editing col-'+item.col+' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                    return 'id' + linea.id + ' editing col-'+item.col+' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
                 }else{
                     return 'notEditing col-'+item.col+' unid col-xs-' + item.cols + ' col-xs-offset-' + item.offset;                    
                 }
             },
+
+            buttonclass(type, linea) {
+                return 'btn'+ type + linea.id + ' btn btn-default col-4 unidades col-xs-push-8';
+            },
+
             grabar(linea) {
                 /* Renumera row */
                 var week = linea.data[0].texto;
@@ -84,19 +89,31 @@
                     var row = rowTitulo1 + (week * 100);
                     linea.row = row ;
                     linea.semana = week;
-                    this.$store.dispatch('GrabarContenido', linea);
-                    /* Renumerar titulo3 */
-                    var oldRow = linea.pre_row + 1;
-                    var newRow = linea.row + 1;
-                    for (var i in this.lineas) {
-                        if (this.lineas[i].row == oldRow) {
-                            var ylinea = this.lineas[i];
+                    var check = this.$store.dispatch('GrabarContenido', linea);
+                    if(check){                    
+                        /* Renumerar titulo3 */
+                        var oldRow = linea.pre_row + 1;
+                        var newRow = linea.row + 1;
+                        for (var i in this.lineas) {
+                            if (this.lineas[i].row == oldRow) {
+                                var ylinea = this.lineas[i];
+                            }
                         }
+                        ylinea.semana = week;
+                        ylinea.row = newRow;
+                        this.$store.dispatch('GrabarContenido', ylinea);
+                        this.$store.commit('switchEdit');
+                        
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.success('Unidad grabada.');
+                    }else{
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.danger('El registro no ha sido grabado.');
                     }
-                    ylinea.semana = week;
-                    ylinea.row = newRow;
-                    this.$store.dispatch('GrabarContenido', ylinea);
-                    this.$store.commit('switchEdit');
                 }else{
                     alert('La semana debe ser un número entero.');
                 };

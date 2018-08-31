@@ -1,5 +1,5 @@
 <template>
-	<div>
+    <div>
         <h1>{{ titulo }}</h1>
         <table>
             <thead>
@@ -12,35 +12,35 @@
                     <div class="row">
                         <span v-if="linea.editing">
                             <span v-for="item in linea.data">                            
-                                <textarea rows="6" wrap="hard" :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                                <textarea rows="6" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
-                            <button type="submit" class="btn btn-default" @click='grabar(linea)'>Grabar</button>
+                            <button type="submit" :class="buttonclass('Save', linea)" @click='grabar(linea)'>Grabar</button>
                         </span>
                         <span v-else>
                             <span v-for="item in linea.data">    
                                 <span v-if="item.view">
-                                    <span :class="rowclass(item, linea.tipo)" :align="item.align" v-html="viewTexto(item)"></span>
+                                    <span :class="rowclass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
                                 </span>                        
                             </span>
                             <span v-if="linea.tipo == 'contenidos'">
-                                <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>                            
+                                <button type="submit" :class="buttonclass('Edit', linea)" @click='editar(linea)'>Editar</button>                            
                             </span>
                         </span>
                     </div>
                 </tr>
             </tbody>
-        </table>			
-	</div>	
+        </table>            
+    </div>  
 </template>
 <script>
     import {mapState} from 'vuex';
 
     export default {
-    	mounted() {
-    		console.log('Contenidos.vue mounted');
+        mounted() {
+            console.log('Contenidos.vue mounted');
             this.setTitulo('contenidos');
-    	},
-    	computed: mapState({
+        },
+        computed: mapState({
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
@@ -53,7 +53,7 @@
                 this.$store.dispatch('EditarContenido', linea);
             },            
             grabar(linea) {
-console.log('linea antes: ', linea);
+                //console.log('linea antes: ', linea);
                 var week = linea.data[0].texto;
                 if(!isNaN(week)){                
                     var week = parseInt(linea.data[0].texto);
@@ -62,11 +62,22 @@ console.log('linea antes: ', linea);
                         return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
                     });
                     var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-    //console.log('rowTitulo1: ', rowTitulo1);
+                    //console.log('rowTitulo1: ', rowTitulo1);
                     var row = rowTitulo1 + (week * 100) + 10;
                     linea.row = row ; 
-console.log('linea despues: ', linea);
-                    this.$store.dispatch('GrabarContenido', linea);
+                    //console.log('linea despues: ', linea);
+                    var check = this.$store.dispatch('GrabarContenido', linea);
+                    if(check){
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.success('Contenido grabado.');
+                    }else{
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.danger('El registro no ha sido grabado.');
+                    }
                 }else{
                     alert('La semana debe ser un número entero.');
                 }
@@ -75,13 +86,18 @@ console.log('linea despues: ', linea);
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
             },
-            rowclass(item, tipo) {
-                if(tipo == 'unidades'){
+            rowclass(item, linea) {
+                if(linea.tipo == 'unidades'){
                     return 'col-1 unidades col-xs-8 col-xs-offset-1';
                 }else{
-                    return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
                 }
             },
+
+            buttonclass(type, linea) {
+                return 'btn'+ type + linea.id + ' btn btn-default';
+            },
+
             setTitulo(subtipo) {
                 this.$store.dispatch('SetTitulo', subtipo);
             },

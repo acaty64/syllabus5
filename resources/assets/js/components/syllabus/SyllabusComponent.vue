@@ -55,6 +55,7 @@
         props:['semestre', 'cod_curso'],
         mounted() {
             console.log('SyllabusComponent.vue mounted.');
+            this.setData();
             this.getData();
         },
         components: {
@@ -64,6 +65,10 @@
         methods:{
             view(tipo){
                 this.$store.commit('view', tipo);
+            },
+            setData() {
+                this.$store.commit('setSemestre', this.semestre);
+                this.$store.commit('setCod_curso', this.cod_curso);
             },
             getData: function() {
                 var request = {
@@ -79,6 +84,7 @@
                     //this.lineas = response.data.data;
                     this.$store.commit('setLineas', response.data.data);
                     this.$store.commit('sortLineasRow');
+                    this.$store.commit('setAcceso', response.data.acceso);
                     this.$store.commit('loaded');
                 }).catch(function (error) {
                     console.log(error);

@@ -5,7 +5,19 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state:{
+        semestre: "",
+        cod_curso: "",
         lineas: [],
+        acceso: [],
+        nuevo: {
+            'sumillas': true,
+            'competencias': [false, true],
+            'unidades': false,
+            'contenidos': true,
+            'estrategias': true,
+            'evaluaciones': false,
+            'bibliografias': true
+        },
 
         columnas: [
              '10%' ,
@@ -24,7 +36,7 @@ export const store = new Vuex.Store({
         romanos: [ '','I','II','III','IV','V','VI','VII','VIII','IX','X' ],
 
         titulo: '',
-        switchEdit: false, 
+        switchEdit: false,
 	},
 
 	mutations:{
@@ -85,6 +97,10 @@ export const store = new Vuex.Store({
             state.lineas = lineas;
         },
 
+        setAcceso(state, acceso){
+            state.acceso = acceso;
+        },
+
         loaded(state){
             state.loading = false;
         },
@@ -101,6 +117,17 @@ export const store = new Vuex.Store({
             state.switchEdit = !state.switchEdit;
         },
 
+        setNuevo(state, [type, value]){
+            state.nuevo[type] = value;
+        },
+
+        setSemestre(state, semestre){
+            state.semestre = semestre;
+        },
+
+        setCod_curso(state, cod_curso){
+            state.cod_curso = cod_curso;
+        },
 	},
 	getters: {
         generales: (state) => {
@@ -127,26 +154,46 @@ export const store = new Vuex.Store({
         },
         estrategias: (state) => {
             var array = state.lineas;
-            var item = array.filter( (linea) => linea.tipo == 'estrategias' );
-            return item;
+            var items = array.filter( (linea) => linea.tipo == 'estrategias' );
+            return items;
         },
         evaluaciones: (state) => {
             var array = state.lineas;
-            var item = array.filter( (linea) => linea.tipo == 'evaluaciones' );
-            return item;
+            var items = array.filter( (linea) => linea.tipo == 'evaluaciones' );
+            return items;
         },
         bibliografias: (state) => {
             var array = state.lineas;
-            var item = array.filter( (linea) => linea.tipo == 'bibliografias' );
-            return item;
+            var items = array.filter( (linea) => linea.tipo == 'bibliografias' );
+            return items;
         },
+        newItem: (state) => {
+            switch (state.status){
+                case 'sumillas':
+                    var item = {
+                        tipo: state.status,
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        texto: "",
+                        orden: 1
+                    };
+                    break;
+                default:
+                    var newItem = {};
+                    // code block
+                    break;
+            }
+            return item;
+        }
     },
 
     actions: {
         SaveLinea: (context, linea) => {
             var request = {
                 'data': linea,
+                'new': false
             };
+//console.log('request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
@@ -155,6 +202,24 @@ export const store = new Vuex.Store({
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
+                return true;
+            }).catch(function (error) {
+                console.log('error SaveLinea: ', error);
+                return false;
+            });
+        },
+        SaveNewLinea: (context, linea) => {
+            var request = {
+                'data': linea,
+                'new': true
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/saveData/';
+            axios.post(url, request).then(response=>{
+                var save = response.data.proceso + 'Saved';
+//                context.commit('saveLinea', linea);
+//                context.commit('changePre_row', linea.row);
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
             });
@@ -165,9 +230,15 @@ export const store = new Vuex.Store({
         },
 
         GrabarContenido: (context, linea) => {
-            context.dispatch("SaveLinea", linea);
-            context.commit('sortLineasRow');
-            context.commit('switchEditingContenido', linea);
+            var check = context.dispatch("SaveLinea", linea);
+            if(check){                
+                context.commit('sortLineasRow');
+                context.commit('switchEditingContenido', linea);
+                return true;
+            }else{
+                return false;
+            }
+
         },
 
         Loaded: (context) => {
@@ -200,6 +271,9 @@ export const store = new Vuex.Store({
             context.commit('sortLineasRow');
         },
 
+        SetNuevo : (context, [type, value]) => {
+            context.commit('setNuevo', [type, value]);
+        }
     },
 });
 

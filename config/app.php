@@ -168,8 +168,8 @@ return [
          * Package Service Providers...
          */
         Laracasts\Flash\FlashServiceProvider::class,
-        //Barryvdh\Snappy\ServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
+        //Barryvdh\DomPDF\ServiceProvider::class,
         
         /*
          * Application Service Providers...
@@ -194,8 +194,8 @@ return [
     */
 
     'aliases' => [
-        //'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        //'PDF' => Barryvdh\DomPDF\Facade::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,

@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div>
         <h1>{{ titulo }}</h1>
         <table>
@@ -22,14 +22,14 @@
                             <span v-for="item in linea.data">                   
                                 <textarea rows="1" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
-                            <button type="submit" class="btn btn-default col-4 unidades col-xs-push-8" @click='grabar(linea)'>Grabar</button>
+                            <button type="submit" :class="buttonclass('Save', linea)" @click='grabar(linea)'>Grabar</button>
                         </span>
                         <span v-else>
                             <span v-for="item in linea.data" class="notEdit">                   
                                 <span rows="1" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
                             <div v-if="!switchEdit">
-                                <button type="submit" class="btn btn-default" @click='editar(linea)'>Editar</button>
+                                <button type="submit" :class="buttonclass('Edit', linea)" @click='editar(linea)'>Editar</button>
                             </div>
                         </span>
                     </div>
@@ -44,6 +44,7 @@
     export default {
         mounted() {
             console.log('Evaluaciones.vue mounted');
+            this.setTitulo('evaluaciones');
         },
         computed: {
             ...mapState({
@@ -77,13 +78,6 @@
 
         },
         methods: {
-            rowclass(item, linea) {
-                if (linea.editing){
-                    return 'editing col-'+item.col+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-                }else{
-                    return 'notEditing col-'+item.col+' evaluaciones col-xs-' + item.cols + ' col-xs-offset-' + item.offset;                    
-                }
-            },
             grabar(linea) {
                 /* Renumera row */
                 var week = linea.data[2].texto;
@@ -97,9 +91,21 @@
                     var row = rowTitulo1 + (week * 100);
                     linea.row = row ;
                     linea.semana = week;
-                    this.$store.dispatch('GrabarContenido', linea);
-                    this.$store.dispatch('RenumeraExamen', linea);
-                    this.$store.commit('switchEdit');
+                    var check = this.$store.dispatch('GrabarContenido', linea);
+                    if(check){
+                        this.$store.dispatch('RenumeraExamen', linea);
+                        this.$store.commit('switchEdit');
+
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.success('Evaluación grabada.');
+                    }else{
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.danger('El registro no ha sido grabado.');
+                    }
                 }else{
                     alert('La semana debe ser un número entero.');
                 };
@@ -111,7 +117,20 @@
             editar(linea) {
                 this.$store.dispatch('EditarContenido', linea);
                 this.$store.commit('switchEdit');
-            },           
+            },  
+            rowclass(item, linea) {
+                if (linea.editing){
+                    return 'id'+linea.id+' editing col-'+item.col+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                }else{
+                    return 'notEditing col-'+item.col+' evaluaciones col-xs-' + item.cols + ' col-xs-offset-' + item.offset;                    
+                }
+            },
+            buttonclass(type, linea) {
+                return 'btn'+ type + linea.id + ' btn btn-default';
+            },
+            setTitulo(subtipo) {
+                this.$store.dispatch('SetTitulo', subtipo);
+            },         
         } 
     };
 
@@ -130,5 +149,3 @@
         margin-left: 0px;
     }
 </style>
-
-

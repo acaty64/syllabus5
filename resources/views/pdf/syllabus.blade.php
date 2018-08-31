@@ -16,6 +16,11 @@
 		@endforeach
 	</div>
 <style>
+	.body {
+		margin-left: 10%;
+		background-color: white;
+	}
+
     .titulo0 {
         font-size: 25px;
         font-weight: bold;

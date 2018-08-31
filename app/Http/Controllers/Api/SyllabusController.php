@@ -18,13 +18,22 @@ use Illuminate\Http\Request;
 class SyllabusController extends Controller
 {
     public function saveData(Request $request)
-    {     
+    {
         switch ($request->data['tipo']) {
             case 'sumillas' :
-                $id = $request->data['id'];
-                $sumilla = Sumilla::find($id);
-                $sumilla->texto = $request->data['data'][0]['texto'];
-                $sumilla->save();
+                if($request->new){
+                    $sumilla = Sumilla::create([
+                        'semestre'=>$request->data["semestre"],
+                        'cod_curso'=>$request->data["cod_curso"],
+                        'texto'=>$request->data["texto"],
+                        'orden'=>$request->data["orden"],
+                    ]);
+                }else{                
+                    $id = $request->data['id'];
+                    $sumilla = Sumilla::find($id);
+                    $sumilla->texto = $request->data['data'][0]['texto'];
+                    $sumilla->save();
+                }
                 $proceso = 'sumillas' ;
                 break;
             case 'unidades' :
@@ -111,36 +120,65 @@ class SyllabusController extends Controller
         
         $curso = Curso::all()->where('cod_curso', $request->cod_curso)->first();
 
+        /*  Datos de acceso de prueba  */
+        $acceso = [
+                'generales' => false,
+                'sumillas' => true,
+                'competencias' => [false, true],
+                'unidades' => [true, true],
+                'contenidos' => true,
+                'estrategias' => true,
+                'evaluaciones' => [false, true, true],
+                'bibliografias' => true
+            ];
+
         $new_data = $this->upload_titulo0($request, $curso);
         $datos = $new_data;
 
         $new_data = $this->upload_generales($datos, $request, $curso);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_sumillas($datos, $request);
-        array_push($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_competencias($datos, $request);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_unidades($datos, $request);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_contenidos($datos, $request);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_evaluaciones($datos, $request);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_estrategias($datos, $request);
-        array_push($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_bibliografias($datos, $request);
-        $datos = $this->insertData($datos, $new_data);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         return [
             'status'=>true,
             'data'=>$datos,
+            'acceso'=>$acceso
         ];
 
     }
@@ -311,26 +349,30 @@ class SyllabusController extends Controller
 
         $data = 'sumillas';
         $data1 = $$data;
-
+        $datos0 = [];
         $new_data = [];
-        $new_data['id'] = $data1[0]['id'];
-        $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
-        $new_data['pre_row'] = $new_data['row'];
-        //$new_data['week'] = '';
-        $new_data['editing'] = false;
-        $new_data['tipo'] = $data;
-        $new_data['subtipo'] = $data;
-        $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 7,
-                    'offset' => 2,
-                    'align' => 'justify',
-                    'texto' => $$data[0]['texto']
-                ],
-        ];
-        return $new_data;     
+
+        if(!empty($$data)){
+            $new_data['id'] = $data1[0]['id'];
+            $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+            $new_data['pre_row'] = $new_data['row'];
+            //$new_data['week'] = '';
+            $new_data['editing'] = true;
+            $new_data['tipo'] = $data;
+            $new_data['subtipo'] = $data;
+            $new_data['data'] = [
+                    [
+                        'view' => true,
+                        'col' => 1,
+                        'cols' => 7,
+                        'offset' => 2,
+                        'align' => 'justify',
+                        'texto' => $$data[0]['texto']
+                    ],
+            ];
+            array_push($datos0, $new_data);
+        }
+        return $datos0;     
     }
 
     protected function upload_competencias($datos, $request)
@@ -340,6 +382,7 @@ class SyllabusController extends Controller
         $competencias = Competencia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
+
         /* Competencias */
         $collect_items = collect($datos)->where('tipo', 'titulo2');
         foreach ($collect_items as $key1 => $value1) {
@@ -615,6 +658,7 @@ class SyllabusController extends Controller
 
     protected function upload_estrategias($datos, $request)
     {
+        $datos0 = [];
 
         $estrategias = Estrategia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
@@ -640,13 +684,14 @@ class SyllabusController extends Controller
                 [
                     'view' => true,
                     'col' => 1,
-                    'cols' => 8,
+                    'cols' => 7,
                     'offset' => 2,
                     'align' => 'justify',
                     'texto' => $$data[0]['texto']
                 ],
         ];
-        return $new_data;
+        array_push($datos0, $new_data); 
+        return $datos0;
 
     }
 

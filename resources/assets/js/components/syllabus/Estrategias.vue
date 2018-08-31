@@ -11,8 +11,8 @@
                 <tr v-for="linea in items">
                     <div class="row">
                         <span v-for="item in linea.data">
-                            <textarea rows="6" wrap="hard" :class="rowclass(item)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
-                            <button type="submit" class="btn btn-default" @click='grabar(linea)'>Grabar</button>
+                            <textarea rows="6" wrap="hard" :class="rowclass(item, linea.tipo)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                            <button type="submit" class="btnSave btn-default" @click='grabar(linea)'>Grabar</button>
                         </span>
                     </div>
                 </tr>
@@ -42,11 +42,22 @@
             setTitulo(subtipo) {
                 this.$store.dispatch('SetTitulo', subtipo);
             },
-            rowclass(item) {
-                return 'col-'+item.col+' '+item.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            rowclass(item, tipo) {
+                return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             grabar(linea) {
-                this.$store.dispatch('SaveLinea', linea);
+                var check = this.$store.dispatch('SaveLinea', linea);
+                if(check){    
+                    toastr.closeButton = false;
+                    toastr.debug = false;
+                    toastr.showDuration = 300;
+                    toastr.success('Estrategias grabadas.');
+                }else{                                            
+                    toastr.closeButton = false;
+                    toastr.debug = false;
+                    toastr.showDuration = 300;
+                    toastr.danger('El registro no ha sido grabado.');
+                }
             },
         }
     }

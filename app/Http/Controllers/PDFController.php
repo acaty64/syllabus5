@@ -85,10 +85,26 @@ class PDFController extends Controller
         $data = $this->syllabus($semestre, $cod_curso);
 //return $data;
         if($pdf == 'true'){
+            $snappy = \PDF::loadView('pdf.syllabus',$data)
+                        ->setPaper('a4')
+                        ->setOrientation('landscape')
+                        ->setOption('enable-javascript', true)
+                        ->setOption('images', true)
+                        ->setOption('javascript-delay', 3500)
+                        ->setOption('no-stop-slow-scripts', true)
+                        ->setOption('enable-smart-shrinking', true);
+            return $snappy->stream('pdf.syllabus');
+            /* 
+            $pdf->setOption('header-html', base_path('views/Modulos/Funcional/OrdemServico/Os/header.blade.php'));
+            $pdf->setOption('footer-html', base_path('views/Modulos/Funcional/OrdemServico/Os/footer.blade.php'));
+            */
+
+/*
             $view = \View::make('pdf.syllabus', $data)->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view)->setPaper('a4', 'portrait');
             return $pdf->stream('dompdf');
+*/
         }else{
             return view('pdf.syllabus')->with($data);
         }
