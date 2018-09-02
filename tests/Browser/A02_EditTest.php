@@ -68,7 +68,7 @@ class A02_EditTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->press('Contenidos')
                     ->assertSee('CONTENIDOS')
-                    ->assertSee('LA CONTABILIDAD GERENCIAL.')
+                    ->assertSee('La contabilidad gerencial.')
                     ->click('.btnEdit3')
                     ->clear('.id3.col-2')
                     ->type('.id3.col-2', 'zzzzzzz')

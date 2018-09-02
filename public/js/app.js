@@ -45987,17 +45987,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return 'col-' + item.col + ' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         grabar: function grabar(linea) {
-            var check = this.$store.dispatch('SaveLinea', linea);
-            if (check) {
-                toastr.closeButton = false;
-                toastr.debug = false;
-                toastr.showDuration = 300;
-                toastr.success('Sumilla grabada.');
+            var consistencia = 0;
+            var xitem = this.items[0]['data'][0];
+            if (xitem.texto.trim().length > 0) {
+                consistencia = consistencia + 1;
+            }
+            if (consistencia == 1) {
+                var check = this.$store.dispatch('SaveLinea', linea);
+                if (check) {
+                    toastr.closeButton = false;
+                    toastr.debug = false;
+                    toastr.showDuration = 300;
+                    toastr.success('Sumilla grabada.');
+                } else {
+                    toastr.closeButton = false;
+                    toastr.debug = false;
+                    toastr.showDuration = 300;
+                    toastr.error('El registro no ha sido grabado.');
+                }
             } else {
                 toastr.closeButton = false;
                 toastr.debug = false;
                 toastr.showDuration = 300;
-                toastr.danger('El registro no ha sido grabado.');
+                toastr.error('Inserte el texto.');
             }
         },
         SaveNewItem: function SaveNewItem() {
@@ -46368,10 +46380,35 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return 'btn' + type + linea.id + ' btn btn-default col-4 unidades col-xs-push-8';
         },
         grabar: function grabar(linea) {
-            /* Renumera row */
-            var week = linea.data[0].texto;
-            var oldWeek = linea.semana;
-            if (!isNaN(week)) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 300;
+            var mess = '';
+            var consistencia = 0;
+            var check = parseInt(linea.data[0].texto);
+            if (!isNaN(check) && check > 0 && check < 17) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
+            }
+
+            var check = linea.data[1].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto de la UNIDAD.';
+            }
+
+            var check = linea.data[2].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto del LOGRO.';
+            }
+
+            if (consistencia == 3) {
+                /* Renumera row */
+
                 var week = parseInt(linea.data[0].texto);
                 var rowUnidades = this.lineas.filter(function (xlinea) {
                     return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'contenidos';
@@ -46383,6 +46420,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 var check = this.$store.dispatch('GrabarContenido', linea);
                 if (check) {
                     /* Renumerar titulo3 */
+
                     var oldRow = linea.pre_row + 1;
                     var newRow = linea.row + 1;
                     for (var i in this.lineas) {
@@ -46394,20 +46432,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     ylinea.row = newRow;
                     this.$store.dispatch('GrabarContenido', ylinea);
                     this.$store.commit('switchEdit');
-
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
+                    /*                        
+                                            toastr.closeButton = false;
+                                            toastr.debug = false;
+                                            toastr.showDuration = 300;
+                    */
                     toastr.success('Unidad grabada.');
                 } else {
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                    /*
+                                            toastr.closeButton = false;
+                                            toastr.debug = false;
+                                            toastr.showDuration = 300;
+                    */
+                    toastr.error('El registro no ha sido grabado.');
                 }
             } else {
-                alert('La semana debe ser un número entero.');
-            };
+                /*
+                                    toastr.closeButton = false;
+                                    toastr.debug = false;
+                                    toastr.showDuration = 300;
+                */
+                toastr.error(mess);
+            }
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
@@ -46838,9 +46884,37 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.$store.dispatch('EditarContenido', linea);
         },
         grabar: function grabar(linea) {
-            //console.log('linea antes: ', linea);
-            var week = linea.data[0].texto;
-            if (!isNaN(week)) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 300;
+            var mess = '';
+            var consistencia = 0;
+            var check = linea.data[0].texto;
+            if (!isNaN(check) && check > 0 && check < 17) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
+            }
+            var check = linea.data[1].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto CONCEPTUAL.';
+            }
+            var check = linea.data[2].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto PROCEDIMENTAL.';
+            }
+            var check = linea.data[3].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto ACTIVIDAD.';
+            }
+
+            if (consistencia == 4) {
                 var week = parseInt(linea.data[0].texto);
                 //linea.week = linea.data[0].texto + 0.5;
                 var rowUnidades = this.lineas.filter(function (linea) {
@@ -46853,18 +46927,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 //console.log('linea despues: ', linea);
                 var check = this.$store.dispatch('GrabarContenido', linea);
                 if (check) {
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
                     toastr.success('Contenido grabado.');
                 } else {
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                    toastr.error('El registro no ha sido grabado.');
                 }
             } else {
-                alert('La semana debe ser un número entero.');
+                toastr.error(mess);
             }
         },
         viewTexto: function viewTexto(item) {
@@ -46872,14 +46940,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return newText;
         },
         rowclass: function rowclass(item, linea) {
-            if (linea.tipo == 'unidades') {
-                return 'col-1 unidades col-xs-8 col-xs-offset-1';
-            } else {
+            if (linea.tipo == 'contenidos') {
                 return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+            } else {
+                return 'col-1 unidades col-xs-8 col-xs-offset-1';
             }
         },
         buttonclass: function buttonclass(type, linea) {
-            return 'btn' + type + linea.id + ' btn btn-default';
+            if (linea.tipo == 'contenidos') {
+                return 'btn' + type + linea.id + ' btn btn-default';
+            } else {
+                return 'hidden';
+            }
         },
         setTitulo: function setTitulo(subtipo) {
             this.$store.dispatch('SetTitulo', subtipo);
@@ -47131,17 +47203,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return 'col-' + item.col + ' ' + tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         grabar: function grabar(linea) {
-            var check = this.$store.dispatch('SaveLinea', linea);
-            if (check) {
-                toastr.closeButton = false;
-                toastr.debug = false;
-                toastr.showDuration = 300;
-                toastr.success('Estrategias grabadas.');
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 300;
+            var mess = '';
+            var consistencia = 0;
+            var check = linea.data[0].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
             } else {
-                toastr.closeButton = false;
-                toastr.debug = false;
-                toastr.showDuration = 300;
-                toastr.danger('El registro no ha sido grabado.');
+                mess = 'Inserte el texto.';
+            }
+            if (consistencia == 1) {
+                var check = this.$store.dispatch('SaveLinea', linea);
+                if (check) {
+                    toastr.success('Estrategias grabadas.');
+                } else {
+                    toastr.error('El registro no ha sido grabado.');
+                }
+            } else {
+                toastr.error(mess);
             }
         }
     }
@@ -47420,10 +47501,32 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: {
         grabar: function grabar(linea) {
-            /* Renumera row */
-            var week = linea.data[2].texto;
-            var oldWeek = linea.semana;
-            if (!isNaN(week)) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 300;
+            var mess = '';
+            var consistencia = 0;
+            var check = linea.data[0].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto EVALUACION.';
+            }
+            var check = linea.data[1].texto;
+            if (!isNaN(check) && check > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'El PORCENTAJE debe ser un número entero mayor a 0.';
+            }
+            var check = linea.data[2].texto;
+            if (!isNaN(check) && check < 17) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'La SEMANA debe ser un número entero menor a 17.';
+            }
+
+            if (consistencia == 3) {
+                /* Renumera row */
                 var week = parseInt(linea.data[2].texto);
                 var rowUnidades = this.lineas.filter(function (xlinea) {
                     return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'evaluaciones';
@@ -47445,10 +47548,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     toastr.closeButton = false;
                     toastr.debug = false;
                     toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                    toastr.error('El registro no ha sido grabado.');
                 }
             } else {
-                alert('La semana debe ser un número entero.');
+                toastr.error(mess);
             };
         },
         viewTexto: function viewTexto(item) {
@@ -47887,7 +47990,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     toastr.closeButton = false;
                     toastr.debug = false;
                     toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                    toastr.error('El registro no ha sido grabado.');
                 }
             } else {
                 alert('El orden debe ser un número entero.');

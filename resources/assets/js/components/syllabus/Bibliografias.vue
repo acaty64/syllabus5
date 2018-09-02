@@ -121,7 +121,7 @@
                         toastr.closeButton = false;
                         toastr.debug = false;
                         toastr.showDuration = 300;
-                        toastr.danger('El registro no ha sido grabado.');
+                        toastr.error('El registro no ha sido grabado.');
                     }
                 }else{
                     alert('El orden debe ser un número entero.');

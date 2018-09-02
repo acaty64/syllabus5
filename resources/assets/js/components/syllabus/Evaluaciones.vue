@@ -79,10 +79,32 @@
         },
         methods: {
             grabar(linea) {
-                /* Renumera row */
-                var week = linea.data[2].texto;
-                var oldWeek = linea.semana;
-                if(!isNaN(week)){                
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 300;
+                var mess = '';
+                var consistencia = 0;
+                var check = linea.data[0].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto EVALUACION.';
+                }
+                var check = linea.data[1].texto;
+                if(!isNaN(check) && check > 0){ 
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'El PORCENTAJE debe ser un número entero mayor a 0.';
+                }
+                var check = linea.data[2].texto;
+                if(!isNaN(check) && check < 17){ 
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'La SEMANA debe ser un número entero menor a 17.';
+                }
+
+                if(consistencia == 3){
+                    /* Renumera row */                
                     var week = parseInt(linea.data[2].texto);
                     var rowUnidades = this.lineas.filter(function (xlinea) {
                         return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'evaluaciones';
@@ -104,10 +126,10 @@
                         toastr.closeButton = false;
                         toastr.debug = false;
                         toastr.showDuration = 300;
-                        toastr.danger('El registro no ha sido grabado.');
+                        toastr.error('El registro no ha sido grabado.');
                     }
                 }else{
-                    alert('La semana debe ser un número entero.');
+                    toastr.error(mess);
                 };
             },
             viewTexto(item){

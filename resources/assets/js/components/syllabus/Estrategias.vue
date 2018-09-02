@@ -46,17 +46,26 @@
                 return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             grabar(linea) {
-                var check = this.$store.dispatch('SaveLinea', linea);
-                if(check){    
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-                    toastr.success('Estrategias grabadas.');
-                }else{                                            
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 300;
+                var mess = '';
+                var consistencia = 0;
+                var check = linea.data[0].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto.';
+                }
+                if(consistencia == 1){ 
+                    var check = this.$store.dispatch('SaveLinea', linea);
+                    if(check){    
+                        toastr.success('Estrategias grabadas.');
+                    }else{                                            
+                        toastr.error('El registro no ha sido grabado.');
+                    }
+                }else{
+                    toastr.error(mess);
                 }
             },
         }

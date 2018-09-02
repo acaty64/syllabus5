@@ -74,17 +74,29 @@
                 return 'col-'+item.col+' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             grabar(linea) {
-                var check = this.$store.dispatch('SaveLinea', linea);
-                if(check){    
+                var consistencia = 0;
+                var xitem = this.items[0]['data'][0];
+                if(xitem.texto.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }
+                if(consistencia == 1){                
+                    var check = this.$store.dispatch('SaveLinea', linea);
+                    if(check){    
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.success('Sumilla grabada.');
+                    }else{                                            
+                        toastr.closeButton = false;
+                        toastr.debug = false;
+                        toastr.showDuration = 300;
+                        toastr.error('El registro no ha sido grabado.');
+                    }
+                }else{
                     toastr.closeButton = false;
                     toastr.debug = false;
                     toastr.showDuration = 300;
-                    toastr.success('Sumilla grabada.');
-                }else{                                            
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-                    toastr.danger('El registro no ha sido grabado.');
+                    toastr.error('Inserte el texto.');
                 }
             },
             SaveNewItem(){
