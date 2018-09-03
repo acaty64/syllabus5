@@ -27,6 +27,8 @@ class A01_ViewTest extends DuskTestCase
                     ->assertSee('I. DATOS GENERALES')
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
+                    ->press('Competencias')
+                    ->assertSee('III. SISTEMA DE COMPETENCIAS')
                     ->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->press('Contenidos')

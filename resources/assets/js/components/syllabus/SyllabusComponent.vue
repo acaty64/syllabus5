@@ -4,13 +4,30 @@
         <img src="/images/loading.gif" v-if="loading" />
         <span v-if="!loading">        
             <button type="button" name="vista" class="btn btn-default" @click='view("vista")'>Vista</button>
-            <button type="button" name="generales" class="btn btn-default" @click='view("generales")'>Generalidades</button>
-            <button type="button" name="sumillas" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
-            <button type="button" name="unidades" class="btn btn-default" @click='view("unidades")'>Unidades</button>
-            <button type="button" name="contenidos" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
-            <button type="button" name="estrategias" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
-            <button type="button" name="evaluaciones" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
-            <button type="button" name="bibliografias" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+            <span v-if="acceso.generales">            
+                <button type="button" name="generales" class="btn btn-default" @click='view("generales")'>Generalidades</button>
+            </span>
+            <span v-if="acceso.sumillas">            
+                <button type="button" name="sumillas" class="btn btn-default" @click='view("sumillas")'>Sumillas</button>
+            </span>
+            <span v-if="acceso.competencias">            
+                <button type="button" name="competencias" class="btn btn-default" @click='view("competencias")'>Competencias</button>
+            </span>
+            <span v-if="acceso.unidades">            
+                <button type="button" name="unidades" class="btn btn-default" @click='view("unidades")'>Unidades</button>
+            </span>
+            <span v-if="acceso.contenidos">            
+                <button type="button" name="contenidos" class="btn btn-default" @click='view("contenidos")'>Contenidos</button>
+            </span>
+            <span v-if="acceso.estrategias">            
+                <button type="button" name="estrategias" class="btn btn-default" @click='view("estrategias")'>Estrategias</button>
+            </span>
+            <span v-if="acceso.evaluaciones">            
+                <button type="button" name="evaluaciones" class="btn btn-default" @click='view("evaluaciones")'>Evaluaciones</button>
+            </span>
+            <span v-if="acceso.bibliografias">            
+                <button type="button" name="bibliografias" class="btn btn-default" @click='view("bibliografias")'>Bibliografias</button>
+            </span>
         </span>
         <span v-if="status == 'vista'">
             <vista></vista>
@@ -23,6 +40,9 @@
         </span>
         <span v-if="status == 'unidades'">
             <unidades></unidades>
+        </span>
+        <span v-if="status == 'competencias'">
+            <competencias></competencias>
         </span>
         <span v-if="status == 'contenidos'">
             <contenidos></contenidos>
@@ -41,10 +61,10 @@
 <script>
     import vista from './Vista';
 	import generales from './Generales';
-    import sumillas  from './Sumillas';
-    import unidades  from './Unidades';
-    import competencias  from './Competencias';
-    import contenidos  from './Contenidos';
+    import sumillas from './Sumillas';
+    import unidades from './Unidades';
+    import competencias from './Competencias';
+    import contenidos from './Contenidos';
     import estrategias from './Estrategias';
     import evaluaciones from './Evaluaciones';
     import bibliografias from './Bibliografias';
@@ -59,9 +79,9 @@
             this.getData();
         },
         components: {
-            vista, generales, sumillas, unidades, competencias, contenidos, estrategias, evaluaciones, bibliografias
+            vista, generales, sumillas, competencias, unidades, contenidos, estrategias, evaluaciones, bibliografias
         },
-        computed: mapState(['status', 'loading']),
+        computed: mapState(['status', 'loading', 'acceso']),
         methods:{
             view(tipo){
                 this.$store.commit('view', tipo);

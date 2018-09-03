@@ -64,7 +64,15 @@ class SyllabusController extends Controller
                 }
                 break;
             case 'competencias' :
-                $proceso = 'competencias';
+                $id = $request->data['id'];
+                $competencia = Competencia::find($id);
+                if(!empty($competencia)){
+                    $competencia->texto = $request->data['data'][0]['texto'];
+                    $competencia->save();
+                    $proceso = 'competencias';
+                }else{
+                    $proceso = 'error contenidos';
+                }
                 break;
             case 'estrategias' :
                 $id = $request->data['id'];
@@ -122,13 +130,15 @@ class SyllabusController extends Controller
 
         /*  Datos de acceso de prueba  */
         $acceso = [
-                'generales' => false,
+                'generales' => true,
                 'sumillas' => true,
-                'competencias' => [false, true],
-                'unidades' => [true, true],
+                'competencias' => true,
+                    'competencias_generales'=> false,
+                    'competencias_especificas'=> true,
+                'unidades' => true, [true, true],
                 'contenidos' => true,
                 'estrategias' => true,
-                'evaluaciones' => [false, true, true],
+                'evaluaciones' => true, [false, true, true],
                 'bibliografias' => true
             ];
 
@@ -395,10 +405,10 @@ class SyllabusController extends Controller
                 $new_data['row'] = $collection[$key2]['orden'] * 100 + $row_titulo;
                 $new_data['pre_row'] = $new_data['row'];
                 //$new_data['week'] = '';
-                $new_data['editing'] = false;
                 $new_data['tipo'] = 'competencias';
                 $new_data['subtipo'] = 'competencias';
                 $new_data['item'] = $collection[$key2]['item'];
+                $new_data['editing'] = false;
                 $new_data['data'] = [
                         [
                             'view' => true,

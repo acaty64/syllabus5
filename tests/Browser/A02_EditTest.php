@@ -18,7 +18,8 @@ class A02_EditTest extends DuskTestCase
     public function testEdit()
     {
         $this->artisan('db:seed');
-
+        $this->artisan('cache:clear');
+        
         // SUMILLAS
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
@@ -36,7 +37,7 @@ class A02_EditTest extends DuskTestCase
                     ->waitForText('Sumilla grabada.')
                     ->waitUntilMissing('#toastr')
                     ->pause(1000);
-        
+        // Es necesario pause(1000) para que reconozca el cambio en la base de datos
         $this->assertDatabaseHas('sumillas', [
                         'texto' => 'xxxxx'
                     ]);
@@ -45,7 +46,11 @@ class A02_EditTest extends DuskTestCase
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->press('Unidades')
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitFor('.unidades', 20)
+                    ->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
                     ->click('.btnEdit2')
@@ -64,9 +69,45 @@ class A02_EditTest extends DuskTestCase
         });
         // End UNIDADES
 
+        // COMPETENCIAS
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitFor('.competencias', 20)
+                    ->press('Competencias')
+                    ->assertSee('COMPETENCIAS')
+                    ->assertSee('Analiza y diagnostica los Estados financieros básicos de diferentes empresas,');
+            $browser->driver->executeScript('window.scrollTo(0, 500);');
+            $reg = 7;
+            $col = 2;
+            $selector = '.id' . $reg . '.col-' . $col; 
+            $btnEdit = '.btnEdit' . $reg;
+            $btnSave = '.btnSave' . $reg;
+            $browser->waitFor($btnEdit)
+                    ->click($btnEdit)
+                    ->clear($selector)
+                    ->type($selector, 'yyyyy')
+                    ->assertSee('yyyyy')
+                    ->click($btnSave)
+                    ->waitForText('Competencia grabada.')
+                    ->assertSee('Competencia grabada.')
+                    ->waitUntilMissing('#toastr')
+                    ->pause(1000);
+
+        $this->assertDatabaseHas('competencias', [
+                        'texto' => 'yyyyy'
+                    ]);
+        });
+        // End COMPETENCIAS
+
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
-            $browser->press('Contenidos')
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitFor('.contenidos', 20)
+                    ->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
                     ->click('.btnEdit3')
@@ -111,7 +152,11 @@ class A02_EditTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->press('Evaluaciones')
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitFor('.evaluaciones', 20)
+                    ->press('Evaluaciones')
                     ->assertSee('EVALUACIÓN')
                     ->assertSee('Evaluación')
                     ->click('.btnEdit2')
@@ -133,7 +178,11 @@ class A02_EditTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->press('Bibliografias')
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitFor('.bibliografias', 20)
+                    ->press('Bibliografias')
                     ->assertSee('BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
                     ->click('.btnEdit2')

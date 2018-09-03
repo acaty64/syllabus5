@@ -118,14 +118,8 @@
                         this.$store.dispatch('RenumeraExamen', linea);
                         this.$store.commit('switchEdit');
 
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
                         toastr.success('Evaluación grabada.');
                     }else{
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
                         toastr.error('El registro no ha sido grabado.');
                     }
                 }else{

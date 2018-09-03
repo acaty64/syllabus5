@@ -79,7 +79,6 @@ export const store = new Vuex.Store({
             state.lineas.sort(function (a, b){
                 return (a.row - b.row);
             });
-
         },
 
         sortLineasTipo(state, tipo){
@@ -90,7 +89,6 @@ export const store = new Vuex.Store({
             state.lineas.sort(function (a, b){
                 return (a.row - b.row);
             });
-
         },
 
         setLineas(state, lineas){
@@ -138,6 +136,12 @@ export const store = new Vuex.Store({
         sumillas: (state) => {
             var array = state.lineas;
             var item = array.filter( (linea) => linea.tipo == 'sumillas' );
+            return item;
+        },
+        competencias: (state) => {
+            var array = state.lineas;
+            var item = array.filter( (linea) => linea.tipo == 'competencias' 
+                                                || linea.tipo == 'titulo2');
             return item;
         },
         unidades: (state) => {
@@ -193,7 +197,7 @@ export const store = new Vuex.Store({
                 'data': linea,
                 'new': false
             };
-//console.log('request: ', request);
+//console.log('store.SaveLinea.request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';

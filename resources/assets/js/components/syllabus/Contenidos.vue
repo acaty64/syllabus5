@@ -58,6 +58,7 @@
                 toastr.showDuration = 300;
                 var mess = '';
                 var consistencia = 0;
+
                 var check = linea.data[0].texto;
                 if(!isNaN(check) && check > 0 && check < 17){ 
                     consistencia = consistencia + 1;
@@ -84,16 +85,6 @@
                 }
 
                 if(consistencia == 4){                
-                    var week = parseInt(linea.data[0].texto);
-                    //linea.week = linea.data[0].texto + 0.5;
-                    var rowUnidades = this.lineas.filter(function (linea) {
-                        return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
-                    });
-                    var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-                    //console.log('rowTitulo1: ', rowTitulo1);
-                    var row = rowTitulo1 + (week * 100) + 10;
-                    linea.row = row ; 
-                    //console.log('linea despues: ', linea);
                     var check = this.$store.dispatch('GrabarContenido', linea);
                     if(check){
                         toastr.success('Contenido grabado.');

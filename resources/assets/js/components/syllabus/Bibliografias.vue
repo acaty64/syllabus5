@@ -97,34 +97,63 @@
         },
         methods: {
             grabar(linea) {
-                /* Renumera row */
-                var week = linea.data[0].texto;
-                var oldWeek = linea.semana;
-                if(!isNaN(week)){                
-                    var week = parseInt(linea.data[0].texto);
-                    var rowUnidades = this.lineas.filter(function (xlinea) {
-                        return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
-                    });
-                    var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-                    var row = rowTitulo1 + (week * 100);
-                    linea.row = row ;
-                    linea.semana = week;
-                    var check = this.$store.dispatch('GrabarContenido', linea);
-                    if(check){
-                        this.$store.commit('switchEdit');
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 300;
 
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
-                        toastr.success('Bibliografía grabada.');
-                    }else{
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
-                        toastr.error('El registro no ha sido grabado.');
-                    }
+                var mess = '';
+                var consistencia = 0;
+                var check = linea.data[1].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
                 }else{
-                    alert('El orden debe ser un número entero.');
+                    mess = 'Inserte el texto AUTOR(ES).';
+                }
+                var check = linea.data[2].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto TÍTULO.';
+                }
+                var check = linea.data[3].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto EDITORIAL.';
+                }
+                var check = linea.data[4].texto;
+                if(!isNaN(check) && check > 1900){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'El AÑO debe ser un número entero mayor a 1900.';
+                }
+                var check = linea.data[5].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto UBICACIÓN.';
+                }
+
+                if(consistencia == 5){   
+                    /* Renumera row */
+                
+                        var week = parseInt(linea.data[0].texto);
+                        var rowUnidades = this.lineas.filter(function (xlinea) {
+                            return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
+                        });
+                        var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
+                        var row = rowTitulo1 + (week * 100);
+                        linea.row = row ;
+                        linea.semana = week;
+                        var check = this.$store.dispatch('GrabarContenido', linea);
+                        if(check){
+                            this.$store.commit('switchEdit');
+                            toastr.success('Bibliografía grabada.');
+                        }else{
+                            toastr.error('El registro no ha sido grabado.');
+                        }
+                }else{
+                    toastr.error(mess);
                 };
             },
             viewTexto(item){

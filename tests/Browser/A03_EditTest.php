@@ -18,7 +18,8 @@ class A03_EditTest extends DuskTestCase
     public function testEdit()
     {
         $this->artisan('db:seed');
-        $pause = 5000;
+        $this->artisan('cache:clear');
+
         // SUMILLAS
         $this->browse(function (Browser $browser) {
             $selector = 'texto';
@@ -40,6 +41,30 @@ class A03_EditTest extends DuskTestCase
 
         });
         // End SUMILLAS
+
+        // COMPETENCIAS
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->press('Competencias')
+                    ->assertSee('III. SISTEMA DE COMPETENCIAS')
+                    ->assertSee('COMPETENCIAS GENERALES')
+                    ->click('.btnEdit6');
+
+            $selector = '.id6.col-2';
+            $error = 'Inserte el texto.';
+            $texto = $browser->text($selector);
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto);
+            $browser->click('.btnSave6')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+        });
+        // End COMPETENCIAS
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
@@ -215,31 +240,75 @@ class A03_EditTest extends DuskTestCase
         });
         // End EVALUACIONES
 
-
-/*
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->press('Bibliografias')
-                    ->assertSee('BIBLIOGRAFÍA')
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->press('Bibliografias')
+                    ->assertSee('VII. BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
-                    ->click('.btnEdit2')
-                    ->clear('.id2.col-2')
-                    ->type('.id2.col-2', 'zzzzz')
-                    ->assertSee('zzzzz')
-                    ->click('.btnSave2')
-                    ->waitForText('Bibliografía grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->click('.btnEdit2');
 
-        $this->assertDatabaseHas('bibliografias', [
-                        'autor' => 'zzzzz'
-                    ]);
+            $selector = '.id2.col-2';
+            $texto = $browser->text($selector);
+            $error = 'Inserte el texto AUTOR(ES).';
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto)
+                    ->click('.btnSave2')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.id2.col-3';
+            $texto = $browser->text($selector);
+            $error = 'Inserte el texto TÍTULO.';
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto)
+                    ->click('.btnSave2')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.id2.col-4';
+            $texto = $browser->text($selector);
+            $error = 'Inserte el texto EDITORIAL.';
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto)
+                    ->click('.btnSave2')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.id2.col-5';
+            $texto = $browser->text($selector);
+            $error = 'El AÑO debe ser un número entero mayor a 1900.';
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto)
+                    ->click('.btnSave2')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.id2.col-6';
+            $texto = $browser->text($selector);
+            $error = 'Inserte el texto UBICACIÓN.';
+            $browser->type($selector, ' ')
+                    ->assertDontSeeIn($selector, $texto)
+                    ->click('.btnSave2')
+                    ->waitForText($error)
+                    ->waitUntilMissing('#toastr')
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
         });
+
         // End BIBLIOGRAFIA
 
-*/
     }
-
-
 
 }
