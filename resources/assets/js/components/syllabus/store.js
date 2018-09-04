@@ -178,7 +178,7 @@ export const store = new Vuex.Store({
                         tipo: state.status,
                         semestre: state.semestre,
                         cod_curso: state.cod_curso,
-                        texto: "",
+                        data: {texto: ""},
                         orden: 1
                     };
                     break;
@@ -222,10 +222,12 @@ export const store = new Vuex.Store({
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var save = response.data.proceso + 'Saved';
+                return true;
 //                context.commit('saveLinea', linea);
 //                context.commit('changePre_row', linea.row);
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
+                return false;
             });
         },
 

@@ -22,17 +22,31 @@ class SyllabusController extends Controller
         switch ($request->data['tipo']) {
             case 'sumillas' :
                 if($request->new){
-                    $sumilla = Sumilla::create([
-                        'semestre'=>$request->data["semestre"],
-                        'cod_curso'=>$request->data["cod_curso"],
-                        'texto'=>$request->data["texto"],
-                        'orden'=>$request->data["orden"],
-                    ]);
-                }else{                
-                    $id = $request->data['id'];
-                    $sumilla = Sumilla::find($id);
-                    $sumilla->texto = $request->data['data'][0]['texto'];
-                    $sumilla->save();
+                    try {
+                        $sumilla = Sumilla::create([
+                            'semestre'=>$request->data["semestre"],
+                            'cod_curso'=>$request->data["cod_curso"],
+                            'texto'=>$request->data['data']["texto"],
+                            'orden'=>$request->data["orden"],
+                        ]);
+                        $success = true;
+                        $proceso = 'sumillas';
+                    } catch (Exception $e) {
+                        $success = false;                        
+                        $proceso = 'Error add sumillas';
+                    }
+                }else{
+                    try {                    
+                        $id = $request->data['id'];
+                        $sumilla = Sumilla::find($id);
+                        $sumilla->texto = $request->data['data'][0]['texto'];
+                        $sumilla->save();
+                        $success = true;
+                        $proceso = 'sumillas';
+                    } catch (Exception $e) {
+                        $success = false;
+                        $proceso = 'Error modify sumillas';
+                    }
                 }
                 $proceso = 'sumillas' ;
                 break;
@@ -110,7 +124,7 @@ class SyllabusController extends Controller
                 break;
         };
         return [
-            'success'=>true,
+            'success'=>$success,
             'proceso' => $proceso,
         ]; 
     }

@@ -46000,40 +46000,40 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     }),
     methods: {
-        setTitulo: function setTitulo(subtipo) {
-            this.$store.dispatch('SetTitulo', subtipo);
-        },
-        rowclass: function rowclass(item) {
-            return 'col-' + item.col + ' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-        },
         grabar: function grabar(linea) {
             var consistencia = 0;
             var xitem = this.items[0]['data'][0];
             if (xitem.texto.trim().length > 0) {
                 consistencia = consistencia + 1;
             }
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 300;
             if (consistencia == 1) {
                 var check = this.$store.dispatch('SaveLinea', linea);
                 if (check) {
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
                     toastr.success('Sumilla grabada.');
                 } else {
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
                     toastr.error('El registro no ha sido grabado.');
                 }
             } else {
-                toastr.closeButton = false;
-                toastr.debug = false;
-                toastr.showDuration = 300;
                 toastr.error('Inserte el texto.');
             }
         },
-        SaveNewItem: function SaveNewItem() {
-            this.$store.dispatch('SaveNewLinea', this.newItem);
+        saveNewLinea: function saveNewLinea() {
+            console.log(this.newItem);
+            var check = this.$store.dispatch('SaveNewLinea', this.newItem);
+            if (check) {
+                toastr.success('Sumilla grabada.');
+            } else {
+                toastr.error('El registro no ha sido grabado.');
+            }
+        },
+        setTitulo: function setTitulo(subtipo) {
+            this.$store.dispatch('SetTitulo', subtipo);
+        },
+        rowclass: function rowclass(item) {
+            return 'col-' + item.col + ' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
@@ -46092,28 +46092,32 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.newItem.texto,
-                          expression: "newItem.texto"
+                          value: _vm.newItem.data.texto,
+                          expression: "newItem.data.texto"
                         }
                       ],
-                      staticClass: "'col-1 sumillas col-xs-6 col-xs-offset-1",
+                      staticClass: "col-1 sumillas col-xs-6 col-xs-offset-1",
                       attrs: {
                         name: "newText",
                         rows: "6",
                         wrap: "hard",
                         align: "justify"
                       },
-                      domProps: { value: _vm.newItem.texto },
+                      domProps: { value: _vm.newItem.data.texto },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.$set(_vm.newItem, "texto", $event.target.value)
+                          _vm.$set(
+                            _vm.newItem.data,
+                            "texto",
+                            $event.target.value
+                          )
                         }
                       }
                     },
-                    [_vm._v(_vm._s(_vm.newItem.texto))]
+                    [_vm._v(_vm._s(_vm.newItem.data.texto))]
                   ),
                   _vm._v(" "),
                   _c(
@@ -46123,7 +46127,7 @@ var render = function() {
                       attrs: { name: "newButton", type: "submit" },
                       on: {
                         click: function($event) {
-                          _vm.SaveNewItem()
+                          _vm.saveNewLinea(_vm.newItem)
                         }
                       }
                     },
@@ -48930,7 +48934,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                         tipo: state.status,
                         semestre: state.semestre,
                         cod_curso: state.cod_curso,
-                        texto: "",
+                        data: { texto: "" },
                         orden: 1
                     };
                     break;
@@ -48949,7 +48953,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 'data': linea,
                 'new': false
             };
-            console.log('store.SaveLinea.request: ', request);
+            //console.log('store.SaveLinea.request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
@@ -48974,10 +48978,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 var save = response.data.proceso + 'Saved';
+                return true;
                 //                context.commit('saveLinea', linea);
                 //                context.commit('changePre_row', linea.row);
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
+                return false;
             });
         },
 

@@ -23,8 +23,8 @@
             <tbody>
                 <tr>
                     <span v-if="nuevo.sumillas && acceso.sumillas">
-                        <textarea name="newText" rows="6" wrap="hard" class="'col-1 sumillas col-xs-6 col-xs-offset-1" align="justify" v-model="newItem.texto">{{newItem.texto}}</textarea>
-                            <button name="newButton" type="submit" class="btnSave btn btn-default"" @click='SaveNewItem()'>Grabar</button>
+                        <textarea name="newText" rows="6" wrap="hard" class="col-1 sumillas col-xs-6 col-xs-offset-1" align="justify" v-model="newItem.data.texto">{{newItem.data.texto}}</textarea>
+                            <button name="newButton" type="submit" class="btnSave btn btn-default"" @click='saveNewLinea(newItem)'>Grabar</button>
                     </span>
                 </tr>
                 <tr v-for="linea in items">
@@ -67,40 +67,40 @@
             newItem(){ return this.$store.getters.newItem },
         },
         methods: {
-            setTitulo(subtipo) {
-                this.$store.dispatch('SetTitulo', subtipo);
-            },
-            rowclass(item) {
-                return 'col-'+item.col+' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
-            },
             grabar(linea) {
                 var consistencia = 0;
                 var xitem = this.items[0]['data'][0];
                 if(xitem.texto.trim().length > 0){
                     consistencia = consistencia + 1;
                 }
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 300;
                 if(consistencia == 1){                
                     var check = this.$store.dispatch('SaveLinea', linea);
                     if(check){    
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
                         toastr.success('Sumilla grabada.');
                     }else{                                            
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
                         toastr.error('El registro no ha sido grabado.');
                     }
                 }else{
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
                     toastr.error('Inserte el texto.');
                 }
             },
-            SaveNewItem(){
-                this.$store.dispatch('SaveNewLinea', this.newItem);
+            saveNewLinea(){
+console.log(this.newItem);
+                var check = this.$store.dispatch('SaveNewLinea', this.newItem);
+                if(check){    
+                    toastr.success('Sumilla grabada.');
+                }else{                                            
+                    toastr.error('El registro no ha sido grabado.');
+                }                
+            },
+            setTitulo(subtipo) {
+                this.$store.dispatch('SetTitulo', subtipo);
+            },
+            rowclass(item) {
+                return 'col-'+item.col+' sumillas col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
