@@ -59,7 +59,7 @@
             grabar(linea) {
                 toastr.closeButton = false;
                 toastr.debug = false;
-                toastr.showDuration = 300;
+                toastr.showDuration = 100;
                 var mess = '';
                 var consistencia = 0;
 

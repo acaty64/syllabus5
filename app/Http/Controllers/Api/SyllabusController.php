@@ -14,6 +14,7 @@ use App\Sumilla;
 use App\Titulo;
 use App\Unidad;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SyllabusController extends Controller
 {
@@ -21,14 +22,17 @@ class SyllabusController extends Controller
     {
         switch ($request->data['tipo']) {
             case 'sumillas' :
+                $dataNew = '';
+                $id = $request->data['id'];
                 if($request->new){
                     try {
                         $sumilla = Sumilla::create([
                             'semestre'=>$request->data["semestre"],
                             'cod_curso'=>$request->data["cod_curso"],
-                            'texto'=>$request->data['data']["texto"],
+                            'texto'=>$request->data['data'][0]["texto"],
                             'orden'=>$request->data["orden"],
                         ]);
+                        $id = $sumilla->id;
                         $success = true;
                         $proceso = 'sumillas';
                     } catch (Exception $e) {
@@ -37,7 +41,6 @@ class SyllabusController extends Controller
                     }
                 }else{
                     try {                    
-                        $id = $request->data['id'];
                         $sumilla = Sumilla::find($id);
                         $sumilla->texto = $request->data['data'][0]['texto'];
                         $sumilla->save();
@@ -48,7 +51,6 @@ class SyllabusController extends Controller
                         $proceso = 'Error modify sumillas';
                     }
                 }
-                $proceso = 'sumillas' ;
                 break;
             case 'unidades' :
                 $id = $request->data['id'];
@@ -65,16 +67,77 @@ class SyllabusController extends Controller
                 break;
             case 'contenidos' :
                 $id = $request->data['id'];
-                $contenido = Contenido::find($id);
-                if(!empty($contenido)){                
-                    $contenido->semana = $request->data['data'][0]['texto'];
-                    $contenido->concepto  = $request->data['data'][1]['texto'];
-                    $contenido->procedimiento  = $request->data['data'][2]['texto'];
-                    $contenido->actividad  = $request->data['data'][3]['texto'];
-                    $contenido->save();
-                    $proceso = 'contenidos';
+                if($request->new){
+                    try {
+                        $contenido = Contenido::create([
+                                'semestre' => $request->data["semestre"], 
+                                'cod_curso' => $request->data["cod_curso"], 
+                                'semana' => $request->data["data"][0]["texto"],
+                                'concepto' => $request->data["data"][1]["texto"],
+                                'procedimiento' => $request->data["data"][2]["texto"],
+                                'actividad' => $request->data["data"][3]["texto"],
+                                'orden' => $request->data["data"][0]["texto"],
+                            ]);
+                        $id = $contenido->id;
+
+                        $_request = $request;
+                        $_request->semestre = $request->data['semestre'];
+                        $_request->cod_curso = $request->data['cod_curso'];
+
+                        $datos = [];
+                        $new_data = $this->upload_titulo1($_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $new_data = $this->upload_titulo2($datos, $_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $new_data = $this->upload_contenidos($datos, $_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+
+                        $dataNew = [];
+                        foreach ($datos as $key => $value) {
+                            if($datos[$key]['tipo'] == 'contenidos' && $datos[$key]['subtipo'] == 'contenidos' ){
+                                array_push($dataNew, $datos[$key]);
+                            }
+                        }
+
+//                    $dataNew = $contenido;
+
+                        $id = $contenido->id;
+                        $success = true;
+                        $proceso = 'contenidos';                        
+                    } catch (Exception $e) {
+                        $id = '';
+                        $success = false;
+                        $proceso = 'Error add contenidos';                        
+                    }
                 }else{
-                    $proceso = 'error contenidos';
+                    $dataNew = '';
+                    try {
+                        $contenido = Contenido::find($id);
+                        if(!empty($contenido)){                
+                            $contenido->semana = $request->data['data'][0]['texto'];
+                            $contenido->concepto  = $request->data['data'][1]['texto'];
+                            $contenido->procedimiento  = $request->data['data'][2]['texto'];
+                            $contenido->actividad  = $request->data['data'][3]['texto'];
+                            $contenido->save();
+                            $success = true;                     
+                            $proceso = 'contenidos';
+                        }else{
+                            $success = false;                      
+                            $proceso = 'error contenidos';
+                        }                        
+                    } catch (Exception $e) {
+                        $success = false;
+                        $proceso = 'Error modify contenidos';                         
+                    }
                 }
                 break;
             case 'competencias' :
@@ -124,9 +187,11 @@ class SyllabusController extends Controller
                 break;
         };
         return [
-            'success'=>$success,
-            'proceso' => $proceso,
-        ]; 
+                'success'=>$success,
+                'proceso' => $proceso,
+                'id' => $id,
+                'data' => $dataNew
+            ]; 
     }
 
     /**
@@ -157,7 +222,19 @@ class SyllabusController extends Controller
             ];
 
         $new_data = $this->upload_titulo0($request, $curso);
-        $datos = $new_data;
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
+
+        $new_data = $this->upload_titulo1($request);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
+
+        $new_data = $this->upload_titulo2($datos, $request);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
 
         $new_data = $this->upload_generales($datos, $request, $curso);
         if(!empty($new_data)){
@@ -215,17 +292,20 @@ class SyllabusController extends Controller
         return $datos;
     }
 
-    
-    protected function upload_titulo0($request, $curso)
-    { 
+    protected function titulos($request)
+    {
         /* Selecciona los titulos del semestre*/
         $titulos = Titulo::all()->where('semestre', $request->semestre)
                 ->sortBy('orden')->toArray();
-
         foreach ($titulos as $key => $value) {
             $titulos[$key]['tipo'] = 'titulo' . $titulos[$key]['tipo'];
         }
 
+        return $titulos;
+    }
+
+    protected function upload_titulo0($request, $curso)
+    {
         $datos0 = [];
         /* titulo0 */
 
@@ -245,10 +325,18 @@ class SyllabusController extends Controller
                     'texto' => $curso['wcurso']
                 ]
             ];
+            
+        array_push($datos0, $new_data);
+        return $datos0;
+    }
 
+    protected function upload_titulo1($request)
+    {
         /* titulo1 */
+        $titulos = $this->titulos($request);
         $collection = collect($titulos)->where('tipo', 'titulo1');
 
+        $datos0 = [];
         foreach ($collection as $key => $value) {
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
@@ -271,14 +359,21 @@ class SyllabusController extends Controller
             array_push($datos0, $new_data);          
         }
 
+        return $datos0;
+    }
+
+    protected function upload_titulo2($data, $request)
+    { 
         /* titulo2 */
-        $collection = collect($datos0)
+        $collection = collect($data)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'competencias');
         $row_titulo = $collection->first()['row'];
 
+        $titulos = $this->titulos($request);
         $collection = collect($titulos)->where('tipo', 'titulo2');
 
+        $datos0 = [];
         foreach ($collection as $key => $value) {
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
@@ -301,9 +396,7 @@ class SyllabusController extends Controller
                 ];
             array_push($datos0, $new_data);
         }
-
         return $datos0;
-
     }
  
     protected function upload_generales($datos, $request, $curso)

@@ -79,7 +79,7 @@
             grabar(linea) {
                 toastr.closeButton = false;
                 toastr.debug = false;
-                toastr.showDuration = 300;
+                toastr.showDuration = 100;
                 var mess = '';
                 var consistencia = 0;
                 var check = parseInt(linea.data[0].texto);
@@ -130,26 +130,11 @@
                         ylinea.row = newRow;
                         this.$store.dispatch('GrabarContenido', ylinea);
                         this.$store.commit('switchEdit');
-/*                        
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
-*/
                         toastr.success('Unidad grabada.');
                     }else{
-/*
-                        toastr.closeButton = false;
-                        toastr.debug = false;
-                        toastr.showDuration = 300;
-*/
                         toastr.error('El registro no ha sido grabado.');
                     }
                 }else{
-/*
-                    toastr.closeButton = false;
-                    toastr.debug = false;
-                    toastr.showDuration = 300;
-*/
                     toastr.error(mess);
                 }
 

@@ -1,12 +1,10 @@
 <template>
     <div>
         <h1>{{ titulo }}
-            <span v-if="!switchEdit && active_line == 0">
-                <!-- boton Nuevo Registro -->
+            <span v-if="newItem.button == 'Editar' && acceso.contenidos">
                 <button name="newButton" type="submit" :class="buttonClass(newItem.button, newItem)" @click="editar(newItem)">Nuevo Registro</button>
             </span>
-            <span v-if="switchEdit && active_line == 'new'">
-                <!-- boton Grabar Nuevo Registro -->
+            <span v-if="newItem.button == 'Grabar'">
                 <button name="newButton" type="submit" :class="buttonClass(newItem.button, newItem)" @click="grabar(newItem, true)">{{ newItem.button }}</button>
             </span>
         </h1>
@@ -19,35 +17,37 @@
             <tbody>
                 <tr>
                     <div class="row">
-                        <span v-if="switchEdit && active_line == 'new'">
+                        <span v-if="newItem.button == 'Grabar'">
                             <span v-for="item in newItem.data">
                                 <textarea name="newText" rows="6" wrap="hard" :class="rowClass(item, newItem)" :align="item.align" v-model="item.texto">"{{item.texto}}"</textarea>
                             </span>                            
                         </span>
                     </div>
                 </tr>
-                <tr v-for="linea in items">
-                    <div class="row">
-                        <span v-for="item in linea.data">                  
-                            <span v-if="!switchEdit && active_line != linea.id && item.view && active_line != 'new'">
-                                <!-- view -->
-                                <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
+                <span v-if="newItem.button == 'Editar'">
+                    <tr v-for="linea in items">
+                        <div class="row">
+                            <span v-if="linea.editing">
+                                <span v-for="item in linea.data">                          
+                                    <textarea rows="6" wrap="hard" :class="rowClass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                                </span>
+                                <span v-if="active_line == linea.id">
+                                    <button type="submit" :class="buttonClass('Save', linea)" @click='grabar(linea, false)'>Grabar</button>
+                                </span>
                             </span>
-                            <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
-                                <!-- edit -->
-                                <textarea rows="6" wrap="hard" :class="rowClass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                            <span v-else>
+                                <span v-for="item in linea.data">    
+                                    <span v-if="item.view">
+                                        <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
+                                    </span>                        
+                                </span>
+                                <span v-if="linea.tipo == 'contenidos'">
+                                    <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>                            
+                                </span>
                             </span>
-                        </span>
-                        <span v-if="!switchEdit && active_line == 0">
-                            <!-- boton editar -->
-                            <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
-                        </span>              
-                        <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
-                            <!-- boton grabar registro editado -->
-                            <button type="submit" :class="buttonClass('Save', linea)" @click='grabar(linea, false)'>Grabar</button>
-                        </span>
-                    </div>
-                </tr>
+                        </div>
+                    </tr>
+                </span>
             </tbody>
         </table>            
     </div>  
@@ -69,8 +69,6 @@
                 acceso: (state) => state.acceso,
                 nuevo: (state) => state.nuevo,
                 active_line: (state) => state.active_line,
-                switchEdit: (state) => state.switchEdit,
-                status: (state) => state.status,
             }),
             items(){ return this.$store.getters.contenidos },
             newItem(){ return this.$store.getters.newItem },
@@ -85,6 +83,7 @@
                 }else{
                     this.$store.dispatch('EditarContenido', linea);
                 }
+                //this.nuevo.contenidos = false;
             },
             consistencia(linea){
                 toastr.closeButton = false;
@@ -130,16 +129,28 @@
                 toastr.showDuration = 100;
                 if(this.consistencia(linea)){                
                     if(linea.id == 'new'){
+//console.log('contenidos dispatch linea new: ', linea);
                         this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+//console.log('Antes de dispatch');
+                            //this.$store.commit('setNewItemValue', ['button', 'Editar']);
+//console.log('Despues de dispatch');
                             toastr.success('Contenido grabado.');
                         }).catch(function () {
                             toastr.error('El registro no ha sido grabado.');
                         });
                     }else{
-                        linea.semana = linea.data[0].texto;
-//console.log('contenidos grabar linea a:', linea);
-                        var linea = this.recalcRow(linea);
-//console.log('contenidos grabar linea b:', linea);
+//console.log('contenidos dispatch linea old: ', linea);
+/*
+                        this.$store.dispatch('SaveLinea', linea).then(function() {
+                            this.$store.dispatch('EditarContenido', linea).then(function() {
+                                toastr.success('Contenido grabado.');
+                            }).catch(function() {
+                                toastr.error('No se puede editar el contenido grabado.');
+                            });
+                        }).catch(function () {
+                            toastr.error('El registro no ha sido grabado.');
+                        });
+*/
                         this.$store.dispatch('SaveLinea', linea).then(function() {
                                 toastr.success('Contenido grabado.');
                         }).catch(function () {
@@ -148,15 +159,6 @@
 
                     }
                 };
-            },
-            recalcRow(oldLinea){
-                var xsemana = oldLinea.semana;
-                var titulo = this.lineas.filter((linea) => linea.tipo == 'titulo1' && linea.subtipo == this.status);
-                var rowTitulo = titulo[0].row;
-                var semanas = this.lineas.filter((linea) => linea.tipo == this.status && linea.subtipo == this.status && linea.semana == xsemana).length;
-                var newRow =  rowTitulo + (xsemana * 100) + semanas;
-                oldLinea.row = newRow;
-                return oldLinea;
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');

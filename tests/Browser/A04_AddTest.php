@@ -121,8 +121,10 @@ class A04_AddTest extends DuskTestCase
 
         });
         // End UNIDADES
-
+*/
         // CONTENIDOS
+
+        $this->artisan('cache:clear');
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
@@ -130,55 +132,52 @@ class A04_AddTest extends DuskTestCase
                     ->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
-                    ->click('.btnEdit3');
+                    ->waitFor('.btnEditarnew', 20)
+                    ->click('.btnEditarnew');
 
-            $selector = '.id3.col-1';
-            $texto = $browser->text($selector);
-            $error = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave3')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.id3.col-2';
-            $error = 'Inserte el texto CONCEPTUAL.';
-            $texto = $browser->text($selector);
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->waitFor('.btnSave3')
-                    ->click('.btnSave3')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.id3.col-4';
-            $error = 'Inserte el texto PROCEDIMENTAL.';
-            $texto = $browser->text($selector);
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave3')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.id3.col-6';
+            $selector = '.idnew.col-6';
             $error = 'Inserte el texto ACTIVIDAD.';
-            $texto = $browser->text($selector);
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave3')
+            $texto = 'Nueva Actividad';
+            $browser->click('.btnGrabarnew')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 20)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
+
+            $selector = '.idnew.col-4';
+            $error = 'Inserte el texto PROCEDIMENTAL.';
+            $texto = 'Nuevo Procedimiento';
+            $browser->click('.btnGrabarnew')
+                    ->waitForText($error)
+                    ->waitUntilMissing('.toast', 20)
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.idnew.col-2';
+            $error = 'Inserte el texto CONCEPTUAL.';
+            $texto = 'Nuevo Concepto';
+            $browser->click('.btnGrabarnew')
+                    ->waitForText($error)
+                    ->waitUntilMissing('.toast', 20)
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $selector = '.idnew.col-1';
+            $texto = 1;
+            $error = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
+            $browser->click('.btnGrabarnew')
+                    ->waitForText($error)
+                    ->waitUntilMissing('.toast', 30)
+                    ->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto);
+
+            $mess = 'Contenido grabado.';
+            $browser->click('.btnGrabarnew')
+                    ->waitForText($mess);
 
         });
 
+/*
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')

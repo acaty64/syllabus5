@@ -45965,6 +45965,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -46000,33 +46002,41 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     }),
     methods: {
-        grabar: function grabar(linea) {
+        consistencia: function consistencia(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
             var consistencia = 0;
-            var xitem = this.items[0]['data'][0];
+            var xitem = linea['data'][0];
             if (xitem.texto.trim().length > 0) {
                 consistencia = consistencia + 1;
             }
-            toastr.closeButton = false;
-            toastr.debug = false;
-            toastr.showDuration = 300;
             if (consistencia == 1) {
-                var check = this.$store.dispatch('SaveLinea', linea);
-                if (check) {
-                    toastr.success('Sumilla grabada.');
-                } else {
-                    toastr.error('El registro no ha sido grabado.');
-                }
+                return true;
             } else {
                 toastr.error('Inserte el texto.');
+                return false;
             }
         },
-        saveNewLinea: function saveNewLinea() {
-            console.log(this.newItem);
-            var check = this.$store.dispatch('SaveNewLinea', this.newItem);
-            if (check) {
-                toastr.success('Sumilla grabada.');
-            } else {
-                toastr.error('El registro no ha sido grabado.');
+        grabar: function grabar(linea, nuevo) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            if (this.consistencia(linea)) {
+                if (nuevo.sumillas) {
+                    console.log('sumillas dispatch: ');
+                    this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+                        toastr.success('Sumilla grabada.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                } else {
+                    var check = this.$store.dispatch('SaveLinea', linea).then(function () {
+                        toastr.success('Sumilla grabada.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                }
             }
         },
         setTitulo: function setTitulo(subtipo) {
@@ -46084,56 +46094,58 @@ var render = function() {
         [
           _c("tr", [
             _vm.nuevo.sumillas && _vm.acceso.sumillas
-              ? _c("span", [
-                  _c(
-                    "textarea",
-                    {
-                      directives: [
+              ? _c(
+                  "span",
+                  _vm._l(_vm.newItem.data, function(item) {
+                    return _c("span", [
+                      _c(
+                        "textarea",
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.newItem.data.texto,
-                          expression: "newItem.data.texto"
-                        }
-                      ],
-                      staticClass: "col-1 sumillas col-xs-6 col-xs-offset-1",
-                      attrs: {
-                        name: "newText",
-                        rows: "6",
-                        wrap: "hard",
-                        align: "justify"
-                      },
-                      domProps: { value: _vm.newItem.data.texto },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: item.texto,
+                              expression: "item.texto"
+                            }
+                          ],
+                          staticClass:
+                            "col-1 sumillas col-xs-6 col-xs-offset-1",
+                          attrs: {
+                            name: "newText",
+                            rows: "6",
+                            wrap: "hard",
+                            align: "justify"
+                          },
+                          domProps: { value: item.texto },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(item, "texto", $event.target.value)
+                            }
                           }
-                          _vm.$set(
-                            _vm.newItem.data,
-                            "texto",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.newItem.data.texto))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btnSave btn btn-default",
-                      attrs: { name: "newButton", type: "submit" },
-                      on: {
-                        click: function($event) {
-                          _vm.saveNewLinea(_vm.newItem)
-                        }
-                      }
-                    },
-                    [_vm._v("Grabar")]
-                  )
-                ])
+                        },
+                        [_vm._v(_vm._s(item.texto))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btnSave btn btn-default",
+                          attrs: { name: "newButton", type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.grabar(_vm.newItem, _vm.nuevo)
+                            }
+                          }
+                        },
+                        [_vm._v("Grabar")]
+                      )
+                    ])
+                  })
+                )
               : _vm._e()
           ]),
           _vm._v(" "),
@@ -46184,7 +46196,7 @@ var render = function() {
                               attrs: { type: "submit" },
                               on: {
                                 click: function($event) {
-                                  _vm.grabar(linea)
+                                  _vm.grabar(linea, _vm.nuevo)
                                 }
                               }
                             },
@@ -46406,7 +46418,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
             var check = parseInt(linea.data[0].texto);
@@ -46456,26 +46468,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     ylinea.row = newRow;
                     this.$store.dispatch('GrabarContenido', ylinea);
                     this.$store.commit('switchEdit');
-                    /*                        
-                                            toastr.closeButton = false;
-                                            toastr.debug = false;
-                                            toastr.showDuration = 300;
-                    */
                     toastr.success('Unidad grabada.');
                 } else {
-                    /*
-                                            toastr.closeButton = false;
-                                            toastr.debug = false;
-                                            toastr.showDuration = 300;
-                    */
                     toastr.error('El registro no ha sido grabado.');
                 }
             } else {
-                /*
-                                    toastr.closeButton = false;
-                                    toastr.debug = false;
-                                    toastr.showDuration = 300;
-                */
                 toastr.error(mess);
             }
         },
@@ -46826,7 +46823,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
 
@@ -47099,7 +47096,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n\n", ""]);
+exports.push([module.i, "\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
 
 // exports
 
@@ -47147,6 +47144,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47154,6 +47171,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     mounted: function mounted() {
         console.log('Contenidos.vue mounted');
         this.setTitulo('contenidos');
+        this.setDefault();
     },
 
     computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(_extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
@@ -47165,20 +47183,45 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         titulo: function titulo(state) {
             return state.titulo;
+        },
+        acceso: function acceso(state) {
+            return state.acceso;
+        },
+        nuevo: function nuevo(state) {
+            return state.nuevo;
+        },
+        active_line: function active_line(state) {
+            return state.active_line;
+        },
+        switchEdit: function switchEdit(state) {
+            return state.switchEdit;
+        },
+        status: function status(state) {
+            return state.status;
         }
     }), {
         items: function items() {
             return this.$store.getters.contenidos;
+        },
+        newItem: function newItem() {
+            return this.$store.getters.newItem;
         }
     })),
     methods: {
-        editar: function editar(linea) {
-            this.$store.dispatch('EditarContenido', linea);
+        setDefault: function setDefault() {
+            this.$store.commit('setDefault');
         },
-        grabar: function grabar(linea) {
+        editar: function editar(linea) {
+            if (linea.id == 'new') {
+                this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
+            } else {
+                this.$store.dispatch('EditarContenido', linea);
+            }
+        },
+        consistencia: function consistencia(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
 
@@ -47206,30 +47249,64 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             } else {
                 mess = 'Inserte el texto ACTIVIDAD.';
             }
-
             if (consistencia == 4) {
-                var check = this.$store.dispatch('GrabarContenido', linea);
-                if (check) {
-                    toastr.success('Contenido grabado.');
-                } else {
-                    toastr.error('El registro no ha sido grabado.');
-                }
+                return true;
             } else {
                 toastr.error(mess);
+                return false;
             }
+        },
+        grabar: function grabar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            if (this.consistencia(linea)) {
+                if (linea.id == 'new') {
+                    this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+                        toastr.success('Contenido grabado.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                } else {
+                    linea.semana = linea.data[0].texto;
+                    //console.log('contenidos grabar linea a:', linea);
+                    var linea = this.recalcRow(linea);
+                    //console.log('contenidos grabar linea b:', linea);
+                    this.$store.dispatch('SaveLinea', linea).then(function () {
+                        toastr.success('Contenido grabado.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                }
+            };
+        },
+        recalcRow: function recalcRow(oldLinea) {
+            var _this = this;
+
+            var xsemana = oldLinea.semana;
+            var titulo = this.lineas.filter(function (linea) {
+                return linea.tipo == 'titulo1' && linea.subtipo == _this.status;
+            });
+            var rowTitulo = titulo[0].row;
+            var semanas = this.lineas.filter(function (linea) {
+                return linea.tipo == _this.status && linea.subtipo == _this.status && linea.semana == xsemana;
+            }).length;
+            var newRow = rowTitulo + xsemana * 100 + semanas;
+            oldLinea.row = newRow;
+            return oldLinea;
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
         },
-        rowclass: function rowclass(item, linea) {
+        rowClass: function rowClass(item, linea) {
             if (linea.tipo == 'contenidos') {
                 return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
             } else {
                 return 'col-1 unidades col-xs-8 col-xs-offset-1';
             }
         },
-        buttonclass: function buttonclass(type, linea) {
+        buttonClass: function buttonClass(type, linea) {
             if (linea.tipo == 'contenidos') {
                 return 'btn' + type + linea.id + ' btn btn-default';
             } else {
@@ -47251,7 +47328,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
+    _c("h1", [
+      _vm._v(_vm._s(_vm.titulo) + "\n        "),
+      !_vm.switchEdit && _vm.active_line == 0
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.editar(_vm.newItem)
+                  }
+                }
+              },
+              [_vm._v("Nuevo Registro")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.switchEdit && _vm.active_line == "new"
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.grabar(_vm.newItem, true)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(_vm.newItem.button))]
+            )
+          ])
+        : _vm._e()
+    ]),
     _vm._v(" "),
     _c("table", [
       _c(
@@ -47263,105 +47377,156 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.items, function(linea) {
-          return _c("tr", [
+        [
+          _c("tr", [
             _c("div", { staticClass: "row" }, [
-              linea.editing
+              _vm.switchEdit && _vm.active_line == "new"
                 ? _c(
                     "span",
-                    [
-                      _vm._l(linea.data, function(item) {
-                        return _c("span", [
-                          _c(
-                            "textarea",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: item.texto,
-                                  expression: "item.texto"
-                                }
-                              ],
-                              class: _vm.rowclass(item, linea),
-                              attrs: {
-                                rows: "6",
-                                wrap: "hard",
-                                align: item.align
-                              },
-                              domProps: { value: item.texto },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(item, "texto", $event.target.value)
-                                }
+                    _vm._l(_vm.newItem.data, function(item) {
+                      return _c("span", [
+                        _c(
+                          "textarea",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: item.texto,
+                                expression: "item.texto"
                               }
+                            ],
+                            class: _vm.rowClass(item, _vm.newItem),
+                            attrs: {
+                              name: "newText",
+                              rows: "6",
+                              wrap: "hard",
+                              align: item.align
                             },
-                            [_vm._v(_vm._s(item.texto))]
-                          )
-                        ])
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          class: _vm.buttonclass("Save", linea),
-                          attrs: { type: "submit" },
-                          on: {
-                            click: function($event) {
-                              _vm.grabar(linea)
+                            domProps: { value: item.texto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(item, "texto", $event.target.value)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v("Grabar")]
-                      )
-                    ],
-                    2
+                          },
+                          [_vm._v('"' + _vm._s(item.texto) + '"')]
+                        )
+                      ])
+                    })
                   )
-                : _c(
-                    "span",
-                    [
-                      _vm._l(linea.data, function(item) {
-                        return _c("span", [
-                          item.view
-                            ? _c("span", [
-                                _c("span", {
-                                  class: _vm.rowclass(item, linea),
-                                  attrs: { align: item.align },
-                                  domProps: {
-                                    innerHTML: _vm._s(_vm.viewTexto(item))
-                                  }
-                                })
-                              ])
-                            : _vm._e()
-                        ])
-                      }),
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.items, function(linea) {
+            return _c("tr", [
+              _c(
+                "div",
+                { staticClass: "row" },
+                [
+                  _vm._l(linea.data, function(item) {
+                    return _c("span", [
+                      !_vm.switchEdit &&
+                      _vm.active_line != linea.id &&
+                      item.view &&
+                      _vm.active_line != "new"
+                        ? _c("span", [
+                            _c("span", {
+                              class: _vm.rowClass(item, linea),
+                              attrs: { align: item.align },
+                              domProps: {
+                                innerHTML: _vm._s(_vm.viewTexto(item))
+                              }
+                            })
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
-                      linea.tipo == "contenidos"
+                      _vm.switchEdit &&
+                      _vm.active_line == linea.id &&
+                      linea.tipo == _vm.status
                         ? _c("span", [
                             _c(
-                              "button",
+                              "textarea",
                               {
-                                class: _vm.buttonclass("Edit", linea),
-                                attrs: { type: "submit" },
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: item.texto,
+                                    expression: "item.texto"
+                                  }
+                                ],
+                                class: _vm.rowClass(item, linea),
+                                attrs: {
+                                  rows: "6",
+                                  wrap: "hard",
+                                  align: item.align
+                                },
+                                domProps: { value: item.texto },
                                 on: {
-                                  click: function($event) {
-                                    _vm.editar(linea)
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(item, "texto", $event.target.value)
                                   }
                                 }
                               },
-                              [_vm._v("Editar")]
+                              [_vm._v(_vm._s(item.texto))]
                             )
                           ])
                         : _vm._e()
-                    ],
-                    2
-                  )
+                    ])
+                  }),
+                  _vm._v(" "),
+                  !_vm.switchEdit && _vm.active_line == 0
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Edit", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.editar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Editar")]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.switchEdit &&
+                  _vm.active_line == linea.id &&
+                  linea.tipo == _vm.status
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Save", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.grabar(linea, false)
+                              }
+                            }
+                          },
+                          [_vm._v("Grabar")]
+                        )
+                      ])
+                    : _vm._e()
+                ],
+                2
+              )
             ])
-          ])
-        })
+          })
+        ],
+        2
       )
     ])
   ])
@@ -47488,7 +47653,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
             var check = linea.data[0].texto;
@@ -47786,7 +47951,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
             var check = linea.data[0].texto;
@@ -48245,7 +48410,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 300;
+            toastr.showDuration = 100;
 
             var mess = '';
             var consistencia = 0;
@@ -48790,10 +48955,51 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         romanos: ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'],
 
         titulo: '',
-        switchEdit: false
+        switchEdit: false,
+        newItem: '',
+        active_line: 0
     },
 
     mutations: {
+        setDefault: function setDefault(state) {
+            state.active_line = 0;
+            state.switchEdit = false;
+        },
+        active_line: function active_line(state, id) {
+            state.active_line = id;
+        },
+        eliminar: function eliminar(state, componente) {
+            //console.log('antes de eliminar: ', state.lineas);
+            state.lineas = state.lineas.filter(function (linea) {
+                return linea.tipo != componente;
+            }).filter(function (linea) {
+                return linea.subtipo != componente;
+            });
+            //console.log('despues de eliminar: ', state.lineas);
+        },
+        agregar: function agregar(state, newLineas) {
+            //console.log('antes de agregar: ', state.lineas);
+            //console.log('newLineas: ', newLineas);
+            for (var xlinea in newLineas) {
+                state.lineas.push(newLineas[xlinea]);
+            }
+            //console.log('despues de agregar: ', state.lineas);
+        },
+        setNewItemValue: function setNewItemValue(state, data) {
+            console.info('setNewItemValue data:', data);
+            var field = data[0];
+            var value = data[1];
+            switch (field) {
+                case 'button':
+                    {
+                        state.newItem.button = value;
+                    }
+            }
+        },
+        nuevo: function nuevo(state, valor) {
+            var tipo = state.status;
+            state.nuevo.tipo = valor;
+        },
         view: function view(state, tipo) {
             state.status = tipo;
         },
@@ -48816,11 +49022,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         switchEditingContenido: function switchEditingContenido(state, linea) {
             var i = findByRow(state.lineas, linea.row, linea.id);
             state.lineas[i].editing = !state.lineas[i].editing;
+            state.switchEdit = true;
         },
         saveLinea: function saveLinea(state, linea) {
             var i = findByRow(state.lineas, linea.pre_row, linea.id);
             state.lineas[i] = linea;
             state.lineas[i].pre_row = linea.row;
+            state.switchEdit = false;
         },
         sortLineasRow: function sortLineasRow(state) {
             state.lineas.sort(function (a, b) {
@@ -48868,6 +49076,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         setCod_curso: function setCod_curso(state, cod_curso) {
             state.cod_curso = cod_curso;
+        },
+        setNewItem: function setNewItem(state, item) {
+            state.newItem = item;
         }
     },
     getters: {
@@ -48931,23 +49142,85 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             switch (state.status) {
                 case 'sumillas':
                     var item = {
+                        id: 'new',
                         tipo: state.status,
                         semestre: state.semestre,
                         cod_curso: state.cod_curso,
-                        data: { texto: "" },
+                        data: [],
                         orden: 1
                     };
+                    item.data.push({ texto: "" });
+                    break;
+                case 'contenidos':
+                    var item = {
+                        button: 'Editar',
+                        id: 'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // semana
+                    item.data.push({
+                        view: true,
+                        col: 1,
+                        cols: 1,
+                        offset: 1,
+                        align: 'center',
+                        texto: '0'
+                    });
+                    // conceptual                
+                    item.data.push({
+                        view: true,
+                        col: 2,
+                        cols: 4,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // procedimiento                
+                    item.data.push({
+                        view: true,
+                        col: 4,
+                        cols: 2,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // actividad                
+                    item.data.push({
+                        view: true,
+                        col: 6,
+                        cols: 2,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
                     break;
                 default:
                     var newItem = {};
                     // code block
                     break;
             }
+            //state.context.commit('setNewItem', item);
+            state.newItem = item;
             return item;
         }
     },
 
     actions: {
+        SetDefault: function SetDefault(context) {
+            context.commit('setDefault');
+        },
+        SetNewItemValue: function SetNewItemValue(context, data) {
+            context.commit('setNewItemValue', data);
+            context.commit('switchEdit');
+            context.commit('active_line', 'new');
+        },
         SaveLinea: function SaveLinea(context, linea) {
             var request = {
                 'data': linea,
@@ -48958,14 +49231,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
-                //console.log('response: ',response.data);
+                console.log('SaveLinea response: ', response.data);
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
-                return true;
+                context.commit('sortLineasRow');
+                context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
-                return false;
             });
         },
         SaveNewLinea: function SaveNewLinea(context, linea) {
@@ -48973,22 +49246,25 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 'data': linea,
                 'new': true
             };
+            console.log('SaveNewLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
-                var save = response.data.proceso + 'Saved';
-                return true;
-                //                context.commit('saveLinea', linea);
-                //                context.commit('changePre_row', linea.row);
+                console.log('SaveNewLinea response: ', response.data);
+                context.commit('eliminar', response.data.proceso);
+                context.commit('agregar', response.data.data);
+                context.commit('sortLineasRow');
+                context.commit('setNewItemValue', ['button', 'Editar']);
+                context.commit('setDefault');
             }).catch(function (error) {
-                console.log('error SaveLinea: ', error);
-                return false;
+                console.log('error SaveNewLinea: ', error);
             });
         },
 
         EditarContenido: function EditarContenido(context, linea) {
             context.commit('switchEditingContenido', linea);
+            context.commit('active_line', linea['id']);
         },
 
         GrabarContenido: function GrabarContenido(context, linea) {

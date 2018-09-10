@@ -119,7 +119,7 @@ class A02_EditTest extends DuskTestCase
                     ->assertSee('Contenido grabado.')
                     ->waitUntilMissing('#toastr')
                     ->pause(1000);
-
+ 
         $this->assertDatabaseHas('contenidos', [
                         'concepto' => 'zzzzzzz'
                     ]);

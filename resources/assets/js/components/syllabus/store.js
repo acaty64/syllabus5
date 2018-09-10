@@ -37,9 +37,46 @@ export const store = new Vuex.Store({
 
         titulo: '',
         switchEdit: false,
+        newItem: '',
+        active_line: 0,
 	},
 
 	mutations:{
+        setDefault(state){
+            state.active_line = 0;
+            state.switchEdit = false;
+        },
+        active_line(state, id){
+            state.active_line = id;
+        },
+        eliminar(state, componente){
+            //console.log('antes de eliminar: ', state.lineas);
+            state.lineas = state.lineas.filter(function(linea) { return linea.tipo != componente }).
+                    filter(function(linea) { return linea.subtipo != componente });
+            //console.log('despues de eliminar: ', state.lineas);
+        },
+        agregar (state, newLineas){
+            //console.log('antes de agregar: ', state.lineas);
+            //console.log('newLineas: ', newLineas);
+            for(var xlinea in newLineas){
+                state.lineas.push(newLineas[xlinea]);
+            }
+            //console.log('despues de agregar: ', state.lineas);
+        },
+        setNewItemValue(state, data){
+            console.info('setNewItemValue data:', data);
+            var field = data[0];
+            var value = data[1];
+            switch (field){
+                case 'button':{
+                    state.newItem.button = value;
+                }
+            }
+        },
+        nuevo(state, valor){
+            var tipo = state.status;
+            state.nuevo.tipo = valor;
+        },
         view(state, tipo){
             state.status = tipo;
         },
@@ -64,15 +101,17 @@ export const store = new Vuex.Store({
             state.status = 'vista';
         },
 
-        switchEditingContenido(state, linea){
+        switchEditingContenido(state, linea){  
             var i = findByRow(state.lineas, linea.row, linea.id);
             state.lineas[i].editing = !state.lineas[i].editing;
+            state.switchEdit = true;
         },
 
         saveLinea(state, linea){
             var i = findByRow(state.lineas, linea.pre_row, linea.id);
             state.lineas[i] = linea;
             state.lineas[i].pre_row = linea.row;
+            state.switchEdit = false;
         },
 
         sortLineasRow(state){
@@ -126,6 +165,10 @@ export const store = new Vuex.Store({
         setCod_curso(state, cod_curso){
             state.cod_curso = cod_curso;
         },
+
+        setNewItem(state, item){
+            state.newItem = item;
+        },
 	},
 	getters: {
         generales: (state) => {
@@ -175,23 +218,85 @@ export const store = new Vuex.Store({
             switch (state.status){
                 case 'sumillas':
                     var item = {
+                        id:'new',
                         tipo: state.status,
                         semestre: state.semestre,
                         cod_curso: state.cod_curso,
-                        data: {texto: ""},
+                        data: [],
                         orden: 1
                     };
+                    item.data.push({texto: ""});
+                    break;
+                case 'contenidos':
+                    var item = {
+                        button: 'Editar',
+                        id:'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // semana
+                    item.data.push({
+                        view:  true,
+                        col:  1,
+                        cols:  1,
+                        offset:  1,
+                        align:  'center',
+                        texto: '0',
+                    });
+                    // conceptual                
+                    item.data.push({
+                        view:  true,
+                        col:  2,
+                        cols:  4,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // procedimiento                
+                    item.data.push({
+                        view:  true,
+                        col:  4,
+                        cols:  2,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });                
+                    // actividad                
+                    item.data.push({
+                        view:  true,
+                        col:  6,
+                        cols:  2,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
                     break;
                 default:
                     var newItem = {};
                     // code block
                     break;
             }
+            //state.context.commit('setNewItem', item);
+            state.newItem = item;
             return item;
         }
     },
 
     actions: {
+        SetDefault: (context) =>{
+            context.commit('setDefault');
+        },
+        SetNewItemValue: (context, data) => {
+            context.commit('setNewItemValue', data);
+            context.commit('switchEdit');
+            context.commit('active_line', 'new');
+        },
         SaveLinea: (context, linea) => {
             var request = {
                 'data': linea,
@@ -202,14 +307,14 @@ export const store = new Vuex.Store({
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-//console.log('response: ',response.data);
+console.log('SaveLinea response: ',response.data);
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
-                return true;
+                context.commit('sortLineasRow');
+                context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
-                return false;
             });
         },
         SaveNewLinea: (context, linea) => {
@@ -217,22 +322,25 @@ export const store = new Vuex.Store({
                 'data': linea,
                 'new': true
             };
+console.log('SaveNewLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-                var save = response.data.proceso + 'Saved';
-                return true;
-//                context.commit('saveLinea', linea);
-//                context.commit('changePre_row', linea.row);
+console.log('SaveNewLinea response: ', response.data);
+                context.commit('eliminar',response.data.proceso);
+                context.commit('agregar', response.data.data);
+                context.commit('sortLineasRow');
+                context.commit('setNewItemValue', ['button', 'Editar']);
+                context.commit('setDefault');
             }).catch(function (error) {
-                console.log('error SaveLinea: ', error);
-                return false;
+                console.log('error SaveNewLinea: ', error);
             });
         },
 
         EditarContenido: (context, linea) => {
             context.commit('switchEditingContenido', linea);
+            context.commit('active_line', linea['id']);
         },
 
         GrabarContenido: (context, linea) => {

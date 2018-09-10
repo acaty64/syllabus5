@@ -28,7 +28,7 @@ class A03_EditTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
-                    ->waitFor('.sumillas', 20)
+                    ->waitForText('Sumillas', 20)
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
                     ->assertSee($texto)
@@ -37,7 +37,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSee($texto)
                     ->click('.btnSave')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr');
+                    ->waitUntilMissing('.toast', 11);
 
         });
         // End SUMILLAS
@@ -47,6 +47,7 @@ class A03_EditTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Competencias')
                     ->press('Competencias')
                     ->assertSee('III. SISTEMA DE COMPETENCIAS')
                     ->assertSee('COMPETENCIAS GENERALES')
@@ -59,7 +60,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto);
             $browser->click('.btnSave6')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -71,6 +72,7 @@ class A03_EditTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Unidades')
                     ->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
@@ -83,7 +85,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -94,7 +96,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto);
             $browser->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -105,7 +107,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -117,6 +119,7 @@ class A03_EditTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Contenidos')
                     ->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
@@ -129,7 +132,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave3')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -141,7 +144,7 @@ class A03_EditTest extends DuskTestCase
                     ->waitFor('.btnSave3')
                     ->click('.btnSave3')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -152,7 +155,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave3')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -163,7 +166,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave3')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -174,6 +177,7 @@ class A03_EditTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Estrategias', 20)
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->assertSee('Lecturas');
@@ -186,7 +190,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -211,7 +215,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -222,7 +226,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -233,7 +237,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -257,7 +261,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -268,7 +272,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -279,7 +283,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -290,7 +294,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -301,7 +305,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
