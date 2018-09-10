@@ -29,3 +29,8 @@ Route::post('/saveData', [
 	'as'	=> 'saveData',
 	'uses'	=> 'Api\SyllabusController@saveData'
 ]);
+
+Route::post('/deleteData', [
+	'as'	=> 'deleteData',
+	'uses'	=> 'Api\SyllabusController@deleteData'
+]);

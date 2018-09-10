@@ -9,42 +9,16 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-class A01_AddTest extends TestCase
+class A02_ContenidoTest extends TestCase
 {
 	use DatabaseMigrations;
-
-    /**
-     * An add test example.
-     *
-     * @test
-     */
-    public function sumillaTest()
-    {
-    	$tipo = "sumillas";
-    	$datos = ["texto"=>"Lorem Ipsum"];
-    	$data = [
-					"id"=> "new",
-					"cod_curso"=> "100048",  
-					"orden"=>1,  
-					"semestre"=>"20181", 
-					"tipo"=>$tipo,
-					"data"=>[ $datos ]
-				];
-        $request = [
-			"new"=> true,
-			"data"=> $data 	
-		];
-
-        $this->post('api/saveData', $request);
-		$this->assertDatabaseHas('sumillas',$datos);
-    }
 
     /**
      * A simple add test example.
      *
      * @test
      */
-    public function contenidoTest()
+    public function addSimpleTest()
     {
     	$contenido = Contenido::create([
             'semestre' => "20182", 
@@ -72,7 +46,7 @@ class A01_AddTest extends TestCase
      *
      * @test
      */
-    public function addContenidoTest()
+    public function addTest()
     {
     	$tipo = "contenidos";
     	$datos = [
@@ -138,6 +112,110 @@ class A01_AddTest extends TestCase
 			"actividad" => "Nueva Actividad"
 		]);
     }
+   
+    /**
+     * An edit test example.
+     *
+     * @test
+     */
 
-//            ->assertJSONFragment($array);
+
+    public function editTest()
+    {
+    	$this->addTest();
+    	$tipo = "contenidos";
+    	$datos = [
+			[
+			    "view" =>  true,
+			    "col" =>  1,
+			    "cols" =>  1,
+			    "offset" =>  1,
+			    "align" =>  "center",
+			    "texto" => "1"
+			],  
+			[
+			    "view" =>  true,
+			    "col" =>  2,
+			    "cols" =>  4,
+			    "offset" =>  1,
+			    "align" =>  "left",
+			    "texto" => "Concepto modificado"
+			],   	                
+			[
+			    "view" =>  true,
+			    "col" =>  2,
+			    "cols" =>  4,
+			    "offset" =>  1,
+			    "align" =>  "left",
+			    "texto" => "Procedimiento modificado"
+			],                         
+			[
+			    "view" =>  true,
+			    "col" =>  6,
+			    "cols" =>  2,
+			    "offset" =>  1,
+			    "align" =>  "left",
+			    "texto" => "Actividad modificada"
+			]     	
+	    ];
+    	$data = [
+					"id"=> "1",
+					"button"=>"Editar",
+					"semestre"=>"20181", 
+					"cod_curso"=> "100048",
+					"tipo"=>$tipo,
+					"subtipo"=>$tipo,
+					"pre_row"=>0,
+					"semana"=>1,
+					"editing"=>false,
+					"data"=> $datos 
+				];
+        $request = [
+			"new"=> false,
+			"data"=> $data 	
+		];
+
+		//$response = $this->json('POST', '/user', ['name' => 'Sally']);
+        $res = $this->json('POST', 'api/saveData', $request);
+
+		$this->assertDatabaseHas($tipo, [
+			"cod_curso"=> "100048",
+			"semestre"=>"20181",
+			"semana"=>"1",
+			"concepto" => "Concepto modificado",
+			"procedimiento" => "Procedimiento modificado",
+			"actividad" => "Actividad modificada"
+		]);
+    }
+
+
+    /**
+     * A delete test example.
+     *
+     * @test
+     */
+    public function deleteTest()
+    {
+    	$this->addTest();
+    	$contenido = Contenido::find(1);
+
+		$request = [
+			"data"=> [
+				"tipo"=>"contenidos",
+				"id"=> $contenido->id,
+				"cod_curso"=> $contenido->cod_curso,
+				"semestre"=>$contenido->semestre, 
+				],
+			];
+		$success = $this->post('api/deleteData', $request);
+		$this->assertDatabaseMissing('contenidos',[ 
+					"id"=> $contenido->id,
+					"cod_curso"=> $contenido->cod_curso,
+					"semestre"=>$contenido->semestre, 
+				]);
+
+    }
+
+
+
 }

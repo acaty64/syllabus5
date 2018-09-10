@@ -284,6 +284,36 @@ class SyllabusController extends Controller
 
     }
 
+    public function deleteData(Request $request)
+    {
+        $id = $request->data['id'];
+        $semestre = $request->data['semestre'];
+        $cod_curso = $request->data['cod_curso'];
+        switch ($request->data['tipo']) {
+            case 'sumillas' :
+                $res = Sumilla::find($id);
+                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                    $res->delete();
+                    $success = true;
+                }else{
+                    $success = false;
+                }
+                break;
+            case 'contenidos':
+                $res = Contenido::find($id);
+                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                    $res->delete();
+                    $success = true;
+                }else{
+                    $success = false;
+                }
+                break;
+        }
+        return [
+            'success' => $success,
+        ];
+    }
+
     public function insertData($datos, $new_data)
     {
         foreach ($new_data as $key => $value) {
