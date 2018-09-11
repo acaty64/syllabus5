@@ -53,16 +53,43 @@ class SyllabusController extends Controller
                 }
                 break;
             case 'unidades' :
+                $dataNew = '';
                 $id = $request->data['id'];
-                $unidad = Unidad::find($id);
-                if(!empty($unidad)){                
-                    $unidad->semana = $request->data['data'][0]['texto'];
-                    $unidad->texto  = $request->data['data'][1]['texto'];
-                    $unidad->logro  = $request->data['data'][2]['texto'];
-                    $unidad->save();
-                    $proceso = 'unidades';
+                if($request->new){
+                    try {
+                        $unidad = Unidad::create([
+                            'semestre'=>$request->data["semestre"],
+                            'cod_curso'=>$request->data["cod_curso"],
+                            'semana'=>$request->data['data'][0]["texto"],
+                            'texto'=>$request->data['data'][1]["texto"],
+                            'logro'=>$request->data['data'][2]["texto"]
+                        ]);
+                        $id = $unidad->id;
+                        $success = true;
+                        $proceso = 'unidades';                        
+                    } catch (Exception $e) {
+                        $success = false;                        
+                        $proceso = 'Error add unidades';                        
+                    }
                 }else{
-                    $proceso = 'error unidades';
+                    try {
+                        $unidad = Unidad::find($id);
+                        if(!empty($unidad)){                
+                            $unidad->semana = $request->data['data'][0]['texto'];
+                            $unidad->texto  = $request->data['data'][1]['texto'];
+                            $unidad->logro  = $request->data['data'][2]['texto'];
+                            $unidad->save();
+                            $success = true;
+                            $proceso = 'unidades';
+                        }else{
+                            $success = false;
+                            $proceso = 'error modify unidades';
+                        }
+                        break;
+                    } catch (Exception $e) {
+                        $success = false;
+                        $proceso = 'Error modify unidades';
+                    }
                 }
                 break;
             case 'contenidos' :
@@ -292,6 +319,15 @@ class SyllabusController extends Controller
         switch ($request->data['tipo']) {
             case 'sumillas' :
                 $res = Sumilla::find($id);
+                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                    $res->delete();
+                    $success = true;
+                }else{
+                    $success = false;
+                }
+                break;
+            case 'unidades':
+                $res = Unidad::find($id);
                 if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
                     $res->delete();
                     $success = true;

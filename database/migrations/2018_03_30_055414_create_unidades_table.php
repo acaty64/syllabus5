@@ -20,7 +20,7 @@ class CreateUnidadesTable extends Migration
             $table->integer('semana');
             $table->char('texto', 100);
             $table->mediumText('logro');
-            $table->integer('orden');
+            $table->integer('orden')->nullable();
             $table->timestamps();
 
         });

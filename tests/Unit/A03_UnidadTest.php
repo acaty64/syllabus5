@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use App\Contenido;
+use App\Unidad;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-class A02_ContenidoTest extends TestCase
+class A03_UnidadTest extends TestCase
 {
 	use DatabaseMigrations;
 
@@ -20,22 +20,20 @@ class A02_ContenidoTest extends TestCase
      */
     public function addSimpleTest()
     {
-    	$contenido = Contenido::create([
+    	$contenido = Unidad::create([
             'semestre' => "20182", 
             'cod_curso' => "100048", 
             'semana' => "3",
-            'concepto' => "Nuevo Concepto",
-            'procedimiento' => "Nuevo procedimiento",
-            'actividad' => "Nueva Actividad",
+            'texto' => "Nuevo texto de unidad",
+            'logro' => "Nuevo logro de unidad",
             'orden' => 5,
     	]);
-		$this->assertDatabaseHas("contenidos", [
+		$this->assertDatabaseHas("unidades", [
             'semestre' => "20182", 
             'cod_curso' => "100048", 
             'semana' => "3",
-            'concepto' => "Nuevo Concepto",
-            'procedimiento' => "Nuevo procedimiento",
-            'actividad' => "Nueva Actividad",
+            'texto' => "Nuevo texto de unidad",
+            'logro' => "Nuevo logro de unidad",
             'orden' => 5,
     	]);
 
@@ -48,7 +46,7 @@ class A02_ContenidoTest extends TestCase
      */
     public function addTest()
     {
-    	$tipo = "contenidos";
+    	$tipo = "unidades";
     	$datos = [
 			[
 			    "view" =>  true,
@@ -56,7 +54,7 @@ class A02_ContenidoTest extends TestCase
 			    "cols" =>  1,
 			    "offset" =>  1,
 			    "align" =>  "center",
-			    "texto" => "1"
+			    "texto" => "16"
 			],  
 			[
 			    "view" =>  true,
@@ -64,7 +62,7 @@ class A02_ContenidoTest extends TestCase
 			    "cols" =>  4,
 			    "offset" =>  1,
 			    "align" =>  "left",
-			    "texto" => "Nuevo concepto"
+			    "texto" => "Texto de unidad"
 			],   	                
 			[
 			    "view" =>  true,
@@ -72,16 +70,8 @@ class A02_ContenidoTest extends TestCase
 			    "cols" =>  4,
 			    "offset" =>  1,
 			    "align" =>  "left",
-			    "texto" => "Nuevo procedimiento"
-			],                         
-			[
-			    "view" =>  true,
-			    "col" =>  6,
-			    "cols" =>  2,
-			    "offset" =>  1,
-			    "align" =>  "left",
-			    "texto" => "Nueva Actividad"
-			]     	
+			    "texto" => "Texto de logro"
+			],                             	
 	    ];
     	$data = [
 					"id"=> "new",
@@ -106,10 +96,9 @@ class A02_ContenidoTest extends TestCase
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
 			"semestre"=>"20181",
-			"semana"=>"1",
-			"concepto" => "Nuevo concepto",
-			"procedimiento" => "Nuevo procedimiento",
-			"actividad" => "Nueva Actividad"
+			"semana"=>"16",
+			"texto" => "Texto de unidad",
+			"logro" => "Texto de logro",
 		]);
     }
    
@@ -123,7 +112,7 @@ class A02_ContenidoTest extends TestCase
     public function editTest()
     {
     	$this->addTest();
-    	$tipo = "contenidos";
+    	$tipo = "unidades";
     	$datos = [
 			[
 			    "view" =>  true,
@@ -139,7 +128,7 @@ class A02_ContenidoTest extends TestCase
 			    "cols" =>  4,
 			    "offset" =>  1,
 			    "align" =>  "left",
-			    "texto" => "Concepto modificado"
+			    "texto" => "Unidad modificada"
 			],   	                
 			[
 			    "view" =>  true,
@@ -147,16 +136,8 @@ class A02_ContenidoTest extends TestCase
 			    "cols" =>  4,
 			    "offset" =>  1,
 			    "align" =>  "left",
-			    "texto" => "Procedimiento modificado"
-			],                         
-			[
-			    "view" =>  true,
-			    "col" =>  6,
-			    "cols" =>  2,
-			    "offset" =>  1,
-			    "align" =>  "left",
-			    "texto" => "Actividad modificada"
-			]     	
+			    "texto" => "Logro modificado"
+			],                             	
 	    ];
     	$data = [
 					"id"=> "1",
@@ -182,9 +163,8 @@ class A02_ContenidoTest extends TestCase
 			"cod_curso"=> "100048",
 			"semestre"=>"20181",
 			"semana"=>"1",
-			"concepto" => "Concepto modificado",
-			"procedimiento" => "Procedimiento modificado",
-			"actividad" => "Actividad modificada"
+			"texto" => "Unidad modificada",
+			"logro" => "Logro modificado",
 		]);
     }
 
@@ -197,25 +177,23 @@ class A02_ContenidoTest extends TestCase
     public function deleteTest()
     {
     	$this->addTest();
-    	$contenido = Contenido::find(1);
+    	$unidad = Unidad::find(1);
 
 		$request = [
 			"data"=> [
-				"tipo"=>"contenidos",
-				"id"=> $contenido->id,
-				"cod_curso"=> $contenido->cod_curso,
-				"semestre"=>$contenido->semestre, 
+				"tipo"=>"unidades",
+				"id"=> $unidad->id,
+				"cod_curso"=> $unidad->cod_curso,
+				"semestre"=>$unidad->semestre, 
 				],
 			];
 		$success = $this->post('api/deleteData', $request);
-		$this->assertDatabaseMissing('contenidos',[ 
-					"id"=> $contenido->id,
-					"cod_curso"=> $contenido->cod_curso,
-					"semestre"=>$contenido->semestre, 
+		$this->assertDatabaseMissing('unidades',[ 
+					"id"=> $unidad->id,
+					"cod_curso"=> $unidad->cod_curso,
+					"semestre"=>$unidad->semestre, 
 				]);
 
     }
-
-
 
 }
