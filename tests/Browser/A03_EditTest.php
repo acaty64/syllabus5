@@ -90,7 +90,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertSeeIn($selector, $texto);
 
             $selector = '.id2.col-2';
-            $error = 'Inserte el texto de la UNIDAD.';
+            $error = 'Inserte el texto UNIDAD.';
             $texto = $browser->text($selector);
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto);
@@ -101,7 +101,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertSeeIn($selector, $texto);
 
             $selector = '.id2.col-3';
-            $error = 'Inserte el texto del LOGRO.';
+            $error = 'Inserte el texto LOGRO.';
             $texto = $browser->text($selector);
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)

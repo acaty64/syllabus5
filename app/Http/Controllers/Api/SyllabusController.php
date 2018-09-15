@@ -636,8 +636,8 @@ class SyllabusController extends Controller
                 ],
                 [
                     'view' => true,
-                    'col' => 1,
-                    'cols' => 8,
+                    'col' => 2,
+                    'cols' => 9,
                     'offset' => 1,
                     'align' => 'center',
                     'texto' => $collection[$key]['texto'],

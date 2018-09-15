@@ -66,16 +66,18 @@
 
             rowclass(item, tipo){
                 switch (tipo){
+/*
                     case 'unidades': {
-                        return 'col-1 unidades col-xs-9 col-xs-offset-1';
+                        return 'col-1 unidades col-xs-9 col-xs-offset-1 vista';
                     };
+*/
                     case 'bibliografias': {
                         switch (item.col){
                             case 1: {
-                                return 'col-1 bibliografias col-xs-1 col-xs-offset-1';
+                                return 'col-1 bibliografias col-xs-1 col-xs-offset-1 vista';
                             };
                             case 2: {
-                                return 'col-2 bibliografias col-xs-6 col-xs-offset-1';
+                                return 'col-2 bibliografias col-xs-6 col-xs-offset-1 vista';
                             };
                             default: {
                                 return '';
@@ -83,7 +85,7 @@
                         }
                     };
                     default: {
-                        return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                        return 'col-'+item.col+' '+tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' vista';
                     };
                 }
             },
@@ -149,10 +151,34 @@
     }
 </script>
 
-<style>
-
+<style>    
     #viewTexto {
         white-space: pre-wrap;
+    }
+
+    .titulo0.vista {
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .titulo1.vista {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .unidades.vista {
+        border: 1px solid black;
+    }
+
+    .col-2.titulo3.vista, .col-3.titulo3.vista,  .col-4.titulo3.vista,  .col-6.titulo3.vista, 
+    .col-2.contenidos.vista, .col-3.contenidos.vista, .col-4.contenidos.vista,  .col-6.contenidos.vista,
+    .col-3.generales.vista,
+    .col-2.bibliografias.vista, .col-3.bibliografias.vista, .col-4.bibliografias.vista, .col-5.bibliografias.vista, .col-6.bibliografias.vista
+    {
+        margin-left: 0px;
+    }
+
+    .examenes.vista {
+        border: 0.5px solid black;
     }
 
 </style>

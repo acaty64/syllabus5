@@ -227,6 +227,47 @@ export const store = new Vuex.Store({
                     };
                     item.data.push({texto: ""});
                     break;
+                case 'unidades':
+                    var item = {
+                        button: 'Editar',
+                        id:'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // semana
+                    item.data.push({
+                        view:  true,
+                        col:  1,
+                        cols:  1,
+                        offset:  1,
+                        align:  'center',
+                        texto: '0',
+                    });
+                    // texto                
+                    item.data.push({
+                        view:  true,
+                        col:  2,
+                        cols:  4,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // logro                
+                    item.data.push({
+                        view:  true,
+                        col:  3,
+                        cols:  4,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    break;
                 case 'contenidos':
                     var item = {
                         button: 'Editar',
