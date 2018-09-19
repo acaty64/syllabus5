@@ -66,11 +66,9 @@
 
             rowclass(item, tipo){
                 switch (tipo){
-/*
                     case 'unidades': {
-                        return 'col-1 unidades col-xs-9 col-xs-offset-1 vista';
+                        return 'col-2 unidades col-xs-9 col-xs-offset-1 vista';
                     };
-*/
                     case 'bibliografias': {
                         switch (item.col){
                             case 1: {
@@ -175,6 +173,11 @@
     .col-2.bibliografias.vista, .col-3.bibliografias.vista, .col-4.bibliografias.vista, .col-5.bibliografias.vista, .col-6.bibliografias.vista
     {
         margin-left: 0px;
+    }
+    
+    .col-2.unidades 
+    {
+        float: left;
     }
 
     .examenes.vista {

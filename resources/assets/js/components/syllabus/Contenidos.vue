@@ -89,7 +89,7 @@
             consistencia(linea){
                 toastr.closeButton = false;
                 toastr.debug = false;
-                toastr.showDuration = 100;
+                toastr.showDuration = 50;
                 var mess = '';
                 var consistencia = 0;
 
@@ -127,7 +127,7 @@
             grabar(linea) {
                 toastr.closeButton = false;
                 toastr.debug = false;
-                toastr.showDuration = 100;
+                toastr.showDuration = 50;
                 if(this.consistencia(linea)){                
                     if(linea.id == 'new'){
                         this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {

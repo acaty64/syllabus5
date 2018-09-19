@@ -22,9 +22,9 @@ class A03_EditTest extends DuskTestCase
 
         // SUMILLAS
         $this->browse(function (Browser $browser) {
-            $selector = 'texto';
+            $selector = '.id1.sumillas';
             $texto = 'El curso tiene como propósito';
-            $error = 'Inserte el texto.';
+            $error = 'Inserte el texto SUMILLA.';
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
@@ -32,13 +32,13 @@ class A03_EditTest extends DuskTestCase
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
                     ->assertSee($texto)
-                    ->waitFor('.sumillas')
-                    ->type('.sumillas', ' ')
-                    ->assertDontSee($texto)
-                    ->click('.btnSave')
+                    ->click('.btnEdit1')
+                    ->waitFor($selector)
+                    ->type($selector, ' ')
+                    ->waitFor('.btnSave1')
+                    ->click('.btnSave1')
                     ->waitForText($error)
                     ->waitUntilMissing('.toast', 11);
-
         });
         // End SUMILLAS
 

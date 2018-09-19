@@ -22,7 +22,6 @@ class SyllabusController extends Controller
     {
         switch ($request->data['tipo']) {
             case 'sumillas' :
-                $dataNew = '';
                 $id = $request->data['id'];
                 if($request->new){
                     try {
@@ -32,7 +31,22 @@ class SyllabusController extends Controller
                             'texto'=>$request->data['data'][0]["texto"],
                             'orden'=>$request->data["orden"],
                         ]);
+
                         $id = $sumilla->id;
+
+                        $_request = $request;
+                        $_request->semestre = $request->data['semestre'];
+                        $_request->cod_curso = $request->data['cod_curso'];
+
+                        $datos = [];
+                        $new_data = $this->upload_titulo1($_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $dataNew = $this->upload_sumillas($datos, $_request);
+
+                        //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'sumillas';
                     } catch (Exception $e) {
@@ -44,6 +58,7 @@ class SyllabusController extends Controller
                         $sumilla = Sumilla::find($id);
                         $sumilla->texto = $request->data['data'][0]['texto'];
                         $sumilla->save();
+                        $dataNew = $sumilla;
                         $success = true;
                         $proceso = 'sumillas';
                     } catch (Exception $e) {
@@ -65,6 +80,29 @@ class SyllabusController extends Controller
                             'logro'=>$request->data['data'][2]["texto"]
                         ]);
                         $id = $unidad->id;
+
+                        $_request = $request;
+                        $_request->semestre = $request->data['semestre'];
+                        $_request->cod_curso = $request->data['cod_curso'];
+
+                        $datos = [];
+                        $new_data = $this->upload_titulo1($_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $new_data = $this->upload_unidades($datos, $_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $dataNew = [];
+                        foreach ($datos as $key => $value) {
+                            if($datos[$key]['tipo'] == 'unidades' && $datos[$key]['subtipo'] == 'unidades' && $datos[$key]['id'] == $id){
+                                array_push($dataNew, $datos[$key]);
+                            }
+                        }
+
                         $success = true;
                         $proceso = 'unidades';                        
                     } catch (Exception $e) {
@@ -210,7 +248,10 @@ class SyllabusController extends Controller
                 $proceso = 'generales';
                 break;
             case 'titulo3' :
+                $id = 0;
+                $dataNew = $this->upload_titulo3($request);
                 $proceso = 'titulo3';
+                $success = true;
                 break;
         };
         return [
@@ -279,6 +320,11 @@ class SyllabusController extends Controller
         }
 
         $new_data = $this->upload_unidades($datos, $request);
+        if(!empty($new_data)){
+            $datos = $this->insertData($datos, $new_data);
+        }
+
+        $new_data = $this->upload_titulo3($request);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -519,7 +565,6 @@ class SyllabusController extends Controller
 
     protected function upload_sumillas($datos, $request)
     {
-
         $sumillas = Sumilla::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
@@ -597,10 +642,58 @@ class SyllabusController extends Controller
         }
         return $datos0;
     }
+    
+    /* titulo3 */
+    protected function upload_titulo3($request)
+    {
+        $datos0 = [];
+        $unidades = Unidad::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+
+        $titulo3 = Titulo::all()
+                    ->where('semestre', $request->semestre)
+                    ->where('tipo', '3')
+                    ->sortBy('orden');
+
+        $titulo1 = Titulo::all()
+                    ->where('semestre', $request->semestre)
+                    ->where('tipo', '1')
+                    ->where('subtipo', 'contenidos')
+                    ->first->toArray();
+
+        $row_titulo = $titulo1->orden * 10000; 
+        $collection = collect($unidades);
+        foreach ($collection as $key => $value) {
+            /* Agrega titulo3 */
+            $new_data = [];
+            $new_data['id'] = $collection[$key]['id'];
+            $new_data['tipo'] = 'titulo3';
+            $new_data['subtipo'] = 'unidades';
+            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 1;
+            $new_data['pre_row'] = $new_data['row'];
+            $new_data['semana'] = $collection[$key]['semana'];
+            $new_data['editing'] = false;
+            $new_data['data'] = [];
+//            $titulo3 = $this->upload_titulo3($request);
+            foreach ($titulo3 as $key2 => $value2) {
+                $new_data_col = [
+                    'col' => $titulo3[$key2]['col'],
+                    'cols' =>  $titulo3[$key2]['columns'],
+                    'offset' => 1,
+                    'align' => 'center',
+                    'texto' => $titulo3[$key2]['texto'],
+                ];
+                array_push($new_data['data'], $new_data_col);                 
+            }
+            array_push($datos0, $new_data);
+        }
+        return $datos0;
+    }
+    /* Fin de titulo3  */
 
     protected function upload_unidades($datos, $request)
     {
-
         $datos0 = [];
 
         $titulos = Titulo::all()->where('semestre', $request->semestre)
@@ -652,29 +745,6 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['logro'],
                 ],
             ];
-            array_push($datos0, $new_data);
-
-            /* Agrega titulo3 */
-            $new_data = [];
-            $new_data['id'] = $collection[$key]['id'];
-            $new_data['tipo'] = 'titulo3';
-            $new_data['subtipo'] = 'unidades';
-            $new_data['row'] = $collection[$key]['semana'] * 100 + $row_titulo + 1;
-            $new_data['pre_row'] = $new_data['row'];
-            $new_data['semana'] = $collection[$key]['semana'];
-            $new_data['editing'] = false;
-            $new_data['data'] = [];
-            $titulo3 = collect($titulos)->where('tipo','3')->sortBy('orden');
-            foreach ($titulo3 as $key2 => $value2) {
-                $new_data_col = [
-                    'col' => $titulo3[$key2]['col'],
-                    'cols' =>  $titulo3[$key2]['columns'],
-                    'offset' => 1,
-                    'align' => 'center',
-                    'texto' => $titulo3[$key2]['texto'],
-                ];
-                array_push($new_data['data'], $new_data_col);                 
-            }
             array_push($datos0, $new_data);
         }
         return $datos0;

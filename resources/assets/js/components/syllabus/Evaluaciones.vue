@@ -81,7 +81,7 @@
             grabar(linea) {
                 toastr.closeButton = false;
                 toastr.debug = false;
-                toastr.showDuration = 100;
+                toastr.showDuration = 50;
                 var mess = '';
                 var consistencia = 0;
                 var check = linea.data[0].texto;

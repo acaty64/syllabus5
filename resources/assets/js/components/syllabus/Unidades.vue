@@ -118,6 +118,7 @@
                 }
                 var check = linea.data[1].texto;
                 if(check.trim().length > 0){
+                    linea.data[1].texto = linea.data[1].texto.toUpperCase();
                     consistencia = consistencia + 1;
                 }else{
                     mess = 'Inserte el texto UNIDAD.';
@@ -141,21 +142,28 @@
                 toastr.showDuration = 100;
                 if(this.consistencia(linea)){                
                     if(linea.id == 'new'){
-                        this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
-                            toastr.success('Contenido grabado.');
-                        }).catch(function () {
-                            toastr.error('El registro no ha sido grabado.');
-                        });
+                        this.$store.dispatch('SaveNewLinea', linea);
+                        toastr.success('Unidad grabada.');
                     }else{
                         linea.semana = linea.data[0].texto;
 //console.log('unidades grabar linea a:', linea);
                         var linea = this.recalcRow(linea);
 //console.log('unidades grabar linea b:', linea);
-                        this.$store.dispatch('SaveLinea', linea).then(function() {
+                        this.$store.dispatch('SaveLinea', linea);
+                        //this.$store.dispatch('RecallTitulo3');
+                        toastr.success('Unidad grabada.');
+/*
+                        this.$store.dispatch('SaveLinea', linea).then(function(store) {
+                            this.$store.dispatch('RecallTitulo3').then(function () {
                                 toastr.success('Unidad grabada.');
-                        }).catch(function () {
+                            }).catch(function (error) {
+                                toastr.error('Error en RecallTitulo3');
+                            });
+                        }).catch(function (error) {
                             toastr.error('El registro no ha sido grabado.');
+                            console.log('grabar.error: ', error);
                         });
+*/
 
                     }
                 };
@@ -164,11 +172,10 @@
                 var xsemana = oldLinea.semana;
                 var titulo = this.lineas.filter((linea) => linea.tipo == 'titulo1' && linea.subtipo == 'contenidos');
                 var rowTitulo = titulo[0].row;
-                //var semanas = this.lineas.filter((linea) => linea.tipo == this.status && linea.subtipo == this.status && linea.semana == xsemana).length;
-                //var newRow =  rowTitulo + (xsemana * 100) + semanas;
                 var newRow =  rowTitulo + (xsemana * 100);
-                oldLinea.row = newRow;
-                return oldLinea;
+                var newLinea = oldLinea;
+                newLinea.row = newRow;
+                return newLinea;
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
@@ -190,9 +197,9 @@
                             var xcols = 1;
                             break;
                     }
-                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + xcols + ' col-xs-offset-' + item.offset;
+                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + xcols + ' col-xs-offset-' + item.offset + ' componente';
                 }else{
-                    return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                    return 'col-1 unidades col-xs-8 col-xs-offset-1 componente';
                 }
             },
 
@@ -211,13 +218,20 @@
     }
 </script>
 <style>
-    .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
-    .col-1.unidades, .col-2.unidades, .col-3.unidades, .col-4.unidades, .col-6.unidades
+    .col-2.titulo3.componente, 
+    .col-3.titulo3.componente,  
+    .col-4.titulo3.componente,  
+    .col-6.titulo3.componente, 
+    .col-1.unidades.componente, 
+    .col-2.unidades.componente,
+    .col-3.unidades.componente, 
+    .col-4.unidades.componente, 
+    .col-6.unidades
     {
         margin-left: 0px;
     } 
 
-    .unidades {
+    .unidades.componente {
         border: 0px solid black;
     }
 

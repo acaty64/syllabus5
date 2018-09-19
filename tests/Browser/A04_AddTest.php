@@ -29,26 +29,30 @@ class A04_AddTest extends DuskTestCase
             $selector = '.col-1.sumillas';
             $texto = 'El curso tiene como proposito ...';
             $mess = 'Sumilla grabada.';
-            $btnSave = '.btnSave';
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Sumillas', 10)
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
+                    ->waitFor('.btnEditarnew')
+                    ->press('Nuevo Registro')
                     ->waitFor($selector, 20)
-                    ->waitFor($btnSave, 20)
                     ->type($selector, $texto)
-                    ->click($btnSave)
+                    ->waitFor('.btnGrabarnew')
+                    ->press('Grabar')
                     ->waitForText($mess)
-                    ->waitUntilMissing('#toastr');
-        });
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->waitForText($texto);
 
-        $this->browse(function (Browser $browser) {
-            $texto = 'El curso tiene como proposito ...';
                 $this->assertDatabaseHas('sumillas', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
         });
+
         // End SUMILLAS
 
 /*
@@ -69,59 +73,47 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto);
             $browser->click('.btnSave6')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
         });
         // End COMPETENCIAS
-
+*/
         // UNIDADES
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Unidades', 10)
                     ->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
-                    ->click('.btnEdit2');
+                    ->click('.btnEditarnew');
 
-            $selector = '.id2.col-1';
-            $texto = $browser->text($selector);
-            $error = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+            $selector = '.idnew.col-1';
+            $mess = 'Unidad grabada.';
+            $browser->type('.idnew.col-1', 1)
+                    ->type('.idnew.col-2', 'Nuevo texto UNIDAD.')
+                    ->type('.idnew.col-3', 'Nuevo texto LOGRO.')
+                    ->click('.btnGrabarnew')
+                    ->waitForText($mess)
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 1000);');
 
-            $selector = '.id2.col-2';
-            $error = 'Inserte el texto de la UNIDAD.';
-            $texto = $browser->text($selector);
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto);
-            $browser->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+            $browser->waitForText('NUEVO TEXTO UNIDAD.')
+                    ->waitForText('Nuevo texto LOGRO.');
 
-            $selector = '.id2.col-3';
-            $error = 'Inserte el texto del LOGRO.';
-            $texto = $browser->text($selector);
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
+                $this->assertDatabaseHas('unidades', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'texto' => 'NUEVO TEXTO UNIDAD.',
+                        'logro' => 'Nuevo texto LOGRO.'
+                    ]);
         });
         // End UNIDADES
-*/
+/*
         // CONTENIDOS
 
         $this->artisan('cache:clear');
@@ -140,7 +132,7 @@ class A04_AddTest extends DuskTestCase
             $texto = 'Nueva Actividad';
             $browser->click('.btnGrabarnew')
                     ->waitForText($error)
-                    ->waitUntilMissing('.toast', 20)
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -149,7 +141,7 @@ class A04_AddTest extends DuskTestCase
             $texto = 'Nuevo Procedimiento';
             $browser->click('.btnGrabarnew')
                     ->waitForText($error)
-                    ->waitUntilMissing('.toast', 20)
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -158,7 +150,7 @@ class A04_AddTest extends DuskTestCase
             $texto = 'Nuevo Concepto';
             $browser->click('.btnGrabarnew')
                     ->waitForText($error)
-                    ->waitUntilMissing('.toast', 20)
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -167,7 +159,7 @@ class A04_AddTest extends DuskTestCase
             $error = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
             $browser->click('.btnGrabarnew')
                     ->waitForText($error)
-                    ->waitUntilMissing('.toast', 30)
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -195,7 +187,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -220,7 +212,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -231,7 +223,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -242,7 +234,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -266,7 +258,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -277,7 +269,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -288,7 +280,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -299,7 +291,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
@@ -310,7 +302,7 @@ class A04_AddTest extends DuskTestCase
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
                     ->waitForText($error)
-                    ->waitUntilMissing('#toastr')
+                    ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 

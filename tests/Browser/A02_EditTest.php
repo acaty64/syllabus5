@@ -29,16 +29,16 @@ class A02_EditTest extends DuskTestCase
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
                     ->assertSee('El curso tiene como propósito')
-                    ->waitFor('.sumillas',20)
-                    ->clear('.sumillas')
+                    ->click('.btnEdit1')
+                    ->waitFor('.id1.sumillas',20)
+                    ->clear('.id1.sumillas')
                     ->type('.sumillas', 'xxxxx')
                     ->assertSee('xxxxx')
-                    ->click('.btnSave')
+                    ->click('.btnSave1')
                     ->waitForText('Sumilla grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
-        // Es necesario pause(1000) para que reconozca el cambio en la base de datos
-        $this->assertDatabaseHas('sumillas', [
+                    ->waitUntilMissing('.toast', 11);
+
+            $this->assertDatabaseHas('sumillas', [
                         'texto' => 'xxxxx'
                     ]);
         });
@@ -60,8 +60,7 @@ class A02_EditTest extends DuskTestCase
                     ->click('.btnSave2')
                     ->waitForText('Unidad grabada.')
                     ->assertSee('Unidad grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
 
         $this->assertDatabaseHas('unidades', [
                         'texto' => 'yyyyy'
@@ -92,8 +91,7 @@ class A02_EditTest extends DuskTestCase
                     ->click($btnSave)
                     ->waitForText('Competencia grabada.')
                     ->assertSee('Competencia grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
 
         $this->assertDatabaseHas('competencias', [
                         'texto' => 'yyyyy'
@@ -117,8 +115,7 @@ class A02_EditTest extends DuskTestCase
                     ->click('.btnSave3')
                     ->waitForText('Contenido grabado.')
                     ->assertSee('Contenido grabado.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
  
         $this->assertDatabaseHas('contenidos', [
                         'concepto' => 'zzzzzzz'
@@ -141,8 +138,7 @@ class A02_EditTest extends DuskTestCase
                     ->click('.btnSave')
                     ->waitForText('Estrategias grabadas.')
                     ->assertSee('Estrategias grabadas.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
         
         $this->assertDatabaseHas('estrategias', [
                         'texto' => 'xxxxx'
@@ -167,8 +163,7 @@ class A02_EditTest extends DuskTestCase
                     ->click('.btnSave2')
                     ->waitForText('Evaluación grabada.')
                     ->assertSee('Evaluación grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
 
         $this->assertDatabaseHas('evaluaciones', [
                         'texto' => 'yyyyy'
@@ -192,8 +187,7 @@ class A02_EditTest extends DuskTestCase
                     ->assertSee('zzzzz')
                     ->click('.btnSave2')
                     ->waitForText('Bibliografía grabada.')
-                    ->waitUntilMissing('#toastr')
-                    ->pause(1000);
+                    ->waitUntilMissing('.toast', 11);
 
         $this->assertDatabaseHas('bibliografias', [
                         'autor' => 'zzzzz'
