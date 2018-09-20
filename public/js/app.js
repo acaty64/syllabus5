@@ -45973,6 +45973,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -46028,6 +46030,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
             } else {
                 this.$store.dispatch('EditarContenido', linea);
+            }
+        },
+        borrar: function borrar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            var check = this.$store.dispatch('BorrarContenido', linea);
+            if (check) {
+                toastr.success('Sumilla eliminada.');
             }
         },
         consistencia: function consistencia(linea) {
@@ -46278,6 +46289,20 @@ var render = function() {
                             }
                           },
                           [_vm._v("Editar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Erase", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.borrar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
                         )
                       ])
                     : _vm._e(),
@@ -49204,6 +49229,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         active_line: function active_line(state, id) {
             state.active_line = id;
         },
+        eliminarLinea: function eliminarLinea(state, xlinea) {
+            console.log('eliminarLinea xlinea: ', xlinea);
+            /*
+                        for (var x in state.lineas) {
+                            if(state.lineas[x].tipo == xlinea.tipo && state.lineas[x].id == xlinea.id){
+                                var nlinea = state.lineas[x];
+                            }
+                        }
+            console.log('eliminarLinea nlinea: ', nlinea);
+            */
+            console.log('eliminarLinea antes: ', state.lineas);
+            state.lineas = state.lineas.filter(function (linea) {
+                return linea != xlinea;
+            });
+            console.log('eliminarLinea despues: ', state.lineas);
+        },
         eliminar: function eliminar(state, componente) {
             //console.log('antes de eliminar: ', state.lineas);
             state.lineas = state.lineas.filter(function (linea) {
@@ -49499,6 +49540,29 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
+        BorrarContenido: function BorrarContenido(context, linea) {
+            var request = {
+                'data': {
+                    'tipo': linea.tipo,
+                    'id': linea.id,
+                    'semestre': context.state.semestre,
+                    'cod_curso': context.state.cod_curso
+                }
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol + '//' + URLdomain + '/api/deleteData/';
+            axios.post(url, request).then(function (response) {
+                context.commit('eliminarLinea', linea);
+                if (linea.tipo == 'sumillas') {
+                    //context.commit('switchEdit');
+                    context.commit('setNuevo', ['sumillas', true]);
+                    context.commit('active_line', 0);
+                };
+            }).catch(function (error) {
+                console.log('error BorrarContenido: ', error);
+            });
+        },
         RecallTitulo3: function RecallTitulo3(context) {
             var request = {
                 'data': {

@@ -41,6 +41,8 @@
                         <span v-if="!switchEdit && active_line == 0">
                             <!-- boton editar -->
                             <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
+                            <!-- boton eliminar -->
+                            <button type="submit" :class="buttonClass('Erase', linea)" @click='borrar(linea)'>Eliminar</button>
                         </span>              
                         <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
                             <!-- boton grabar registro editado -->
@@ -87,6 +89,15 @@
                     this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
                 }else{
                     this.$store.dispatch('EditarContenido', linea);
+                }
+            },
+            borrar(linea) {
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 100;
+                var check = this.$store.dispatch('BorrarContenido', linea);
+                if(check) {
+                    toastr.success('Sumilla eliminada.');
                 }
             },
             consistencia(linea){

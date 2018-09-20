@@ -54,10 +54,16 @@ export const store = new Vuex.Store({
         active_line(state, id){
             state.active_line = id;
         },
+        eliminarLinea(state, xlinea){
+            state.lineas = state.lineas.
+                filter(linea => linea != xlinea );
+        },
+
         eliminar(state, componente){
             //console.log('antes de eliminar: ', state.lineas);
-            state.lineas = state.lineas.filter(function(linea) { return linea.tipo != componente }).
-                    filter(function(linea) { return linea.subtipo != componente });
+            state.lineas = state.lineas.
+                filter(function(linea) { return linea.tipo != componente }).
+                filter(function(linea) { return linea.subtipo != componente });
             //console.log('despues de eliminar: ', state.lineas);
         },
         agregar (state, newLineas){
@@ -345,6 +351,29 @@ console.log('despues de agregar: ', state.lineas);
     },
 
     actions: {
+        BorrarContenido: (context, linea) => {
+            var request = {
+                'data': {
+                    'tipo': linea.tipo,
+                    'id' : linea.id,
+                    'semestre': context.state.semestre,
+                    'cod_curso': context.state.cod_curso,
+                },
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/deleteData/';
+            axios.post(url, request).then(response=>{
+                context.commit('eliminarLinea', linea);
+                if(linea.tipo == 'sumillas'){
+                    //context.commit('switchEdit');
+                    context.commit('setNuevo', ['sumillas', true]);
+                    context.commit('active_line', 0);
+                };
+            }).catch(function (error) {
+                console.log('error BorrarContenido: ', error);
+            });
+        },
         RecallTitulo3: (context) =>{            
             var request = {
                 'data': {
