@@ -39,6 +39,8 @@
                             </span>
                         </span>
                         <span v-if="!switchEdit && active_line == 0">
+                            <!-- boton eliminar -->
+                            <button type="submit" :class="buttonClass('Erase', linea)" @click='borrar(linea)'>Eliminar</button>
                             <!-- boton editar -->
                             <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
                         </span>              
@@ -76,6 +78,15 @@
             newItem(){ return this.$store.getters.newItem },
         }),
         methods: {
+            borrar(linea) {
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 100;
+                var check = this.$store.dispatch('BorrarContenido', linea);
+                if(check) {
+                    toastr.success('Unidad eliminada.');
+                }
+            },
             align(item){
                 switch (item.col){
                     case 1:
@@ -146,25 +157,9 @@
                         toastr.success('Unidad grabada.');
                     }else{
                         linea.semana = linea.data[0].texto;
-//console.log('unidades grabar linea a:', linea);
                         var linea = this.recalcRow(linea);
-//console.log('unidades grabar linea b:', linea);
                         this.$store.dispatch('SaveLinea', linea);
-                        //this.$store.dispatch('RecallTitulo3');
                         toastr.success('Unidad grabada.');
-/*
-                        this.$store.dispatch('SaveLinea', linea).then(function(store) {
-                            this.$store.dispatch('RecallTitulo3').then(function () {
-                                toastr.success('Unidad grabada.');
-                            }).catch(function (error) {
-                                toastr.error('Error en RecallTitulo3');
-                            });
-                        }).catch(function (error) {
-                            toastr.error('El registro no ha sido grabado.');
-                            console.log('grabar.error: ', error);
-                        });
-*/
-
                     }
                 };
             },

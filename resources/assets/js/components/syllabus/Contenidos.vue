@@ -39,6 +39,8 @@
                             </span>
                         </span>
                         <span v-if="!switchEdit && active_line == 0">
+                            <!-- boton eliminar -->
+                            <button type="submit" :class="buttonClass('Erase', linea)" @click='borrar(linea)'>Eliminar</button>
                             <!-- boton editar -->
                             <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
                         </span>              
@@ -76,6 +78,15 @@
             newItem(){ return this.$store.getters.newItem },
         }),
         methods: {
+            borrar(linea) {
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 100;
+                var check = this.$store.dispatch('BorrarContenido', linea);
+                if(check) {
+                    toastr.success('Contenido eliminado.');
+                }
+            },
             setDefault(){
                 this.$store.commit('setDefault');
             },

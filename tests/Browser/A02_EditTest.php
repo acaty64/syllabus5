@@ -7,8 +7,19 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
+    /**
+     * 1. Sumillas Ok
+     * 2. Unidades Ok
+     * 3. Competencias ---- REVISAR
+     * 4. Contenidos Ok
+     * 5. Estrategias Ok
+     * 6. Evaluaciones Ok
+     * 7. Bibliografias Ok
+     */
+
 class A02_EditTest extends DuskTestCase
 {
+
     use DatabaseMigrations;
     /**
      * An Edit test example.

@@ -8,6 +8,16 @@ use Laravel\Dusk\Browser;
 use Tests\DuskData;
 use Tests\DuskTestCase;
 
+    /**
+     * 1. Sumillas Ok
+     * 2. Unidades Ok
+     * 3. Competencias 
+     * 4. Contenidos Ok
+     * 5. Estrategias *********** Falta
+     * 6. Evaluaciones *********** Falta
+     * 7. Bibliografias *********** Falta
+     */
+
 class A04_AddTest extends DuskTestCase
 {
     use DatabaseMigrations;
@@ -113,7 +123,7 @@ class A04_AddTest extends DuskTestCase
                     ]);
         });
         // End UNIDADES
-/*
+
         // CONTENIDOS
 
         $this->artisan('cache:clear');
@@ -127,48 +137,33 @@ class A04_AddTest extends DuskTestCase
                     ->waitFor('.btnEditarnew', 20)
                     ->click('.btnEditarnew');
 
-            $selector = '.idnew.col-6';
-            $error = 'Inserte el texto ACTIVIDAD.';
-            $texto = 'Nueva Actividad';
-            $browser->click('.btnGrabarnew')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.idnew.col-4';
-            $error = 'Inserte el texto PROCEDIMENTAL.';
-            $texto = 'Nuevo Procedimiento';
-            $browser->click('.btnGrabarnew')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.idnew.col-2';
-            $error = 'Inserte el texto CONCEPTUAL.';
-            $texto = 'Nuevo Concepto';
-            $browser->click('.btnGrabarnew')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
             $selector = '.idnew.col-1';
-            $texto = 1;
-            $error = 'La SEMANA debe ser un número entero mayor que 0 y menor a 17.';
-            $browser->click('.btnGrabarnew')
-                    ->waitForText($error)
+            $texto = 5;
+            $browser->type('.idnew.col-1', 5)
+                    ->type('.idnew.col-2', 'Nuevo Concepto')
+                    ->type('.idnew.col-4', 'Nuevo Procedimiento')
+                    ->type('.idnew.col-6', 'Nueva Actividad')
+                    ->click('.btnGrabarnew')
+                    ->waitForText('Contenido grabado.')
                     ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 1000);');
 
-            $mess = 'Contenido grabado.';
-            $browser->click('.btnGrabarnew')
-                    ->waitForText($mess);
+            $browser->waitForText('Nuevo Concepto')
+                    ->waitForText('Nuevo Procedimiento')
+                    ->waitForText('Nueva Actividad');
 
+
+            $this->assertDatabaseHas('contenidos', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'concepto' => 'Nuevo Concepto',
+                        'procedimiento' => 'Nuevo Procedimiento',
+                        'actividad' => 'Nueva Actividad',
+                    ]);
         });
 
+/*
 /*
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {

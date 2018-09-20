@@ -39,10 +39,10 @@
                             </span>
                         </span>
                         <span v-if="!switchEdit && active_line == 0">
-                            <!-- boton editar -->
-                            <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
                             <!-- boton eliminar -->
                             <button type="submit" :class="buttonClass('Erase', linea)" @click='borrar(linea)'>Eliminar</button>
+                            <!-- boton editar -->
+                            <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
                         </span>              
                         <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
                             <!-- boton grabar registro editado -->

@@ -46280,20 +46280,6 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            class: _vm.buttonClass("Edit", linea),
-                            attrs: { type: "submit" },
-                            on: {
-                              click: function($event) {
-                                _vm.editar(linea)
-                              }
-                            }
-                          },
-                          [_vm._v("Editar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
                             class: _vm.buttonClass("Erase", linea),
                             attrs: { type: "submit" },
                             on: {
@@ -46303,6 +46289,20 @@ var render = function() {
                             }
                           },
                           [_vm._v("Eliminar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Edit", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.editar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Editar")]
                         )
                       ])
                     : _vm._e(),
@@ -46501,6 +46501,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -46545,6 +46547,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     })),
     methods: {
+        borrar: function borrar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            var check = this.$store.dispatch('BorrarContenido', linea);
+            if (check) {
+                toastr.success('Unidad eliminada.');
+            }
+        },
         align: function align(item) {
             switch (item.col) {
                 case 1:
@@ -46615,24 +46626,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     toastr.success('Unidad grabada.');
                 } else {
                     linea.semana = linea.data[0].texto;
-                    //console.log('unidades grabar linea a:', linea);
                     var linea = this.recalcRow(linea);
-                    //console.log('unidades grabar linea b:', linea);
                     this.$store.dispatch('SaveLinea', linea);
-                    //this.$store.dispatch('RecallTitulo3');
                     toastr.success('Unidad grabada.');
-                    /*
-                                            this.$store.dispatch('SaveLinea', linea).then(function(store) {
-                                                this.$store.dispatch('RecallTitulo3').then(function () {
-                                                    toastr.success('Unidad grabada.');
-                                                }).catch(function (error) {
-                                                    toastr.error('Error en RecallTitulo3');
-                                                });
-                                            }).catch(function (error) {
-                                                toastr.error('El registro no ha sido grabado.');
-                                                console.log('grabar.error: ', error);
-                                            });
-                    */
                 }
             };
         },
@@ -46850,6 +46846,20 @@ var render = function() {
                   _vm._v(" "),
                   !_vm.switchEdit && _vm.active_line == 0
                     ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Erase", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.borrar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
+                        ),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {
@@ -47418,6 +47428,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -47462,6 +47474,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     })),
     methods: {
+        borrar: function borrar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            var check = this.$store.dispatch('BorrarContenido', linea);
+            if (check) {
+                toastr.success('Contenido eliminado.');
+            }
+        },
         setDefault: function setDefault() {
             this.$store.commit('setDefault');
         },
@@ -47739,6 +47760,20 @@ var render = function() {
                   _vm._v(" "),
                   !_vm.switchEdit && _vm.active_line == 0
                     ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Erase", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.borrar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
+                        ),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {
@@ -49230,20 +49265,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             state.active_line = id;
         },
         eliminarLinea: function eliminarLinea(state, xlinea) {
-            console.log('eliminarLinea xlinea: ', xlinea);
-            /*
-                        for (var x in state.lineas) {
-                            if(state.lineas[x].tipo == xlinea.tipo && state.lineas[x].id == xlinea.id){
-                                var nlinea = state.lineas[x];
-                            }
-                        }
-            console.log('eliminarLinea nlinea: ', nlinea);
-            */
-            console.log('eliminarLinea antes: ', state.lineas);
             state.lineas = state.lineas.filter(function (linea) {
                 return linea != xlinea;
             });
-            console.log('eliminarLinea despues: ', state.lineas);
         },
         eliminar: function eliminar(state, componente) {
             //console.log('antes de eliminar: ', state.lineas);
