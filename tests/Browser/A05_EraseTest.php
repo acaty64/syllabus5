@@ -127,9 +127,33 @@ class A05_EraseTest extends DuskTestCase
 
         // End COMPETENCIAS
 
-
+*/
         // ESTRATEGIAS
+        $this->browse(function (Browser $browser) {
+            $selector = '.col-1.estrategias';
+            $texto = 'El curso tiene como ';
+            $mess = 'Estrategias eliminadas.';
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitForText('Estrategias', 10)
+                    ->press('Estrategias')
+                    ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
+                    ->waitFor('.btnEdit1')
+                    ->waitFor('.btnErase1')
+                    ->press('.btnErase1')
+                    ->waitForText($mess)
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->assertDontSee($texto);
 
+                $this->assertDatabaseMissing('estrategias', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'texto' => $texto
+                    ]);
+        });
+/*
 
         // End ESTRATEGIAS
 

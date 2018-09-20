@@ -12,9 +12,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
      * 2. Unidades Ok
      * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
-     * 5. Estrategias Ok
-     * 6. Evaluaciones Ok
-     * 7. Bibliografias Ok
+     * 5. Estrategias ---- REVISAR
+     * 6. Evaluaciones ---- REVISAR
+     * 7. Bibliografias ---- REVISAR
      */
 
 class A03_EditTest extends DuskTestCase
@@ -195,10 +195,11 @@ class A03_EditTest extends DuskTestCase
 
             $selector = '.estrategias';
             $texto = $browser->text($selector);
-            $error = 'Inserte el texto.';
-            $browser->type($selector, ' ')
+            $error = 'Inserte el texto ESTRATEGIAS.';
+            $browser->press('.btnEdit1')
+                    ->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave')
+                    ->click('.btnSave1')
                     ->waitForText($error)
                     ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)

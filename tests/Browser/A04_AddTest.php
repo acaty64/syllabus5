@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Estrategia;
 use App\Sumilla;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
@@ -13,7 +14,7 @@ use Tests\DuskTestCase;
      * 2. Unidades Ok
      * 3. Competencias 
      * 4. Contenidos Ok
-     * 5. Estrategias *********** Falta
+     * 5. Estrategias Ok
      * 6. Evaluaciones *********** Falta
      * 7. Bibliografias *********** Falta
      */
@@ -163,32 +164,43 @@ class A04_AddTest extends DuskTestCase
                     ]);
         });
 
-/*
-/*
         // ESTRATEGIAS
+        $id = 1;
+        $estrategia = Estrategia::findOrFail($id);
+        $estrategia->delete();
+
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
-                    ->assertSee('Lecturas');
-//                    ->click('.btnEdit3');
+                    ->waitFor('.btnEditarnew', 20)
+                    ->click('.btnEditarnew');
 
             $selector = '.estrategias';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave')
-                    ->waitForText($error)
+            $texto = 'Nueva estrategia';
+            $mess = 'Estrategias grabadas.';
+            $browser->type($selector, $texto)
+                    ->assertSeeIn($selector, $texto)
+                    ->click('.btnGrabarnew')
+                    ->waitForText($mess)
                     ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 2000);');
 
+            $browser->waitForText($texto);
+
+
+            $this->assertDatabaseHas('estrategias', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'texto' => 'Nueva estrategia',
+                    ]);        
         });
         // End ESTRATEGIAS
 
+/*
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {

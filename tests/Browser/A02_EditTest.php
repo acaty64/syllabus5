@@ -12,9 +12,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
      * 2. Unidades Ok
      * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
-     * 5. Estrategias Ok
-     * 6. Evaluaciones Ok
-     * 7. Bibliografias Ok
+     * 5. Estrategias ---- REVISAR
+     * 6. Evaluaciones ---- REVISAR
+     * 7. Bibliografias ---- REVISAR
      */
 
 class A02_EditTest extends DuskTestCase
@@ -143,10 +143,12 @@ class A02_EditTest extends DuskTestCase
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->assertSee('Lecturas')
+                    ->assertSee('Editar')
+                    ->press('.btnEdit1')
                     ->clear('.estrategias')
                     ->type('.estrategias', 'xxxxx')
                     ->assertSee('xxxxx')
-                    ->click('.btnSave')
+                    ->click('.btnSave1')
                     ->waitForText('Estrategias grabadas.')
                     ->assertSee('Estrategias grabadas.')
                     ->waitUntilMissing('.toast', 11);

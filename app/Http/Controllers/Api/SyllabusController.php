@@ -218,11 +218,59 @@ class SyllabusController extends Controller
                 break;
             case 'estrategias' :
                 $id = $request->data['id'];
+                if($request->new){
+                    try {
+                        $estrategia = Estrategia::create([
+                            'semestre'=>$request->data["semestre"],
+                            'cod_curso'=>$request->data["cod_curso"],
+                            'texto'=>$request->data['data'][0]["texto"],
+                            'orden'=>$request->data["orden"],
+                        ]);
+
+                        $id = $estrategia->id;
+
+                        $_request = $request;
+                        $_request->semestre = $request->data['semestre'];
+                        $_request->cod_curso = $request->data['cod_curso'];
+
+                        $datos = [];
+                        $new_data = $this->upload_titulo1($_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $dataNew = $this->upload_estrategias($datos, $_request);
+
+                        //$dataNew[0] = $data_new;
+                        $success = true;
+                        $proceso = 'estrategias';
+                    } catch (Exception $e) {
+                        $success = false;                        
+                        $proceso = 'Error add estrategias';
+                    }
+                }else{
+                    try {                    
+                        $estrategia = Estrategia::find($id);
+                        $estrategia->texto = $request->data['data'][0]['texto'];
+                        $estrategia->save();
+                        $dataNew = $estrategia;
+                        $success = true;
+                        $proceso = 'sumillas';
+                    } catch (Exception $e) {
+                        $success = false;
+                        $proceso = 'Error modify estrategias';
+                    }
+                }
+                break;
+
+/*            
+                $id = $request->data['id'];
                 $estrategia = Estrategia::find($id);
                 $estrategia->texto = $request->data['data'][0]['texto'];
                 $estrategia->save();
                 $proceso = 'estrategias';
                 break;
+*/
             case 'evaluaciones' :
                 $id = $request->data['id'];
                 $evaluacion = Evaluacion::find($id);
@@ -365,6 +413,15 @@ class SyllabusController extends Controller
         switch ($request->data['tipo']) {
             case 'sumillas' :
                 $res = Sumilla::find($id);
+                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                    $res->delete();
+                    $success = true;
+                }else{
+                    $success = false;
+                }
+                break;
+            case 'estrategias' :
+                $res = Estrategia::find($id);
                 if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
                     $res->delete();
                     $success = true;
@@ -925,25 +982,27 @@ class SyllabusController extends Controller
 
         $data = 'estrategias';
         $data1 = $$data;
-
-        $new_data = [];
-        $new_data['id'] = $data1[0]['id'];
-        $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
-        $new_data['pre_row'] = $new_data['row'];
-        $new_data['editing'] = false;
-        $new_data['tipo'] = $data;
-        $new_data['subtipo'] = $data;
-        $new_data['data'] = [
-                [
-                    'view' => true,
-                    'col' => 1,
-                    'cols' => 7,
-                    'offset' => 2,
-                    'align' => 'justify',
-                    'texto' => $$data[0]['texto']
-                ],
-        ];
-        array_push($datos0, $new_data); 
+        if(!empty($$data)){
+            $new_data = [];
+            $new_data['id'] = $data1[0]['id'];
+            $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+            $new_data['pre_row'] = $new_data['row'];
+            $new_data['editing'] = false;
+            $new_data['tipo'] = $data;
+            $new_data['subtipo'] = $data;
+            $new_data['data'] = [
+                    [
+                        'view' => true,
+                        'col' => 1,
+                        'cols' => 7,
+                        'offset' => 2,
+                        'align' => 'justify',
+                        'texto' => $$data[0]['texto']
+                    ],
+            ];
+            array_push($datos0, $new_data);
+        }
+         
         return $datos0;
 
     }

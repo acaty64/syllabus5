@@ -50,6 +50,10 @@ export const store = new Vuex.Store({
             if(item.length > 0){
                 state.nuevo.sumillas = false;
             }
+            var item = array.filter( (linea) => linea.tipo == 'estrategias' );
+            if(item.length > 0){
+                state.nuevo.estrategias = false;
+            }
         },
         active_line(state, id){
             state.active_line = id;
@@ -248,6 +252,25 @@ console.log('despues de agregar: ', state.lineas);
                         align: 'justify',                        
                     });
                     break;
+                case 'estrategias':
+                    var item = {
+                        button: 'Editar',
+                        id:'new',
+                        tipo: state.status,
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        data: [],
+                        orden: 1
+                    };
+                    item.data.push({
+                        texto: "",
+                        view: true,
+                        col: 1,
+                        cols: 7,
+                        offset: 2,
+                        align: 'justify',                        
+                    });
+                    break;
                 case 'unidades':
                     var item = {
                         button: 'Editar',
@@ -344,7 +367,7 @@ console.log('despues de agregar: ', state.lineas);
                     // code block
                     break;
             }
-            //state.context.commit('setNewItem', item);
+console.log('setNewItem', item);
             state.newItem = item;
             return item;
         }
@@ -365,9 +388,9 @@ console.log('despues de agregar: ', state.lineas);
             var url = protocol+'//'+URLdomain+'/api/deleteData/';
             axios.post(url, request).then(response=>{
                 context.commit('eliminarLinea', linea);
-                if(linea.tipo == 'sumillas'){
+                if( linea.tipo == 'sumillas' || linea.tipo == 'estrategias' ){
                     //context.commit('switchEdit');
-                    context.commit('setNuevo', ['sumillas', true]);
+                    context.commit('setNuevo', [linea.tipo, true]);
                     context.commit('active_line', 0);
                 };
             }).catch(function (error) {
