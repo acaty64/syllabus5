@@ -393,7 +393,7 @@ console.log('despues de agregar: ', state.lineas);
                     };
                     // orden
                     item.data.push({
-                        view:  true,
+                        view:  false,
                         col:  1,
                         cols:  1,
                         offset:  1,

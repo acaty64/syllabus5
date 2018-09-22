@@ -267,7 +267,7 @@ class A03_EditTest extends DuskTestCase
                     ->assertSee('Autor(es)')
                     ->click('.btnEdit2');
 
-            $selector = '.id2.col-2';
+            $selector = '.id2.col-1';
             $texto = $browser->text($selector);
             $error = 'Inserte el texto AUTOR(ES).';
             $browser->type($selector, ' ')
@@ -278,7 +278,7 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-3';
+            $selector = '.id2.col-2';
             $texto = $browser->text($selector);
             $error = 'Inserte el texto TÍTULO.';
             $browser->type($selector, ' ')
@@ -289,7 +289,7 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-4';
+            $selector = '.id2.col-3';
             $texto = $browser->text($selector);
             $error = 'Inserte el texto EDITORIAL.';
             $browser->type($selector, ' ')
@@ -300,7 +300,7 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-5';
+            $selector = '.id2.col-4';
             $texto = '2016';
             $error = 'El AÑO debe ser un número entero mayor a 2015.';
             $browser->type($selector, ' ')
@@ -311,7 +311,7 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-6';
+            $selector = '.id2.col-5';
             $texto = $browser->text($selector);
             $error = 'Inserte el texto UBICACIÓN.';
             $browser->type($selector, ' ')

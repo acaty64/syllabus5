@@ -48967,6 +48967,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -49137,7 +49138,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         rowClass: function rowClass(item, linea) {
             if (linea.tipo == 'bibliografias') {
-                return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
+                return 'id' + linea.id + ' col-' + (parseInt(item.col) - 1) + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
             } else {
                 return 'col-1 unidades col-xs-8 col-xs-offset-1 componente';
             }
@@ -49223,36 +49224,44 @@ var render = function() {
                     "span",
                     _vm._l(_vm.newItem.data, function(item) {
                       return _c("span", [
-                        _c(
-                          "textarea",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: item.texto,
-                                expression: "item.texto"
-                              }
-                            ],
-                            class: _vm.rowClass(item, _vm.newItem),
-                            attrs: {
-                              name: "newText",
-                              rows: "6",
-                              wrap: "hard",
-                              align: item.align
-                            },
-                            domProps: { value: item.texto },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(item, "texto", $event.target.value)
-                              }
-                            }
-                          },
-                          [_vm._v('"' + _vm._s(item.texto) + '"')]
-                        )
+                        item.view
+                          ? _c("span", [
+                              _c(
+                                "textarea",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: item.texto,
+                                      expression: "item.texto"
+                                    }
+                                  ],
+                                  class: _vm.rowClass(item, _vm.newItem),
+                                  attrs: {
+                                    name: "newText",
+                                    rows: "6",
+                                    wrap: "hard",
+                                    align: item.align
+                                  },
+                                  domProps: { value: item.texto },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        item,
+                                        "texto",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                },
+                                [_vm._v('"' + _vm._s(item.texto) + '"')]
+                              )
+                            ])
+                          : _vm._e()
                       ])
                     })
                   )
@@ -49270,8 +49279,8 @@ var render = function() {
                     return _c("span", [
                       !_vm.switchEdit &&
                       _vm.active_line != linea.id &&
-                      item.view &&
-                      _vm.active_line != "new"
+                      _vm.active_line != "new" &&
+                      item.view
                         ? _c("span", [
                             _c("span", {
                               class: _vm.rowClass(item, linea),
@@ -49285,7 +49294,8 @@ var render = function() {
                       _vm._v(" "),
                       _vm.switchEdit &&
                       _vm.active_line == linea.id &&
-                      linea.tipo == _vm.status
+                      linea.tipo == _vm.status &&
+                      item.view
                         ? _c("span", [
                             _c(
                               "textarea",
@@ -49396,17 +49406,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias componente",
-            attrs: { align: "center" }
-          },
-          [_c("b", [_vm._v("Orden")])]
-        ),
-        _vm._v(" "),
-        _c(
-          "span",
-          {
-            staticClass:
-              "notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente",
+              "notEditing col-1 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Autor(es)")])]
@@ -49416,7 +49416,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente",
+              "notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Título")])]
@@ -49426,7 +49426,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias componente",
+              "notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Editorial")])]
@@ -49436,7 +49436,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias componente",
+              "notEditing col-4 col-xs-1 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Año")])]
@@ -49446,7 +49446,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias componente",
+              "notEditing col-5 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Ubicación")])]
@@ -49454,7 +49454,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("span", {
           staticClass:
-            "notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias componente",
+            "notEditing col-6 col-xs-1 col-xs-offset-1 bibliografias componente",
           attrs: { align: "center" }
         })
       ])
@@ -50086,7 +50086,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                     };
                     // orden
                     item.data.push({
-                        view: true,
+                        view: false,
                         col: 1,
                         cols: 1,
                         offset: 1,

@@ -260,12 +260,11 @@ class A04_AddTest extends DuskTestCase
                     ->click('.btnEditarnew');
 
             $browser
-                    ->type('.idnew.col-1', '1')
-                    ->type('.idnew.col-2', 'Nuevo autor')
-                    ->type('.idnew.col-3', 'Nuevo titulo')
-                    ->type('.idnew.col-4', 'Nuevo editorial')
-                    ->type('.idnew.col-5', '2016')
-                    ->type('.idnew.col-6', 'UCSSxxx')
+                    ->type('.idnew.col-1', 'Nuevo autor')
+                    ->type('.idnew.col-2', 'Nuevo titulo')
+                    ->type('.idnew.col-3', 'Nuevo editorial')
+                    ->type('.idnew.col-4', '2016')
+                    ->type('.idnew.col-5', 'UCSSxxx')
                     ->click('.btnGrabarnew')
                     ->waitForText('Bibliografía grabada.')
                     ->waitUntilMissing('.toast', 11)
@@ -277,7 +276,6 @@ class A04_AddTest extends DuskTestCase
             $this->assertDatabaseHas('bibliografias', [
                         "cod_curso"=> "100048",
                         "semestre"=>"20181",
-                        "orden"=>"1",
                         "autor" => "Nuevo autor",
                         "titulo" => "Nuevo titulo",
                         "editorial" => "Nuevo editorial",

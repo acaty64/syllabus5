@@ -19,20 +19,21 @@
             <tbody>
                 <tr>                    
                     <div class="row">                
-                        <span class="notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Orden</b></span>
-                        <span class="notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Autor(es)</b></span>
-                        <span class="notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Título</b></span>
-                        <span class="notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Editorial</b></span>
-                        <span class="notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Año</b></span>
-                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Ubicación</b></span>
-                        <span class="notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'></span>
+                        <span class="notEditing col-1 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Autor(es)</b></span>
+                        <span class="notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Título</b></span>
+                        <span class="notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Editorial</b></span>
+                        <span class="notEditing col-4 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Año</b></span>
+                        <span class="notEditing col-5 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Ubicación</b></span>
+                        <span class="notEditing col-6 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'></span>
                     </div>                
                 </tr>
                 <tr>
                     <div class="row">
                         <span v-if="switchEdit && active_line == 'new'">
                             <span v-for="item in newItem.data">
-                                <textarea name="newText" rows="6" wrap="hard" :class="rowClass(item, newItem)" :align="item.align" v-model="item.texto">"{{item.texto}}"</textarea>
+                                <span v-if='item.view'>
+                                    <textarea name="newText" rows="6" wrap="hard" :class="rowClass(item, newItem)" :align="item.align" v-model="item.texto">"{{item.texto}}"</textarea>
+                                </span>
                             </span>                            
                         </span>
                     </div>
@@ -40,11 +41,11 @@
                 <tr v-for="linea in items">
                     <div class="row">
                         <span v-for="item in linea.data">                  
-                            <span v-if="!switchEdit && active_line != linea.id && item.view && active_line != 'new'">
-                                <!-- view -->
+                            <!-- view -->
+                            <span v-if="!switchEdit && active_line != linea.id && active_line != 'new' && item.view">
                                 <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
                             </span>
-                            <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
+                            <span v-if="switchEdit && active_line == linea.id && linea.tipo == status && item.view">
                                 <!-- edit -->
                                 <textarea rows="6" wrap="hard" :class="rowClass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
                             </span>
@@ -222,7 +223,7 @@
 
             rowClass(item, linea) {
                 if(linea.tipo == 'bibliografias'){
-                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
+                    return 'id'+linea.id + ' col-'+(parseInt(item.col)-1)+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
                 }else{
                     return 'col-1 unidades col-xs-8 col-xs-offset-1 componente';
                 }

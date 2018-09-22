@@ -184,7 +184,6 @@ class A02_EditTest extends DuskTestCase
         });
         // End EVALUACIONES
 
-
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
@@ -195,9 +194,9 @@ class A02_EditTest extends DuskTestCase
                     ->assertSee('BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
                     ->click('.btnEdit2')
-                    ->clear('.id2.col-2')
-                    ->type('.id2.col-2', 'zzzzz')
-                    ->type('.id2.col-5', '2016')
+                    ->clear('.id2.col-1')
+                    ->type('.id2.col-1', 'zzzzz')
+                    ->type('.id2.col-4', '2016')
                     ->assertSee('zzzzz')
                     ->click('.btnSave2')
                     ->waitForText('Bibliografía grabada.')

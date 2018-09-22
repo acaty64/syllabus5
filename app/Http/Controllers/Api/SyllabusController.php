@@ -1100,7 +1100,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['data'] = [
                 [
-                    'view' => true,
+                    'view' => false,
                     'col' => 1,
                     'cols' => 1,
                     'offset' => 1,
