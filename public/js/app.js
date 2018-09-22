@@ -49122,33 +49122,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         toastr.error('El registro no ha sido grabado.');
                     });
                 } else {
-                    linea.semana = linea.data[0].texto;
-                    //console.log('bibliografias grabar linea a:', linea);
-                    var linea = this.recalcRow(linea);
-                    //console.log('bibliografias grabar linea b:', linea);
                     this.$store.dispatch('SaveLinea', linea).then(function () {
                         toastr.success('Bibliografía grabada.');
                     }).catch(function () {
                         toastr.error('El registro no ha sido grabado.');
                     });
                 }
+                //                    this.$store.dispatch('OrdenarPorAutor');
             };
-            this.$store.dispatch('OrdenarPorAutor');
-        },
-        recalcRow: function recalcRow(oldLinea) {
-            var _this = this;
-
-            var xsemana = oldLinea.semana;
-            var titulo = this.lineas.filter(function (linea) {
-                return linea.tipo == 'titulo1' && linea.subtipo == _this.status;
-            });
-            var rowTitulo = titulo[0].row;
-            var semanas = this.lineas.filter(function (linea) {
-                return linea.tipo == _this.status && linea.subtipo == _this.status && linea.semana == xsemana;
-            }).length;
-            var newRow = rowTitulo + xsemana * 100 + semanas;
-            oldLinea.row = newRow;
-            return oldLinea;
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
@@ -49788,7 +49769,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             console.log('despues de agregar: ', state.lineas);
         },
         setNewItemValue: function setNewItemValue(state, data) {
-            console.info('setNewItemValue data:', data);
+            //console.info('setNewItemValue data:', data);
             var field = data[0];
             var value = data[1];
             switch (field) {
@@ -49846,21 +49827,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var rows = state.lineas.filter(function (linea) {
                 return linea.tipo == 'bibliografias';
             });
-            //console.log('sortAutor rows 0: ', rows);
             rows.sort(function (a, b) {
-                //console.log('sortAutor a.data[1].texto: ', a.data[1].texto);
-                //console.log('sortAutor b.data[1].texto: ', b.data[1].texto);
                 return a.data[1].texto > b.data[1].texto;
             });
-            //console.log('sortAutor rows 1: ', rows);
             var count = 0;
             for (var x in rows) {
-                //console.log('sortAutor row: ', row);
                 count++;
                 rows[x].data[0].texto = count;
                 rows[x].row = row_titulo + count * 1000;
             }
-            //console.log('sortAutor rows 2: ', rows);
         },
         sortLineasTipo: function sortLineasTipo(state, tipo) {
             var array = state.lineas;
@@ -50199,6 +50174,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                     context.commit('setNuevo', [linea.tipo, true]);
                     context.commit('active_line', 0);
                 };
+                if (context.state.status == 'bibliografias') {
+                    context.dispatch('OrdenarPorAutor');
+                }
             }).catch(function (error) {
                 console.log('error BorrarContenido: ', error);
             });
@@ -50251,6 +50229,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
                 }
+                if (context.state.status == 'bibliografias') {
+                    context.dispatch('OrdenarPorAutor');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
@@ -50266,10 +50247,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
-                console.log('SaveNewLinea response: ', response.data);
+                //console.log('SaveNewLinea response: ', response.data);
                 context.commit('agregar', response.data.data);
                 context.commit('setNewItemValue', ['button', 'Editar']);
-                context.dispatch('RecallTitulo3');
+                if (context.state.status == 'unidades') {
+                    context.dispatch('RecallTitulo3');
+                }
+                if (context.state.status == 'bibliografias') {
+                    context.dispatch('OrdenarPorAutor');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveNewLinea: ', error);

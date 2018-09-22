@@ -203,30 +203,18 @@
                             toastr.error('El registro no ha sido grabado.');
                         });
                     }else{
-                        linea.semana = linea.data[0].texto;
-//console.log('bibliografias grabar linea a:', linea);
-                        var linea = this.recalcRow(linea);
-//console.log('bibliografias grabar linea b:', linea);
                         this.$store.dispatch('SaveLinea', linea).then(function() {
-                                toastr.success('Bibliografía grabada.');
+                            toastr.success('Bibliografía grabada.');
                         }).catch(function () {
                             toastr.error('El registro no ha sido grabado.');
                         });
 
                     }
+//                    this.$store.dispatch('OrdenarPorAutor');
                 };
-                this.$store.dispatch('OrdenarPorAutor');
+                
             },
 
-            recalcRow(oldLinea){
-                var xsemana = oldLinea.semana;
-                var titulo = this.lineas.filter((linea) => linea.tipo == 'titulo1' && linea.subtipo == this.status);
-                var rowTitulo = titulo[0].row;
-                var semanas = this.lineas.filter((linea) => linea.tipo == this.status && linea.subtipo == this.status && linea.semana == xsemana).length;
-                var newRow =  rowTitulo + (xsemana * 100) + semanas;
-                oldLinea.row = newRow;
-                return oldLinea;
-            },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;

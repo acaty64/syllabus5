@@ -79,7 +79,7 @@ console.log('newLineas: ', newLineas);
 console.log('despues de agregar: ', state.lineas);
         },
         setNewItemValue(state, data){
-            console.info('setNewItemValue data:', data);
+//console.info('setNewItemValue data:', data);
             var field = data[0];
             var value = data[1];
             switch (field){
@@ -138,24 +138,19 @@ console.log('despues de agregar: ', state.lineas);
         },
 
         sortAutor(state){
-            var titulo1 = state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == 'bibliografias');
+            var titulo1 = state.lineas.filter( (linea) => linea.tipo == 'titulo1' 
+                            && linea.subtipo == 'bibliografias');
             var row_titulo = titulo1[0].row;
             var rows = state.lineas.filter( (linea) => linea.tipo == 'bibliografias' );
-//console.log('sortAutor rows 0: ', rows);
             rows.sort(function (a, b) {
-//console.log('sortAutor a.data[1].texto: ', a.data[1].texto);
-//console.log('sortAutor b.data[1].texto: ', b.data[1].texto);
                 return (a.data[1].texto > b.data[1].texto);
             });
-//console.log('sortAutor rows 1: ', rows);
             var count = 0;
             for (var x in rows) {
-//console.log('sortAutor row: ', row);
                 count ++ ;
                 rows[x].data[0].texto = count;
                 rows[x].row =  row_titulo + count * 1000;
             }
-//console.log('sortAutor rows 2: ', rows);
         },
 
         sortLineasTipo(state, tipo){
@@ -486,6 +481,9 @@ console.log('setNewItem', item);
                     context.commit('setNuevo', [linea.tipo, true]);
                     context.commit('active_line', 0);
                 };
+                if(context.state.status == 'bibliografias'){
+                    context.dispatch('OrdenarPorAutor');
+                }                
             }).catch(function (error) {
                 console.log('error BorrarContenido: ', error);
             });
@@ -538,6 +536,9 @@ console.log('setNewItem', item);
                 if(context.state.status == 'unidades'){
                     context.dispatch('RecallTitulo3');
                 }
+                if(context.state.status == 'bibliografias'){
+                    context.dispatch('OrdenarPorAutor');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
@@ -553,10 +554,15 @@ console.log('setNewItem', item);
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-console.log('SaveNewLinea response: ', response.data);
+//console.log('SaveNewLinea response: ', response.data);
                 context.commit('agregar', response.data.data);
                 context.commit('setNewItemValue', ['button', 'Editar']);
-                context.dispatch('RecallTitulo3');
+                if(context.state.status == 'unidades'){
+                    context.dispatch('RecallTitulo3');
+                }
+                if(context.state.status == 'bibliografias'){
+                    context.dispatch('OrdenarPorAutor');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveNewLinea: ', error);

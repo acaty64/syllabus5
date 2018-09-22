@@ -298,7 +298,14 @@ class SyllabusController extends Controller
                             $datos = $this->insertData($datos, $new_data);
                         }
 
-                        $dataNew = $this->upload_bibliografias($datos, $_request);
+                        $datos = $this->upload_bibliografias($datos, $_request);
+
+                        $dataNew = [];
+                        foreach ($datos as $key => $value) {
+                            if($datos[$key]['tipo'] == 'bibliografias' && $datos[$key]['subtipo'] == 'bibliografias' && $datos[$key]['id'] == $id ){
+                                array_push($dataNew, $datos[$key]);
+                            }
+                        }
 
                         //$dataNew[0] = $data_new;
                         $success = true;
@@ -1070,6 +1077,7 @@ class SyllabusController extends Controller
 
         $bibliografias = Bibliografia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
+                    ->sortBy('autor')
                     ->toArray();
 
         /* Bibliografias */
@@ -1078,14 +1086,16 @@ class SyllabusController extends Controller
                     ->where('subtipo', 'bibliografias');
         $row_titulo = $collection->first()['row'];        
 
+        $orden = 0;
         $collection = collect($bibliografias);
         foreach ($collection as $key => $value) {
+            $orden ++ ;
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'bibliografias';
             $new_data['subtipo'] = 'bibliografias';
 //            $new_data['semana'] = $collection[$key]['orden'];
-            $new_data['row'] = $collection[$key]['orden'] * 1000 + $row_titulo;
+            $new_data['row'] = $orden * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['editing'] = false;
             $new_data['data'] = [
@@ -1095,7 +1105,7 @@ class SyllabusController extends Controller
                     'cols' => 1,
                     'offset' => 1,
                     'align' => 'right',
-                    'texto' => $collection[$key]['orden'],
+                    'texto' => $orden,
                     'type' => 'orden',                    
                 ],
                 [
