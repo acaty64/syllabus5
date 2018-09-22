@@ -17,7 +17,7 @@ class CreateBibliografiasTable extends Migration
             $table->increments('id');
             $table->char('semestre',6);
             $table->char('cod_curso',6);
-            $table->char('tipo',3);
+            //$table->char('tipo',3);
             $table->char('autor', 255);
             $table->char('titulo', 255);
             $table->char('editorial', 255);

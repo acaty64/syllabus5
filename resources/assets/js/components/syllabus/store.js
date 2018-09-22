@@ -362,6 +362,74 @@ console.log('despues de agregar: ', state.lineas);
                         texto: '',
                     });
                     break;
+                case 'bibliografias':
+                    var item = {
+                        button: 'Editar',
+                        id:'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // orden
+                    item.data.push({
+                        view:  true,
+                        col:  1,
+                        cols:  1,
+                        offset:  1,
+                        align:  'center',
+                        texto: '0',
+                    });
+                    // autor                
+                    item.data.push({
+                        view:  true,
+                        col:  2,
+                        cols:  2,
+                        offset:  2,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // titulo                
+                    item.data.push({
+                        view:  true,
+                        col:  3,
+                        cols:  2,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });                
+                    // editorial                
+                    item.data.push({
+                        view:  true,
+                        col:  4,
+                        cols:  2,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // year                
+                    item.data.push({
+                        view:  true,
+                        col:  5,
+                        cols:  1,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // codigo                
+                    item.data.push({
+                        view:  true,
+                        col:  6,
+                        cols:  2,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    break;
                 default:
                     var newItem = {};
                     // code block

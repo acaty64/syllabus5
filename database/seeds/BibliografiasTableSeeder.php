@@ -16,7 +16,7 @@ class BibliografiasTableSeeder extends Seeder
         Bibliografia::create([
         	'semestre' => '20181',
             'cod_curso' => '100048',
-            'tipo' => '1',
+//            'tipo' => '1',
             'autor' => 'Flores Soria, Jaime',
             'titulo' => 'Contabilidad Gerencial',
             'editorial' => 'Centro de Especialización en Contabilidad y Finanzas',
@@ -28,7 +28,7 @@ class BibliografiasTableSeeder extends Seeder
         Bibliografia::create([
         	'semestre' => '20181',
             'cod_curso' => '100048',
-            'tipo' => '1',
+//            'tipo' => '1',
             'autor' => 'Pascual Chávez, Ackerman',
             'titulo' => 'Contabilidad para la toma de decisiones',
             'editorial' => 'San Marcos',
@@ -40,7 +40,7 @@ class BibliografiasTableSeeder extends Seeder
         Bibliografia::create([
         	'semestre' => '20181',
             'cod_curso' => '100048',
-            'tipo' => '1',
+//            'tipo' => '1',
             'autor' => 'Díaz Izquierdo, Pedro; Quiroz Pacheco, Juan',
             'titulo' => 'Contabilidad Gerencial II',
             'editorial' => 'USMP',

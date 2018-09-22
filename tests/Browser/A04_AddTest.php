@@ -12,7 +12,7 @@ use Tests\DuskTestCase;
     /**
      * 1. Sumillas Ok
      * 2. Unidades Ok
-     * 3. Competencias 
+     * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
      * 5. Estrategias Ok
      * 6. Evaluaciones *********** Falta
@@ -247,6 +247,7 @@ class A04_AddTest extends DuskTestCase
 
         });
         // End EVALUACIONES
+*/
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
@@ -256,67 +257,37 @@ class A04_AddTest extends DuskTestCase
                     ->press('Bibliografias')
                     ->assertSee('VII. BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
-                    ->click('.btnEdit2');
+                    ->click('.btnEditarnew');
 
-            $selector = '.id2.col-2';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto AUTOR(ES).';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
+            $browser
+                    ->type('.idnew.col-1', '1')
+                    ->type('.idnew.col-2', 'Nuevo autor')
+                    ->type('.idnew.col-3', 'Nuevo titulo')
+                    ->type('.idnew.col-4', 'Nuevo editorial')
+                    ->type('.idnew.col-5', '2016')
+                    ->type('.idnew.col-6', 'UCSSxxx')
+                    ->click('.btnGrabarnew')
+                    ->waitForText('Bibliografía grabada.')
                     ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 2500);');
 
-            $selector = '.id2.col-3';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto TÍTULO.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+            $browser->waitForText('Nuevo autor');
 
-            $selector = '.id2.col-4';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto EDITORIAL.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.id2.col-5';
-            $texto = $browser->text($selector);
-            $error = 'El AÑO debe ser un número entero mayor a 1900.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
-            $selector = '.id2.col-6';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto UBICACIÓN.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+            $this->assertDatabaseHas('bibliografias', [
+                        "cod_curso"=> "100048",
+                        "semestre"=>"20181",
+                        "orden"=>"1",
+                        "autor" => "Nuevo autor",
+                        "titulo" => "Nuevo titulo",
+                        "editorial" => "Nuevo editorial",
+                        "year" => "2016",
+                        "codigo" => "UCSSxxx",
+                    ]);
 
         });
 
         // End BIBLIOGRAFIA
 
-*/
     }
 }

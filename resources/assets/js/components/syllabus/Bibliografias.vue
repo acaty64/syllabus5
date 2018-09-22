@@ -1,6 +1,15 @@
 <template>
     <div>
-        <h1>{{ titulo }}</h1>
+        <h1>{{ titulo }}
+            <span v-if="!switchEdit && active_line == 0">
+                <!-- boton Nuevo Registro -->
+                <button name="newButton" type="submit" :class="buttonClass(newItem.button, newItem)" @click="editar(newItem)">Nuevo Registro</button>
+            </span>
+            <span v-if="switchEdit && active_line == 'new'">
+                <!-- boton Grabar Nuevo Registro -->
+                <button name="newButton" type="submit" :class="buttonClass(newItem.button, newItem)" @click="grabar(newItem, true)">{{ newItem.button }}</button>
+            </span>
+        </h1>
         <table>
             <thead>
                 <tr v-for="columna in columnas">
@@ -10,51 +19,72 @@
             <tbody>
                 <tr>                    
                     <div class="row">                
-                        <span class="notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias" align='center'><b>Orden</b></span>
-                        <span class="notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias" align='center'><b>Autor(es)</b></span>
-                        <span class="notEditing col-3 col-xs-3 col-xs-offset-1 bibliografias" align='center'><b>Título</b></span>
-                        <span class="notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias" align='center'><b>Editorial</b></span>
-                        <span class="notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias" align='center'><b>Año</b></span>
-                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias" align='center'><b>Ubicación</b></span>
-                        <span class="notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias" align='center'></span>
+                        <span class="notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Orden</b></span>
+                        <span class="notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Autor(es)</b></span>
+                        <span class="notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Título</b></span>
+                        <span class="notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Editorial</b></span>
+                        <span class="notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Año</b></span>
+                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Ubicación</b></span>
+                        <span class="notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'></span>
                     </div>                
                 </tr>
-                <tr v-for="linea in items">
+                <tr>
                     <div class="row">
-                        <span v-if="linea.editing">
-                            <span v-for="item in linea.data">                   
-                                <textarea rows="3" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
-                            </span>
-                            <button type="submit" :class="buttonclass('Save', linea)" @click='grabar(linea)'>Grabar</button>
-                        </span>
-                        <span v-else>
-                            <span v-for="item in linea.data" class="notEdit">                   
-                                <span rows="3" wrap="hard" :class="rowclass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
-                            </span>
-                            <div v-if="!switchEdit">
-                                <button type="submit" :class="buttonclass('Edit', linea)" @click='editar(linea)'>Editar</button>
-                            </div>
+                        <span v-if="switchEdit && active_line == 'new'">
+                            <span v-for="item in newItem.data">
+                                <textarea name="newText" rows="6" wrap="hard" :class="rowClass(item, newItem)" :align="item.align" v-model="item.texto">"{{item.texto}}"</textarea>
+                            </span>                            
                         </span>
                     </div>
                 </tr>
+                <tr v-for="linea in items">
+                    <div class="row">
+                        <span v-for="item in linea.data">                  
+                            <span v-if="!switchEdit && active_line != linea.id && item.view && active_line != 'new'">
+                                <!-- view -->
+                                <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
+                            </span>
+                            <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
+                                <!-- edit -->
+                                <textarea rows="6" wrap="hard" :class="rowClass(item, linea)" :align="item.align" v-model="item.texto">{{item.texto}}</textarea>
+                            </span>
+                        </span>
+                        <span v-if="!switchEdit && active_line == 0">
+                            <!-- boton eliminar -->
+                            <button type="submit" :class="buttonClass('Erase', linea)" @click='borrar(linea)'>Eliminar</button>
+                            <!-- boton editar -->
+                            <button type="submit" :class="buttonClass('Edit', linea)" @click='editar(linea)'>Editar</button>
+                        </span>              
+                        <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
+                            <!-- boton grabar registro editado -->
+                            <button type="submit" :class="buttonClass('Save', linea)" @click='grabar(linea, false)'>Grabar</button>
+                        </span>
+                    </div>
+                    <br>
+                </tr>
             </tbody>
-        </table>        
-    </div>
+        </table>            
+    </div>  
 </template>
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import {mapState} from 'vuex';
 
     export default {
         mounted() {
             console.log('Bibliografias.vue mounted');
             this.setTitulo('bibliografias');
+            this.setDefault();
         },
-        computed: {
+        computed: mapState({
             ...mapState({
                 lineas: (state) => state.lineas,
                 columnas: (state) => state.columnas,
                 titulo: (state) => state.titulo,
+                acceso: (state) => state.acceso,
+                nuevo: (state) => state.nuevo,
+                active_line: (state) => state.active_line,
                 switchEdit: (state) => state.switchEdit,
+                status: (state) => state.status,
             }),
 
             items(){ 
@@ -72,7 +102,7 @@
                     lineas[linea]['data'][1].align = 'left';
 
                     lineas[linea]['data'][2].col = 3;
-                    lineas[linea]['data'][2].cols = 3;
+                    lineas[linea]['data'][2].cols = 2;
                     lineas[linea]['data'][2].offset = 1;
                     lineas[linea]['data'][2].align = 'left';
 
@@ -94,26 +124,46 @@
                 return lineas; 
             },
 
-        },
+            //items(){ return this.$store.getters.bibliografias },
+            newItem(){ return this.$store.getters.newItem },
+        }),
         methods: {
-            grabar(linea) {
+            borrar(linea) {
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 100;
+                var check = this.$store.dispatch('BorrarContenido', linea);
+                if(check) {
+                    toastr.success('Bibliografía eliminada.');
+                }
+            },
+            setDefault(){
+                this.$store.commit('setDefault');
+            },
+            editar(linea) {
+                if(linea.id == 'new'){
+                    this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
+                }else{
+                    this.$store.dispatch('EditarContenido', linea);
+                }
+            },
+            consistencia(linea){
                 toastr.closeButton = false;
                 toastr.debug = false;
                 toastr.showDuration = 50;
-
                 var mess = '';
                 var consistencia = 0;
-                var check = linea.data[1].texto;
+                var check = linea.data[5].texto;
                 if(check.trim().length > 0){
                     consistencia = consistencia + 1;
                 }else{
-                    mess = 'Inserte el texto AUTOR(ES).';
+                    mess = 'Inserte el texto UBICACIÓN.';
                 }
-                var check = linea.data[2].texto;
-                if(check.trim().length > 0){
+                var check = linea.data[4].texto;
+                if(!isNaN(check) && check > 2015){
                     consistencia = consistencia + 1;
                 }else{
-                    mess = 'Inserte el texto TÍTULO.';
+                    mess = 'El AÑO debe ser un número entero mayor a 2015.';
                 }
                 var check = linea.data[3].texto;
                 if(check.trim().length > 0){
@@ -121,75 +171,102 @@
                 }else{
                     mess = 'Inserte el texto EDITORIAL.';
                 }
-                var check = linea.data[4].texto;
-                if(!isNaN(check) && check > 1900){
-                    consistencia = consistencia + 1;
-                }else{
-                    mess = 'El AÑO debe ser un número entero mayor a 1900.';
-                }
-                var check = linea.data[5].texto;
+                var check = linea.data[2].texto;
                 if(check.trim().length > 0){
                     consistencia = consistencia + 1;
                 }else{
-                    mess = 'Inserte el texto UBICACIÓN.';
+                    mess = 'Inserte el texto TÍTULO.';
+                }
+                var check = linea.data[1].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el texto AUTOR(ES).';
                 }
 
-                if(consistencia == 5){   
-                    /* Renumera row */
-                
-                        var week = parseInt(linea.data[0].texto);
-                        var rowUnidades = this.lineas.filter(function (xlinea) {
-                            return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
-                        });
-                        var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0,1)) * 10000;
-                        var row = rowTitulo1 + (week * 100);
-                        linea.row = row ;
-                        linea.semana = week;
-                        var check = this.$store.dispatch('GrabarContenido', linea);
-                        if(check){
-                            this.$store.commit('switchEdit');
-                            toastr.success('Bibliografía grabada.');
-                        }else{
-                            toastr.error('El registro no ha sido grabado.');
-                        }
+                if(consistencia == 5){                
+                    return true;
                 }else{
                     toastr.error(mess);
+                    return false;
+                }
+            },            
+            grabar(linea) {
+                toastr.closeButton = false;
+                toastr.debug = false;
+                toastr.showDuration = 50;
+                if(this.consistencia(linea)){                
+                    if(linea.id == 'new'){
+                        this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+                            toastr.success('Bibliografía grabada.');
+                        }).catch(function () {
+                            toastr.error('El registro no ha sido grabado.');
+                        });
+                    }else{
+                        linea.semana = linea.data[0].texto;
+//console.log('bibliografias grabar linea a:', linea);
+                        var linea = this.recalcRow(linea);
+//console.log('bibliografias grabar linea b:', linea);
+                        this.$store.dispatch('SaveLinea', linea).then(function() {
+                                toastr.success('Bibliografía grabada.');
+                        }).catch(function () {
+                            toastr.error('El registro no ha sido grabado.');
+                        });
+
+                    }
                 };
+            },
+
+            recalcRow(oldLinea){
+                var xsemana = oldLinea.semana;
+                var titulo = this.lineas.filter((linea) => linea.tipo == 'titulo1' && linea.subtipo == this.status);
+                var rowTitulo = titulo[0].row;
+                var semanas = this.lineas.filter((linea) => linea.tipo == this.status && linea.subtipo == this.status && linea.semana == xsemana).length;
+                var newRow =  rowTitulo + (xsemana * 100) + semanas;
+                oldLinea.row = newRow;
+                return oldLinea;
             },
             viewTexto(item){
                 var newText = item.texto.toString().replace(/\n/g, '<br>');
                 return newText;
             },
-            editar(linea) {
-                this.$store.dispatch('EditarContenido', linea);
-                this.$store.commit('switchEdit');
-            },  
-            rowclass(item, linea) {
-                if (linea.editing){
-                    return 'id'+linea.id+' editing col-'+item.col+' bibliografias col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+
+            rowClass(item, linea) {
+                if(linea.tipo == 'bibliografias'){
+                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
                 }else{
-                    return 'notEditing col-'+item.col+' bibliografias col-xs-' + item.cols + ' col-xs-offset-' + item.offset;                    
+                    return 'col-1 unidades col-xs-8 col-xs-offset-1 componente';
                 }
             },
-            buttonclass(type, linea) {
-                return 'btn'+ type + linea.id + ' btn btn-default';
-            },            
+
+            buttonClass(type, linea) {
+                if(linea.tipo == 'bibliografias'){
+                    return 'col-7 btn'+ type + linea.id + ' btn btn-default';
+                }else{
+                    return 'hidden';
+                }
+            },
+
             setTitulo(subtipo) {
                 this.$store.dispatch('SetTitulo', subtipo);
-            },         
+            },
         } 
-    };
+    }
 </script>
-
 <style>
-
-    .editing {
-        background: yellow;
+    .col-1.bibliografias.componente,
+    .col-2.bibliografias.componente,
+    .col-3.bibliografias.componente,
+    .col-4.bibliografias.componente,
+    .col-5.bibliografias.componente,
+    .col-6.bibliografias.componente,
+    .col-7
+    {
         margin-left: 0px;
+    } 
+
+    #viewTexto {
+        white-space: pre-wrap;
     }
 
-    .notEditing {
-        background: white;
-        margin-left: 0px;
-    }    
 </style>

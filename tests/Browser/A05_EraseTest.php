@@ -100,8 +100,8 @@ class A05_EraseTest extends DuskTestCase
                     ->waitForText('Unidades', 10)
                     ->press('Unidades')
                     ->assertSee('UNIDADES')
-                    ->waitFor('.btnEdit2')
-                    ->driver->takeScreenshot(base_path('tests/Browser/screenshots/check.png'));
+                    ->waitFor('.btnEdit2');
+                    //->driver->takeScreenshot(base_path('tests/Browser/screenshots/check.png'));
 
             $browser->waitFor('.btnErase2')
                     ->press('.btnErase2')
@@ -145,6 +145,9 @@ class A05_EraseTest extends DuskTestCase
                     ->waitForText($mess)
                     ->waitUntilMissing('.toast', 11)
                     ->press('Vista')
+                    ->script('window.scrollTo(0, 2000);');
+
+            $browser->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('estrategias', [
@@ -153,19 +156,43 @@ class A05_EraseTest extends DuskTestCase
                         'texto' => $texto
                     ]);
         });
-/*
-
         // End ESTRATEGIAS
 
 
+/*
         // EVALUACIONES
 
         // End EVALUACIONES
+*/
 
         // BIBLIOGRAFIA
+        $this->browse(function (Browser $browser) {
+            $selector = '.col-1.bibliografias';
+            $mess = 'Bibliografía eliminada.';
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitForText('Bibliografias', 10)
+                    ->press('Bibliografias')
+                    ->assertSee('VII. BIBLIOGRAFÍA')
+                    ->waitFor('.btnEdit1')
+                    ->waitFor('.btnErase1')
+                    ->press('.btnErase1')
+                    ->waitForText($mess)
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 2500);');
 
+            $browser->assertSee('VII. BIBLIOGRAFÍA')
+                    ->assertDontSee('Flores Soria, Jaime');
+
+                $this->assertDatabaseMissing('bibliografias', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'autor' => 'Flores Soria, Jaime'
+                    ]);
+        });
         // End BIBLIOGRAFIA
 
-*/
     }
 }

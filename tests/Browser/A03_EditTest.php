@@ -12,9 +12,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
      * 2. Unidades Ok
      * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
-     * 5. Estrategias ---- REVISAR
-     * 6. Evaluaciones ---- REVISAR
-     * 7. Bibliografias ---- REVISAR
+     * 5. Estrategias Ok
+     * 6. Evaluaciones Ok
+     * 7. Bibliografias Ok
      */
 
 class A03_EditTest extends DuskTestCase
@@ -273,7 +273,7 @@ class A03_EditTest extends DuskTestCase
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
-                    ->waitForText($error)
+                    ->waitForText($error, 10)
                     ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
@@ -301,8 +301,8 @@ class A03_EditTest extends DuskTestCase
                     ->assertSeeIn($selector, $texto);
 
             $selector = '.id2.col-5';
-            $texto = $browser->text($selector);
-            $error = 'El AÑO debe ser un número entero mayor a 1900.';
+            $texto = '2016';
+            $error = 'El AÑO debe ser un número entero mayor a 2015.';
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')

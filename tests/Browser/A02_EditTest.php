@@ -12,9 +12,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
      * 2. Unidades Ok
      * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
-     * 5. Estrategias ---- REVISAR
-     * 6. Evaluaciones ---- REVISAR
-     * 7. Bibliografias ---- REVISAR
+     * 5. Estrategias Ok
+     * 6. Evaluaciones Ok
+     * 7. Bibliografias Ok
      */
 
 class A02_EditTest extends DuskTestCase
@@ -197,6 +197,7 @@ class A02_EditTest extends DuskTestCase
                     ->click('.btnEdit2')
                     ->clear('.id2.col-2')
                     ->type('.id2.col-2', 'zzzzz')
+                    ->type('.id2.col-5', '2016')
                     ->assertSee('zzzzz')
                     ->click('.btnSave2')
                     ->waitForText('Bibliografía grabada.')

@@ -48885,7 +48885,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.editing {\n    background: yellow;\n    margin-left: 0px;\n}\n.notEditing {\n    background: white;\n    margin-left: 0px;\n}    \n", ""]);
+exports.push([module.i, "\n.col-1.bibliografias.componente,\n.col-2.bibliografias.componente,\n.col-3.bibliografias.componente,\n.col-4.bibliografias.componente,\n.col-5.bibliografias.componente,\n.col-6.bibliografias.componente,\n.col-7\n{\n    margin-left: 0px;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
 
 // exports
 
@@ -48942,6 +48942,31 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -48949,9 +48974,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     mounted: function mounted() {
         console.log('Bibliografias.vue mounted');
         this.setTitulo('bibliografias');
+        this.setDefault();
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(_extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
         lineas: function lineas(state) {
             return state.lineas;
         },
@@ -48961,8 +48987,20 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         titulo: function titulo(state) {
             return state.titulo;
         },
+        acceso: function acceso(state) {
+            return state.acceso;
+        },
+        nuevo: function nuevo(state) {
+            return state.nuevo;
+        },
+        active_line: function active_line(state) {
+            return state.active_line;
+        },
         switchEdit: function switchEdit(state) {
             return state.switchEdit;
+        },
+        status: function status(state) {
+            return state.status;
         }
     }), {
         items: function items() {
@@ -48980,7 +49018,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 lineas[linea]['data'][1].align = 'left';
 
                 lineas[linea]['data'][2].col = 3;
-                lineas[linea]['data'][2].cols = 3;
+                lineas[linea]['data'][2].cols = 2;
                 lineas[linea]['data'][2].offset = 1;
                 lineas[linea]['data'][2].align = 'left';
 
@@ -49000,27 +49038,51 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 lineas[linea]['data'][5].align = 'left';
             }
             return lineas;
+        },
+
+
+        //items(){ return this.$store.getters.bibliografias },
+        newItem: function newItem() {
+            return this.$store.getters.newItem;
         }
-    }),
+    })),
     methods: {
-        grabar: function grabar(linea) {
+        borrar: function borrar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            var check = this.$store.dispatch('BorrarContenido', linea);
+            if (check) {
+                toastr.success('Bibliografía eliminada.');
+            }
+        },
+        setDefault: function setDefault() {
+            this.$store.commit('setDefault');
+        },
+        editar: function editar(linea) {
+            if (linea.id == 'new') {
+                this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
+            } else {
+                this.$store.dispatch('EditarContenido', linea);
+            }
+        },
+        consistencia: function consistencia(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
             toastr.showDuration = 50;
-
             var mess = '';
             var consistencia = 0;
-            var check = linea.data[1].texto;
+            var check = linea.data[5].texto;
             if (check.trim().length > 0) {
                 consistencia = consistencia + 1;
             } else {
-                mess = 'Inserte el texto AUTOR(ES).';
+                mess = 'Inserte el texto UBICACIÓN.';
             }
-            var check = linea.data[2].texto;
-            if (check.trim().length > 0) {
+            var check = linea.data[4].texto;
+            if (!isNaN(check) && check > 2015) {
                 consistencia = consistencia + 1;
             } else {
-                mess = 'Inserte el texto TÍTULO.';
+                mess = 'El AÑO debe ser un número entero mayor a 2015.';
             }
             var check = linea.data[3].texto;
             if (check.trim().length > 0) {
@@ -49028,58 +49090,82 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             } else {
                 mess = 'Inserte el texto EDITORIAL.';
             }
-            var check = linea.data[4].texto;
-            if (!isNaN(check) && check > 1900) {
-                consistencia = consistencia + 1;
-            } else {
-                mess = 'El AÑO debe ser un número entero mayor a 1900.';
-            }
-            var check = linea.data[5].texto;
+            var check = linea.data[2].texto;
             if (check.trim().length > 0) {
                 consistencia = consistencia + 1;
             } else {
-                mess = 'Inserte el texto UBICACIÓN.';
+                mess = 'Inserte el texto TÍTULO.';
+            }
+            var check = linea.data[1].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el texto AUTOR(ES).';
             }
 
             if (consistencia == 5) {
-                /* Renumera row */
-
-                var week = parseInt(linea.data[0].texto);
-                var rowUnidades = this.lineas.filter(function (xlinea) {
-                    return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'bibliografias';
-                });
-                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0, 1)) * 10000;
-                var row = rowTitulo1 + week * 100;
-                linea.row = row;
-                linea.semana = week;
-                var check = this.$store.dispatch('GrabarContenido', linea);
-                if (check) {
-                    this.$store.commit('switchEdit');
-                    toastr.success('Bibliografía grabada.');
-                } else {
-                    toastr.error('El registro no ha sido grabado.');
-                }
+                return true;
             } else {
                 toastr.error(mess);
+                return false;
+            }
+        },
+        grabar: function grabar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 50;
+            if (this.consistencia(linea)) {
+                if (linea.id == 'new') {
+                    this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+                        toastr.success('Bibliografía grabada.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                } else {
+                    linea.semana = linea.data[0].texto;
+                    //console.log('bibliografias grabar linea a:', linea);
+                    var linea = this.recalcRow(linea);
+                    //console.log('bibliografias grabar linea b:', linea);
+                    this.$store.dispatch('SaveLinea', linea).then(function () {
+                        toastr.success('Bibliografía grabada.');
+                    }).catch(function () {
+                        toastr.error('El registro no ha sido grabado.');
+                    });
+                }
             };
+        },
+        recalcRow: function recalcRow(oldLinea) {
+            var _this = this;
+
+            var xsemana = oldLinea.semana;
+            var titulo = this.lineas.filter(function (linea) {
+                return linea.tipo == 'titulo1' && linea.subtipo == _this.status;
+            });
+            var rowTitulo = titulo[0].row;
+            var semanas = this.lineas.filter(function (linea) {
+                return linea.tipo == _this.status && linea.subtipo == _this.status && linea.semana == xsemana;
+            }).length;
+            var newRow = rowTitulo + xsemana * 100 + semanas;
+            oldLinea.row = newRow;
+            return oldLinea;
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
         },
-        editar: function editar(linea) {
-            this.$store.dispatch('EditarContenido', linea);
-            this.$store.commit('switchEdit');
-        },
-        rowclass: function rowclass(item, linea) {
-            if (linea.editing) {
-                return 'id' + linea.id + ' editing col-' + item.col + ' bibliografias col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        rowClass: function rowClass(item, linea) {
+            if (linea.tipo == 'bibliografias') {
+                return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
             } else {
-                return 'notEditing col-' + item.col + ' bibliografias col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                return 'col-1 unidades col-xs-8 col-xs-offset-1 componente';
             }
         },
-        buttonclass: function buttonclass(type, linea) {
-            return 'btn' + type + linea.id + ' btn btn-default';
+        buttonClass: function buttonClass(type, linea) {
+            if (linea.tipo == 'bibliografias') {
+                return 'col-7 btn' + type + linea.id + ' btn btn-default';
+            } else {
+                return 'hidden';
+            }
         },
         setTitulo: function setTitulo(subtipo) {
             this.$store.dispatch('SetTitulo', subtipo);
@@ -49096,7 +49182,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
+    _c("h1", [
+      _vm._v(_vm._s(_vm.titulo) + "\n        "),
+      !_vm.switchEdit && _vm.active_line == 0
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.editar(_vm.newItem)
+                  }
+                }
+              },
+              [_vm._v("Nuevo Registro")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.switchEdit && _vm.active_line == "new"
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.grabar(_vm.newItem, true)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(_vm.newItem.button))]
+            )
+          ])
+        : _vm._e()
+    ]),
     _vm._v(" "),
     _c("table", [
       _c(
@@ -49111,15 +49234,77 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
+          _c("tr", [
+            _c("div", { staticClass: "row" }, [
+              _vm.switchEdit && _vm.active_line == "new"
+                ? _c(
+                    "span",
+                    _vm._l(_vm.newItem.data, function(item) {
+                      return _c("span", [
+                        _c(
+                          "textarea",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: item.texto,
+                                expression: "item.texto"
+                              }
+                            ],
+                            class: _vm.rowClass(item, _vm.newItem),
+                            attrs: {
+                              name: "newText",
+                              rows: "6",
+                              wrap: "hard",
+                              align: item.align
+                            },
+                            domProps: { value: item.texto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(item, "texto", $event.target.value)
+                              }
+                            }
+                          },
+                          [_vm._v('"' + _vm._s(item.texto) + '"')]
+                        )
+                      ])
+                    })
+                  )
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
           _vm._l(_vm.items, function(linea) {
             return _c("tr", [
-              _c("div", { staticClass: "row" }, [
-                linea.editing
-                  ? _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", [
+              _c(
+                "div",
+                { staticClass: "row" },
+                [
+                  _vm._l(linea.data, function(item) {
+                    return _c("span", [
+                      !_vm.switchEdit &&
+                      _vm.active_line != linea.id &&
+                      item.view &&
+                      _vm.active_line != "new"
+                        ? _c("span", [
+                            _c("span", {
+                              class: _vm.rowClass(item, linea),
+                              attrs: { align: item.align },
+                              domProps: {
+                                innerHTML: _vm._s(_vm.viewTexto(item))
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.switchEdit &&
+                      _vm.active_line == linea.id &&
+                      linea.tipo == _vm.status
+                        ? _c("span", [
                             _c(
                               "textarea",
                               {
@@ -49131,9 +49316,9 @@ var render = function() {
                                     expression: "item.texto"
                                   }
                                 ],
-                                class: _vm.rowclass(item, linea),
+                                class: _vm.rowClass(item, linea),
                                 attrs: {
-                                  rows: "3",
+                                  rows: "6",
                                   wrap: "hard",
                                   align: item.align
                                 },
@@ -49150,64 +49335,66 @@ var render = function() {
                               [_vm._v(_vm._s(item.texto))]
                             )
                           ])
-                        }),
+                        : _vm._e()
+                    ])
+                  }),
+                  _vm._v(" "),
+                  !_vm.switchEdit && _vm.active_line == 0
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Erase", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.borrar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
+                        ),
                         _vm._v(" "),
                         _c(
                           "button",
                           {
-                            class: _vm.buttonclass("Save", linea),
+                            class: _vm.buttonClass("Edit", linea),
                             attrs: { type: "submit" },
                             on: {
                               click: function($event) {
-                                _vm.grabar(linea)
+                                _vm.editar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Editar")]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.switchEdit &&
+                  _vm.active_line == linea.id &&
+                  linea.tipo == _vm.status
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Save", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.grabar(linea, false)
                               }
                             }
                           },
                           [_vm._v("Grabar")]
                         )
-                      ],
-                      2
-                    )
-                  : _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", { staticClass: "notEdit" }, [
-                            _c("span", {
-                              class: _vm.rowclass(item, linea),
-                              attrs: {
-                                rows: "3",
-                                wrap: "hard",
-                                align: item.align
-                              },
-                              domProps: {
-                                innerHTML: _vm._s(_vm.viewTexto(item))
-                              }
-                            })
-                          ])
-                        }),
-                        _vm._v(" "),
-                        !_vm.switchEdit
-                          ? _c("div", [
-                              _c(
-                                "button",
-                                {
-                                  class: _vm.buttonclass("Edit", linea),
-                                  attrs: { type: "submit" },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.editar(linea)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Editar")]
-                              )
-                            ])
-                          : _vm._e()
-                      ],
-                      2
-                    )
-              ])
+                      ])
+                    : _vm._e()
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("br")
             ])
           })
         ],
@@ -49227,7 +49414,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias",
+              "notEditing col-1 col-xs-1 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Orden")])]
@@ -49237,7 +49424,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias",
+              "notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Autor(es)")])]
@@ -49247,7 +49434,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-3 col-xs-3 col-xs-offset-1 bibliografias",
+              "notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Título")])]
@@ -49257,7 +49444,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias",
+              "notEditing col-4 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Editorial")])]
@@ -49267,7 +49454,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias",
+              "notEditing col-5 col-xs-1 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Año")])]
@@ -49277,7 +49464,7 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias",
+              "notEditing col-6 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
           [_c("b", [_vm._v("Ubicación")])]
@@ -49285,7 +49472,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("span", {
           staticClass:
-            "notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias",
+            "notEditing col-7 col-xs-1 col-xs-offset-1 bibliografias componente",
           attrs: { align: "center" }
         })
       ])
@@ -49875,6 +50062,74 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                         texto: ''
                     });
                     // actividad                
+                    item.data.push({
+                        view: true,
+                        col: 6,
+                        cols: 2,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    break;
+                case 'bibliografias':
+                    var item = {
+                        button: 'Editar',
+                        id: 'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // orden
+                    item.data.push({
+                        view: true,
+                        col: 1,
+                        cols: 1,
+                        offset: 1,
+                        align: 'center',
+                        texto: '0'
+                    });
+                    // autor                
+                    item.data.push({
+                        view: true,
+                        col: 2,
+                        cols: 2,
+                        offset: 2,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // titulo                
+                    item.data.push({
+                        view: true,
+                        col: 3,
+                        cols: 2,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // editorial                
+                    item.data.push({
+                        view: true,
+                        col: 4,
+                        cols: 2,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // year                
+                    item.data.push({
+                        view: true,
+                        col: 5,
+                        cols: 1,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // codigo                
                     item.data.push({
                         view: true,
                         col: 6,

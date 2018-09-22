@@ -262,15 +262,6 @@ class SyllabusController extends Controller
                     }
                 }
                 break;
-
-/*            
-                $id = $request->data['id'];
-                $estrategia = Estrategia::find($id);
-                $estrategia->texto = $request->data['data'][0]['texto'];
-                $estrategia->save();
-                $proceso = 'estrategias';
-                break;
-*/
             case 'evaluaciones' :
                 $id = $request->data['id'];
                 $evaluacion = Evaluacion::find($id);
@@ -282,6 +273,62 @@ class SyllabusController extends Controller
                 break;
             case 'bibliografias' :
                 $id = $request->data['id'];
+                if($request->new){
+                    try {
+                        $bibliografia = Bibliografia::create([
+                            'semestre'=>$request->data["semestre"],
+                            'cod_curso'=>$request->data["cod_curso"],
+                            'orden'=>$request->data['data'][0]["texto"],
+                            'autor'=>$request->data['data'][1]["texto"],
+                            'titulo'=>$request->data['data'][2]["texto"],
+                            'editorial'=>$request->data['data'][3]["texto"],
+                            'year'=>$request->data['data'][4]["texto"],
+                            'codigo'=>$request->data['data'][5]["texto"]
+                        ]);
+
+                        $id = $bibliografia->id;
+
+                        $_request = $request;
+                        $_request->semestre = $request->data['semestre'];
+                        $_request->cod_curso = $request->data['cod_curso'];
+
+                        $datos = [];
+                        $new_data = $this->upload_titulo1($_request);
+                        if(!empty($new_data)){
+                            $datos = $this->insertData($datos, $new_data);
+                        }
+
+                        $dataNew = $this->upload_bibliografias($datos, $_request);
+
+                        //$dataNew[0] = $data_new;
+                        $success = true;
+                        $proceso = 'bibliografias';
+                    } catch (Exception $e) {
+                        $success = false;                        
+                        $proceso = 'Error add bibliografias';
+                    }
+                }else{
+                    try {                    
+                        $bibliografia = Bibliografia::find($id);
+                        $bibliografia->orden = $request->data['data'][0]['texto'];
+                        $bibliografia->autor = $request->data['data'][1]['texto'];
+                        $bibliografia->titulo = $request->data['data'][2]['texto'];
+                        $bibliografia->editorial = $request->data['data'][3]['texto'];
+                        $bibliografia->year = $request->data['data'][4]['texto'];
+                        $bibliografia->codigo = $request->data['data'][5]['texto'];
+                        $bibliografia->save();
+                        $dataNew = $bibliografia;
+                        $success = true;
+                        $proceso = 'bibliografias';
+                    } catch (Exception $e) {
+                        $success = false;
+                        $proceso = 'Error modify bibliografias';
+                    }
+                }
+                break;
+
+/*
+                $id = $request->data['id'];
                 $bibliografia = Bibliografia::find($id);
                 $bibliografia->orden = $request->data['data'][0]['texto'];
                 $bibliografia->autor = $request->data['data'][1]['texto'];
@@ -292,6 +339,7 @@ class SyllabusController extends Controller
                 $bibliografia->save();
                 $proceso = 'bibliografias';
                 break;
+*/
             case 'generales' :
                 $proceso = 'generales';
                 break;
@@ -440,6 +488,15 @@ class SyllabusController extends Controller
                 break;
             case 'contenidos':
                 $res = Contenido::find($id);
+                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                    $res->delete();
+                    $success = true;
+                }else{
+                    $success = false;
+                }
+                break;
+            case 'bibliografias':
+                $res = Bibliografia::find($id);
                 if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
                     $res->delete();
                     $success = true;
