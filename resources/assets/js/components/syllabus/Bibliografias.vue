@@ -215,6 +215,7 @@
 
                     }
                 };
+                this.$store.dispatch('OrdenarPorAutor');
             },
 
             recalcRow(oldLinea){

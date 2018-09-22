@@ -49133,6 +49133,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     });
                 }
             };
+            this.$store.dispatch('OrdenarPorAutor');
         },
         recalcRow: function recalcRow(oldLinea) {
             var _this = this;
@@ -49837,6 +49838,30 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
             //console.log('sortLineasRow:', state.lineas);
         },
+        sortAutor: function sortAutor(state) {
+            var titulo1 = state.lineas.filter(function (linea) {
+                return linea.tipo == 'titulo1' && linea.subtipo == 'bibliografias';
+            });
+            var row_titulo = titulo1[0].row;
+            var rows = state.lineas.filter(function (linea) {
+                return linea.tipo == 'bibliografias';
+            });
+            //console.log('sortAutor rows 0: ', rows);
+            rows.sort(function (a, b) {
+                //console.log('sortAutor a.data[1].texto: ', a.data[1].texto);
+                //console.log('sortAutor b.data[1].texto: ', b.data[1].texto);
+                return a.data[1].texto > b.data[1].texto;
+            });
+            //console.log('sortAutor rows 1: ', rows);
+            var count = 0;
+            for (var x in rows) {
+                //console.log('sortAutor row: ', row);
+                count++;
+                rows[x].data[0].texto = count;
+                rows[x].row = row_titulo + count * 1000;
+            }
+            //console.log('sortAutor rows 2: ', rows);
+        },
         sortLineasTipo: function sortLineasTipo(state, tipo) {
             var array = state.lineas;
             var rows = array.filter(function (linea) {
@@ -50151,6 +50176,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
+        OrdenarPorAutor: function OrdenarPorAutor(context) {
+            context.commit('sortAutor');
+            context.commit('sortLineasTipo', 'bibliografias');
+        },
         BorrarContenido: function BorrarContenido(context, linea) {
             var request = {
                 'data': {

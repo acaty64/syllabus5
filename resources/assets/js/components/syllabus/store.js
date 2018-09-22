@@ -137,6 +137,27 @@ console.log('despues de agregar: ', state.lineas);
 //console.log('sortLineasRow:', state.lineas);
         },
 
+        sortAutor(state){
+            var titulo1 = state.lineas.filter( (linea) => linea.tipo == 'titulo1' && linea.subtipo == 'bibliografias');
+            var row_titulo = titulo1[0].row;
+            var rows = state.lineas.filter( (linea) => linea.tipo == 'bibliografias' );
+//console.log('sortAutor rows 0: ', rows);
+            rows.sort(function (a, b) {
+//console.log('sortAutor a.data[1].texto: ', a.data[1].texto);
+//console.log('sortAutor b.data[1].texto: ', b.data[1].texto);
+                return (a.data[1].texto > b.data[1].texto);
+            });
+//console.log('sortAutor rows 1: ', rows);
+            var count = 0;
+            for (var x in rows) {
+//console.log('sortAutor row: ', row);
+                count ++ ;
+                rows[x].data[0].texto = count;
+                rows[x].row =  row_titulo + count * 1000;
+            }
+//console.log('sortAutor rows 2: ', rows);
+        },
+
         sortLineasTipo(state, tipo){
             var array = state.lineas;
             var rows = array.filter( (linea) => linea.tipo == tipo );            
@@ -442,6 +463,10 @@ console.log('setNewItem', item);
     },
 
     actions: {
+        OrdenarPorAutor: (context) => {
+            context.commit('sortAutor');
+            context.commit('sortLineasTipo', 'bibliografias');
+        },
         BorrarContenido: (context, linea) => {
             var request = {
                 'data': {
