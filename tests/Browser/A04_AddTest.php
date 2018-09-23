@@ -15,8 +15,8 @@ use Tests\DuskTestCase;
      * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
      * 5. Estrategias Ok
-     * 6. Evaluaciones *********** Falta
-     * 7. Bibliografias *********** Falta
+     * 6. Evaluaciones Ok
+     * 7. Bibliografias Ok
      */
 
 class A04_AddTest extends DuskTestCase
@@ -148,7 +148,7 @@ class A04_AddTest extends DuskTestCase
                     ->waitForText('Contenido grabado.')
                     ->waitUntilMissing('.toast', 11)
                     ->press('Vista')
-                    ->script('window.scrollTo(0, 1000);');
+                    ->script('window.scrollTo(0, 1500);');
 
             $browser->waitForText('Nuevo Concepto')
                     ->waitForText('Nuevo Procedimiento')
@@ -173,6 +173,7 @@ class A04_AddTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Estrategias', 20)
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->waitFor('.btnEditarnew', 20)
@@ -200,60 +201,42 @@ class A04_AddTest extends DuskTestCase
         });
         // End ESTRATEGIAS
 
-/*
-
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Evaluaciones')
-                    ->assertSee('EVALUACIÓN')
-                    ->assertSee('Evaluación')
-                    ->click('.btnEdit2');
+                    ->assertSee('EVALUACIONES')
+                    ->click('.btnEditarnew');
 
-            $selector = '.id2.col-2';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto EVALUACION.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
+            $browser
+                    ->type('.idnew.col-1', 'Nueva evaluacion')
+                    ->type('.idnew.col-2', 10)
+                    ->type('.idnew.col-3', 3)
+                    ->click('.btnGrabarnew')
+                    ->waitForText('Evaluacion grabada.')
                     ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 2000);');
 
-            $selector = '.id2.col-3';
-            $texto = $browser->text($selector);
-            $error = 'El PORCENTAJE debe ser un número entero mayor a 0.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-4';
-            $texto = $browser->text($selector);
-            $error = 'La SEMANA debe ser un número entero menor a 17.';
-            $browser->type($selector, '17')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
-
+            $this->assertDatabaseHas('evaluaciones', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'texto' => 'Nueva evaluacion',
+                        'porcentaje' => '10',
+                        'semana' => '3',
+                    ]);        
         });
         // End EVALUACIONES
-*/
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Bibliografias')
                     ->press('Bibliografias')
                     ->assertSee('VII. BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')

@@ -66,8 +66,8 @@ export const store = new Vuex.Store({
         eliminar(state, componente){
             //console.log('antes de eliminar: ', state.lineas);
             state.lineas = state.lineas.
-                filter(function(linea) { return linea.tipo != componente }).
-                filter(function(linea) { return linea.subtipo != componente });
+                    filter(function(linea) { return linea.tipo != componente });
+
             //console.log('despues de eliminar: ', state.lineas);
         },
         agregar (state, newLineas){
@@ -446,18 +446,81 @@ console.log('despues de agregar: ', state.lineas);
                         texto: '',
                     });
                     break;
+                case 'evaluaciones':
+                    var item = {
+                        button: 'Editar',
+                        id:'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // texto
+                    item.data.push({
+                        view:  false,
+                        col:  2,
+                        cols:  2,
+                        offset:  1,
+                        align:  'center',
+                        texto: '0',
+                    });
+                    // porcentaje                
+                    item.data.push({
+                        view:  true,
+                        col:  4,
+                        cols:  1,
+                        offset:  2,
+                        align:  'left',
+                        texto: '',
+                    });
+                    // semana                
+                    item.data.push({
+                        view:  true,
+                        col:  5,
+                        cols:  1,
+                        offset:  1,
+                        align:  'left',
+                        texto: '',
+                    });
+                    break;
                 default:
                     var newItem = {};
                     // code block
                     break;
             }
-console.log('setNewItem', item);
+//console.log('setNewItem', item);
             state.newItem = item;
             return item;
         }
     },
 
     actions: {
+        RecallCompetencias: (context) =>{            
+            var request = {
+                'data': {
+                    'tipo': 'recallCompetencias',
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/saveData/';
+            axios.post(url, request).then(response=>{
+                var competencias = response.data.data;
+console.log('RecallCompetencias data:', competencias);
+                context.commit('eliminar', 'competencias');
+                context.commit('agregar', competencias);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallCompetencias: ', error);
+            });
+        },
         OrdenarPorAutor: (context) => {
             context.commit('sortAutor');
             context.commit('sortLineasTipo', 'bibliografias');
@@ -497,13 +560,11 @@ console.log('setNewItem', item);
                 'cod_curso': context.state.cod_curso,
                 'new': false
             };
-//console.log('RecallTitulo3 request:', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var titulo3 = response.data.data;
-//console.log('RecallTitulo3 titulo3:', titulo3);
                 context.commit('eliminar', 'titulo3');
                 context.commit('agregar', titulo3);
                 context.commit('sortLineasRow');
@@ -535,6 +596,7 @@ console.log('setNewItem', item);
                 context.commit('changePre_row', linea.row);
                 if(context.state.status == 'unidades'){
                     context.dispatch('RecallTitulo3');
+                    context.dispatch('RecallCompetencias');
                 }
                 if(context.state.status == 'bibliografias'){
                     context.dispatch('OrdenarPorAutor');
@@ -559,6 +621,7 @@ console.log('setNewItem', item);
                 context.commit('setNewItemValue', ['button', 'Editar']);
                 if(context.state.status == 'unidades'){
                     context.dispatch('RecallTitulo3');
+                    context.dispatch('RecallCompetencias');
                 }
                 if(context.state.status == 'bibliografias'){
                     context.dispatch('OrdenarPorAutor');

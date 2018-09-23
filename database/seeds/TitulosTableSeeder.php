@@ -114,7 +114,7 @@ class TitulosTableSeeder extends Seeder
 			'semestre' => '20181', 
 			'tipo' => '1',
 			'subtipo' => 'evaluaciones', 
-			'texto' => 'EVALUACIÓN',
+			'texto' => 'EVALUACIONES',
 			'orden' => 6,
 		]);
 

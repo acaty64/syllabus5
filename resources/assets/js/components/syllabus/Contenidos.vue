@@ -17,6 +17,14 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>                    
+                    <div class="row">                
+                        <span class="notEditing col-1 col-xs-1 col-xs-offset-1 contenidos componente" align='center'><b>SEMANA</b></span>
+                        <span class="notEditing col-2 col-xs-4 col-xs-offset-1 contenidos componente" align='center'><b>CONCEPTUAL</b></span>
+                        <span class="notEditing col-4 col-xs-2 col-xs-offset-1 contenidos componente" align='center'><b>PROCEDIMENTAL</b></span>
+                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 contenidos componente" align='center'><b>ACTIVIDAD DE APRENDIZAJE</b></span>
+                    </div>                
+                </tr>
                 <tr>
                     <div class="row">
                         <span v-if="switchEdit && active_line == 'new'">
@@ -175,9 +183,9 @@
             },
             rowClass(item, linea) {
                 if(linea.tipo == 'contenidos'){
-                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                    return 'id'+linea.id + ' col-'+item.col+' '+linea.tipo+' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
                 }else{
-                    return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                    return 'col-1 titulo3 col-xs-11 col-xs-offset-1 componente';
                 }
             },
 
@@ -196,14 +204,13 @@
     }
 </script>
 <style>
-    .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
-    .col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,
-    .col-3.generales 
+    .titulo3.componente,
+    .contenidos.componente
     {
         margin-left: 0px;
     } 
 
-    .examenes {
+    .titulo3.componente {
         border: 0.5px solid black;
     }
 

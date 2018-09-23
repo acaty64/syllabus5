@@ -11,11 +11,11 @@ use Tests\DuskTestCase;
     /**
      * 1. Sumillas Ok
      * 2. Unidades Ok
-     * 3. Competencias 
+     * 3. Competencias ---- REVISAR
      * 4. Contenidos Ok
-     * 5. Estrategias *********** Falta
-     * 6. Evaluaciones *********** Falta
-     * 7. Bibliografias *********** Falta
+     * 5. Estrategias Ok
+     * 6. Evaluaciones Ok
+     * 7. Bibliografias Ok
      */
 
 class A05_EraseTest extends DuskTestCase
@@ -159,11 +159,36 @@ class A05_EraseTest extends DuskTestCase
         // End ESTRATEGIAS
 
 
-/*
         // EVALUACIONES
+        $this->browse(function (Browser $browser) {
+            $selector = '.col-1.evaluacion';
+            $texto = 'Primer Examen Parcial';
+            $mess = 'Evaluacion eliminada.';
+            $browser->visit('/show/20181/100048')
+                    ->waitFor('.SyllabusComponent', 20)
+                    ->waitFor('.Vista', 20)
+                    ->waitForText('Evaluaciones', 10)
+                    ->press('Evaluaciones')
+                    ->assertSee('VI. EVALUACIONES')
+                    ->waitFor('.btnEdit1')
+                    ->waitFor('.btnErase1')
+                    ->press('.btnErase1')
+                    ->waitForText($mess)
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 1000);');
 
+            $browser->assertSee('VI. EVALUACIONES')
+                    ->assertDontSee($texto);
+
+                $this->assertDatabaseMissing('estrategias', [
+                        'semestre' => '20181',
+                        'cod_curso' => '100048',
+                        'texto' => $texto
+                    ]);
+        });
         // End EVALUACIONES
-*/
+
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {

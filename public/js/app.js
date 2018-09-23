@@ -47360,7 +47360,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, \n.col-2.contenidos,  .col-3.contenidos,  .col-4.contenidos,  .col-6.contenidos,\n.col-3.generales \n{\n    margin-left: 0px;\n}\n.examenes {\n    border: 0.5px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.titulo3.componente,\n.contenidos.componente\n{\n    margin-left: 0px;\n}\n.titulo3.componente {\n    border: 0.5px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
 
 // exports
 
@@ -47374,6 +47374,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -47576,9 +47584,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         rowClass: function rowClass(item, linea) {
             if (linea.tipo == 'contenidos') {
-                return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                return 'id' + linea.id + ' col-' + item.col + ' ' + linea.tipo + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset + ' componente';
             } else {
-                return 'col-1 unidades col-xs-8 col-xs-offset-1';
+                return 'col-1 titulo3 col-xs-11 col-xs-offset-1 componente';
             }
         },
         buttonClass: function buttonClass(type, linea) {
@@ -47653,6 +47661,8 @@ var render = function() {
       _c(
         "tbody",
         [
+          _vm._m(0),
+          _vm._v(" "),
           _c("tr", [
             _c("div", { staticClass: "row" }, [
               _vm.switchEdit && _vm.active_line == "new"
@@ -47820,7 +47830,56 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-1 col-xs-1 col-xs-offset-1 contenidos componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("SEMANA")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-2 col-xs-4 col-xs-offset-1 contenidos componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("CONCEPTUAL")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-4 col-xs-2 col-xs-offset-1 contenidos componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("PROCEDIMENTAL")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-6 col-xs-2 col-xs-offset-1 contenidos componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("ACTIVIDAD DE APRENDIZAJE")])]
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -48444,7 +48503,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.evaluaciones {\n    border: 0px solid black;\n}\n.editing {\n    background: yellow;\n    margin-left: 0px;\n}\n.notEditing {\n    background: white;\n    margin-left: 0px;\n}\n", ""]);
+exports.push([module.i, "\n.col-1.evaluaciones.componente, \n.col-2.evaluaciones.componente,\n.col-3.evaluaciones.componente, \n.col-4.evaluaciones.componente, \n.col-5.evaluaciones.componente, \n.col-5.btn\n{\n    margin-left: 0px;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
 
 // exports
 
@@ -48498,6 +48557,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -48505,9 +48587,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     mounted: function mounted() {
         console.log('Evaluaciones.vue mounted');
         this.setTitulo('evaluaciones');
+        this.setDefault();
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(_extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
         lineas: function lineas(state) {
             return state.lineas;
         },
@@ -48517,39 +48600,70 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         titulo: function titulo(state) {
             return state.titulo;
         },
+        acceso: function acceso(state) {
+            return state.acceso;
+        },
+        nuevo: function nuevo(state) {
+            return state.nuevo;
+        },
+        active_line: function active_line(state) {
+            return state.active_line;
+        },
         switchEdit: function switchEdit(state) {
             return state.switchEdit;
+        },
+        status: function status(state) {
+            return state.status;
         }
     }), {
         items: function items() {
-            var lineas = this.$store.getters.evaluaciones;
-            /* Modifica col y cols del texto */
-            for (var linea in lineas) {
-                lineas[linea]['data'][0].col = 2;
-                lineas[linea]['data'][0].cols = 4;
-                lineas[linea]['data'][0].offset = 1;
-                lineas[linea]['data'][0].align = 'left';
-
-                lineas[linea]['data'][1].col = 3;
-                lineas[linea]['data'][1].cols = 2;
-                lineas[linea]['data'][1].offset = 1;
-                lineas[linea]['data'][1].align = 'center';
-
-                lineas[linea]['data'][2].col = 4;
-                lineas[linea]['data'][2].cols = 2;
-                lineas[linea]['data'][2].offset = 1;
-                lineas[linea]['data'][2].align = 'center';
-            }
-            return lineas;
+            return this.$store.getters.evaluaciones;
+        },
+        newItem: function newItem() {
+            return this.$store.getters.newItem;
         }
-    }),
+    })),
     methods: {
-        grabar: function grabar(linea) {
+        borrar: function borrar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 50;
+            toastr.showDuration = 100;
+            var check = this.$store.dispatch('BorrarContenido', linea);
+            if (check) {
+                toastr.success('Evaluacion eliminada.');
+            }
+        },
+        align: function align(item) {
+            switch (item.col) {
+                case 2:
+                    var align = 'justify';
+                    break;
+                case 4:
+                    var align = 'center';
+                    break;
+                case 5:
+                    var align = 'center';
+                    break;
+            }
+            return align;
+        },
+        setDefault: function setDefault() {
+            this.$store.commit('setDefault');
+        },
+        editar: function editar(linea) {
+            if (linea.id == 'new') {
+                this.$store.dispatch('SetNewItemValue', ['button', 'Grabar']);
+            } else {
+                this.$store.dispatch('EditarContenido', linea);
+            }
+        },
+        consistencia: function consistencia(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
             var mess = '';
             var consistencia = 0;
+
             var check = linea.data[0].texto;
             if (check.trim().length > 0) {
                 consistencia = consistencia + 1;
@@ -48557,10 +48671,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 mess = 'Inserte el texto EVALUACION.';
             }
             var check = linea.data[1].texto;
-            if (!isNaN(check) && check > 0) {
+            if (!isNaN(check) && check > 0 && check < 101) {
                 consistencia = consistencia + 1;
             } else {
-                mess = 'El PORCENTAJE debe ser un número entero mayor a 0.';
+                mess = 'El PORCENTAJE debe ser un número entero mayor a 0 y menor a 101.';
             }
             var check = linea.data[2].texto;
             if (!isNaN(check) && check < 17) {
@@ -48568,47 +48682,83 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             } else {
                 mess = 'La SEMANA debe ser un número entero menor a 17.';
             }
-
             if (consistencia == 3) {
-                /* Renumera row */
-                var week = parseInt(linea.data[2].texto);
-                var rowUnidades = this.lineas.filter(function (xlinea) {
-                    return xlinea.tipo == 'titulo1' && xlinea.subtipo == 'evaluaciones';
-                });
-                var rowTitulo1 = parseInt(rowUnidades[0].row.toString().substring(0, 1)) * 10000;
-                var row = rowTitulo1 + week * 100;
-                linea.row = row;
-                linea.semana = week;
-                var check = this.$store.dispatch('GrabarContenido', linea);
-                if (check) {
-                    this.$store.dispatch('RenumeraExamen', linea);
-                    this.$store.commit('switchEdit');
-
-                    toastr.success('Evaluación grabada.');
-                } else {
-                    toastr.error('El registro no ha sido grabado.');
-                }
+                return true;
             } else {
                 toastr.error(mess);
+                return false;
+            }
+        },
+        grabar: function grabar(linea) {
+            toastr.closeButton = false;
+            toastr.debug = false;
+            toastr.showDuration = 100;
+            if (this.consistencia(linea)) {
+                if (linea.id == 'new') {
+                    this.$store.dispatch('SaveNewLinea', linea);
+                    toastr.success('Evaluacion grabada.');
+                } else {
+                    linea.semana = linea.data[0].texto;
+                    var linea = this.recalcRow(linea);
+                    this.$store.dispatch('SaveLinea', linea);
+                    toastr.success('Evaluacion grabada.');
+                }
             };
+        },
+        recalcRow: function recalcRow(oldLinea) {
+            var xsemana = oldLinea.semana;
+            var titulo = this.lineas.filter(function (linea) {
+                return linea.tipo == 'titulo1' && linea.subtipo == 'contenidos';
+            });
+            var rowTitulo = titulo[0].row;
+            var newRow = rowTitulo + xsemana * 100;
+            var newLinea = oldLinea;
+            newLinea.row = newRow;
+            return newLinea;
         },
         viewTexto: function viewTexto(item) {
             var newText = item.texto.toString().replace(/\n/g, '<br>');
             return newText;
         },
-        editar: function editar(linea) {
-            this.$store.dispatch('EditarContenido', linea);
-            this.$store.commit('switchEdit');
-        },
-        rowclass: function rowclass(item, linea) {
-            if (linea.editing) {
-                return 'id' + linea.id + ' editing col-' + item.col + ' col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+        rowClass: function rowClass(item, linea) {
+            if (linea.tipo == 'evaluaciones') {
+                switch (item.col) {
+                    case 1:
+                        var xcol = 0;
+                        var xcols = 0;
+                        break;
+                    case 2:
+                        var xcol = 1;
+                        var xcols = 4;
+                        break;
+                    case 3:
+                        var xcol = 0;
+                        var xcols = 0;
+                        break;
+                    case 4:
+                        var xcol = 2;
+                        var xcols = 2;
+                        break;
+                    case 5:
+                        var xcol = 3;
+                        var xcols = 2;
+                        break;
+                    case 6:
+                        var xcol = 4;
+                        var xcols = 2;
+                        break;
+                }
+                return 'id' + linea.id + ' col-' + xcol + ' ' + linea.tipo + ' col-xs-' + xcols + ' col-xs-offset-' + item.offset + ' componente';
             } else {
-                return 'notEditing col-' + item.col + ' evaluaciones col-xs-' + item.cols + ' col-xs-offset-' + item.offset;
+                return 'col-1 evaluaciones col-xs-8 col-xs-offset-1 componente';
             }
         },
-        buttonclass: function buttonclass(type, linea) {
-            return 'btn' + type + linea.id + ' btn btn-default';
+        buttonClass: function buttonClass(type, linea) {
+            if (linea.tipo == 'evaluaciones') {
+                return 'col-6 btn' + type + linea.id + ' btn btn-default';
+            } else {
+                return 'hidden';
+            }
         },
         setTitulo: function setTitulo(subtipo) {
             this.$store.dispatch('SetTitulo', subtipo);
@@ -48625,7 +48775,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v(_vm._s(_vm.titulo))]),
+    _c("h1", [
+      _vm._v(_vm._s(_vm.titulo) + "\n        "),
+      !_vm.switchEdit && _vm.active_line == 0
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.editar(_vm.newItem)
+                  }
+                }
+              },
+              [_vm._v("Nuevo Registro")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.switchEdit && _vm.active_line == "new"
+        ? _c("span", [
+            _c(
+              "button",
+              {
+                class: _vm.buttonClass(_vm.newItem.button, _vm.newItem),
+                attrs: { name: "newButton", type: "submit" },
+                on: {
+                  click: function($event) {
+                    _vm.grabar(_vm.newItem, true)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(_vm.newItem.button))]
+            )
+          ])
+        : _vm._e()
+    ]),
     _vm._v(" "),
     _c("table", [
       _c(
@@ -48640,15 +48827,76 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
+          _c("tr", [
+            _c("div", { staticClass: "row" }, [
+              _vm.switchEdit && _vm.active_line == "new"
+                ? _c(
+                    "span",
+                    _vm._l(_vm.newItem.data, function(item) {
+                      return _c("span", [
+                        _c(
+                          "textarea",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: item.texto,
+                                expression: "item.texto"
+                              }
+                            ],
+                            class: _vm.rowClass(item, _vm.newItem),
+                            attrs: {
+                              name: "newText",
+                              rows: "6",
+                              wrap: "hard",
+                              align: _vm.align(item)
+                            },
+                            domProps: { value: item.texto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(item, "texto", $event.target.value)
+                              }
+                            }
+                          },
+                          [_vm._v('"' + _vm._s(item.texto) + '"')]
+                        )
+                      ])
+                    })
+                  )
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
           _vm._l(_vm.items, function(linea) {
             return _c("tr", [
-              _c("div", { staticClass: "row" }, [
-                linea.editing
-                  ? _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", [
+              _c(
+                "div",
+                { staticClass: "row" },
+                [
+                  _vm._l(linea.data, function(item) {
+                    return _c("span", [
+                      !_vm.switchEdit &&
+                      _vm.active_line != linea.id &&
+                      _vm.active_line != "new"
+                        ? _c("span", [
+                            _c("span", {
+                              class: _vm.rowClass(item, linea),
+                              attrs: { align: _vm.align(item) },
+                              domProps: {
+                                innerHTML: _vm._s(_vm.viewTexto(item))
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.switchEdit &&
+                      _vm.active_line == linea.id &&
+                      linea.tipo == _vm.status
+                        ? _c("span", [
                             _c(
                               "textarea",
                               {
@@ -48660,11 +48908,11 @@ var render = function() {
                                     expression: "item.texto"
                                   }
                                 ],
-                                class: _vm.rowclass(item, linea),
+                                class: _vm.rowClass(item, linea),
                                 attrs: {
-                                  rows: "1",
+                                  rows: "6",
                                   wrap: "hard",
-                                  align: item.align
+                                  align: _vm.align(item)
                                 },
                                 domProps: { value: item.texto },
                                 on: {
@@ -48679,64 +48927,64 @@ var render = function() {
                               [_vm._v(_vm._s(item.texto))]
                             )
                           ])
-                        }),
+                        : _vm._e()
+                    ])
+                  }),
+                  _vm._v(" "),
+                  !_vm.switchEdit && _vm.active_line == 0
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Erase", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.borrar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
+                        ),
                         _vm._v(" "),
                         _c(
                           "button",
                           {
-                            class: _vm.buttonclass("Save", linea),
+                            class: _vm.buttonClass("Edit", linea),
                             attrs: { type: "submit" },
                             on: {
                               click: function($event) {
-                                _vm.grabar(linea)
+                                _vm.editar(linea)
+                              }
+                            }
+                          },
+                          [_vm._v("Editar")]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.switchEdit &&
+                  _vm.active_line == linea.id &&
+                  linea.tipo == _vm.status
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            class: _vm.buttonClass("Save", linea),
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.grabar(linea, false)
                               }
                             }
                           },
                           [_vm._v("Grabar")]
                         )
-                      ],
-                      2
-                    )
-                  : _c(
-                      "span",
-                      [
-                        _vm._l(linea.data, function(item) {
-                          return _c("span", { staticClass: "notEdit" }, [
-                            _c("span", {
-                              class: _vm.rowclass(item, linea),
-                              attrs: {
-                                rows: "1",
-                                wrap: "hard",
-                                align: item.align
-                              },
-                              domProps: {
-                                innerHTML: _vm._s(_vm.viewTexto(item))
-                              }
-                            })
-                          ])
-                        }),
-                        _vm._v(" "),
-                        !_vm.switchEdit
-                          ? _c("div", [
-                              _c(
-                                "button",
-                                {
-                                  class: _vm.buttonclass("Edit", linea),
-                                  attrs: { type: "submit" },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.editar(linea)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Editar")]
-                              )
-                            ])
-                          : _vm._e()
-                      ],
-                      2
-                    )
-              ])
+                      ])
+                    : _vm._e()
+                ],
+                2
+              )
             ])
           })
         ],
@@ -48756,36 +49004,31 @@ var staticRenderFns = [
           "span",
           {
             staticClass:
-              "notEditing col-2 col-xs-4 col-xs-offset-1 evaluaciones",
+              "notEditing col-1 col-xs-4 col-xs-offset-1 evaluaciones componente",
             attrs: { align: "center" }
           },
-          [_c("b", [_vm._v("Evaluación")])]
+          [_c("b", [_vm._v("EVALUACIÓN")])]
         ),
         _vm._v(" "),
         _c(
           "span",
           {
             staticClass:
-              "notEditing col-3 col-xs-2 col-xs-offset-1 evaluaciones",
+              "notEditing col-2 col-xs-2 col-xs-offset-1 evaluaciones componente",
             attrs: { align: "center" }
           },
-          [_c("b", [_vm._v("Porcentaje")])]
+          [_c("b", [_vm._v("PORCENTAJE")])]
         ),
         _vm._v(" "),
         _c(
           "span",
           {
             staticClass:
-              "notEditing col-4 col-xs-2 col-xs-offset-1 evaluaciones",
+              "notEditing col-3 col-xs-2 col-xs-offset-1 evaluaciones componente",
             attrs: { align: "center" }
           },
-          [_c("b", [_vm._v("Semana")])]
-        ),
-        _vm._v(" "),
-        _c("span", {
-          staticClass: "notEditing col-5 col-xs-1 col-xs-offset-1 evaluaciones",
-          attrs: { align: "center" }
-        })
+          [_c("b", [_vm._v("SEMANA")])]
+        )
       ])
     ])
   }
@@ -49755,9 +49998,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             //console.log('antes de eliminar: ', state.lineas);
             state.lineas = state.lineas.filter(function (linea) {
                 return linea.tipo != componente;
-            }).filter(function (linea) {
-                return linea.subtipo != componente;
             });
+
             //console.log('despues de eliminar: ', state.lineas);
         },
         agregar: function agregar(state, newLineas) {
@@ -50139,18 +50381,81 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                         texto: ''
                     });
                     break;
+                case 'evaluaciones':
+                    var item = {
+                        button: 'Editar',
+                        id: 'new',
+                        semestre: state.semestre,
+                        cod_curso: state.cod_curso,
+                        tipo: state.status,
+                        subtipo: state.status,
+                        pre_row: 0,
+                        semana: 0,
+                        editing: false,
+                        data: []
+                    };
+                    // texto
+                    item.data.push({
+                        view: false,
+                        col: 2,
+                        cols: 2,
+                        offset: 1,
+                        align: 'center',
+                        texto: '0'
+                    });
+                    // porcentaje                
+                    item.data.push({
+                        view: true,
+                        col: 4,
+                        cols: 1,
+                        offset: 2,
+                        align: 'left',
+                        texto: ''
+                    });
+                    // semana                
+                    item.data.push({
+                        view: true,
+                        col: 5,
+                        cols: 1,
+                        offset: 1,
+                        align: 'left',
+                        texto: ''
+                    });
+                    break;
                 default:
                     var newItem = {};
                     // code block
                     break;
             }
-            console.log('setNewItem', item);
+            //console.log('setNewItem', item);
             state.newItem = item;
             return item;
         }
     },
 
     actions: {
+        RecallCompetencias: function RecallCompetencias(context) {
+            var request = {
+                'data': {
+                    'tipo': 'recallCompetencias'
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol + '//' + URLdomain + '/api/saveData/';
+            axios.post(url, request).then(function (response) {
+                var competencias = response.data.data;
+                console.log('RecallCompetencias data:', competencias);
+                context.commit('eliminar', 'competencias');
+                context.commit('agregar', competencias);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallCompetencias: ', error);
+            });
+        },
         OrdenarPorAutor: function OrdenarPorAutor(context) {
             context.commit('sortAutor');
             context.commit('sortLineasTipo', 'bibliografias');
@@ -50190,13 +50495,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 'cod_curso': context.state.cod_curso,
                 'new': false
             };
-            //console.log('RecallTitulo3 request:', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 var titulo3 = response.data.data;
-                //console.log('RecallTitulo3 titulo3:', titulo3);
                 context.commit('eliminar', 'titulo3');
                 context.commit('agregar', titulo3);
                 context.commit('sortLineasRow');
@@ -50228,6 +50531,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 context.commit('changePre_row', linea.row);
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
+                    context.dispatch('RecallCompetencias');
                 }
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');
@@ -50252,6 +50556,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 context.commit('setNewItemValue', ['button', 'Editar']);
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
+                    context.dispatch('RecallCompetencias');
                 }
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');

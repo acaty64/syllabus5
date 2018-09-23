@@ -8,6 +8,6 @@ class Evaluacion extends Model
 {
 	protected $table = 'evaluaciones';
 	protected $fillable = [
-    	'semestre', 'cod_curso', 'tipo', 'texto', 'porcentaje', 'semana',
+    	'semestre', 'cod_curso', 'texto', 'porcentaje', 'semana',
     ];
 }

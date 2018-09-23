@@ -53,6 +53,7 @@ class A03_EditTest extends DuskTestCase
         // End SUMILLAS
 
         // COMPETENCIAS
+/*
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
@@ -73,8 +74,8 @@ class A03_EditTest extends DuskTestCase
                     ->waitUntilMissing('.toast', 11)
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
-
         });
+*/
         // End COMPETENCIAS
 
         // UNIDADES
@@ -217,10 +218,9 @@ class A03_EditTest extends DuskTestCase
                     ->waitForText('Evaluaciones', 20)
                     ->press('Evaluaciones')
                     ->assertSee('EVALUACIÓN')
-                    ->assertSee('Evaluación')
                     ->click('.btnEdit2');
 
-            $selector = '.id2.col-2';
+            $selector = '.id2.col-1';
             $texto = $browser->text($selector);
             $error = 'Inserte el texto EVALUACION.';
             $browser->type($selector, ' ')
@@ -231,9 +231,9 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-3';
+            $selector = '.id2.col-2';
             $texto = $browser->text($selector);
-            $error = 'El PORCENTAJE debe ser un número entero mayor a 0.';
+            $error = 'El PORCENTAJE debe ser un número entero mayor a 0';
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')
@@ -242,7 +242,7 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-4';
+            $selector = '.id2.col-3';
             $texto = $browser->text($selector);
             $error = 'La SEMANA debe ser un número entero menor a 17.';
             $browser->type($selector, '17')

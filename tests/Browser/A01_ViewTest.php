@@ -35,6 +35,10 @@ class A01_ViewTest extends DuskTestCase
                     ->assertSee('IV. PROGRAMACIÓN DE CONTENIDOS')
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
+                    ->press('Evaluaciones')
+                    ->assertSee('VI. EVALUACIONES')
+                    ->press('Bibliografias')
+                    ->assertSee('VII. BIBLIOGRAFÍA')
                     ;
         });
     }

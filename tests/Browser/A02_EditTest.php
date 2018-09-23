@@ -79,6 +79,7 @@ class A02_EditTest extends DuskTestCase
         });
         // End UNIDADES
 
+/************** COMPETENCIAS ESPECIFICAS SE EXTRAE DESDE UNIDADES
         // COMPETENCIAS
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20181/100048')
@@ -87,7 +88,7 @@ class A02_EditTest extends DuskTestCase
                     ->waitForText('Competencias', 10)
                     ->press('Competencias')
                     ->assertSee('COMPETENCIAS')
-                    ->assertSee('Analiza y diagnostica los Estados financieros básicos de diferentes empresas,');
+                    ->assertSee('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac nunc facilisis, aliquet elit vitae, dapibus ipsum. Nulla ut quam ultrices, suscipit nulla a, tristique sapien.');
             $browser->driver->executeScript('window.scrollTo(0, 500);');
             $reg = 7;
             $col = 2;
@@ -109,6 +110,7 @@ class A02_EditTest extends DuskTestCase
                     ]);
         });
         // End COMPETENCIAS
+********************/
 
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
@@ -132,7 +134,6 @@ class A02_EditTest extends DuskTestCase
                         'concepto' => 'zzzzzzz'
                     ]);
         });
-
 
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
@@ -167,15 +168,15 @@ class A02_EditTest extends DuskTestCase
                     ->waitFor('.Vista', 20)
                     ->waitForText('Evaluaciones', 10)
                     ->press('Evaluaciones')
-                    ->assertSee('EVALUACIÓN')
-                    ->assertSee('Evaluación')
+                    ->assertSee('EVALUACIONES')
+                    ->waitForText('PORCENTAJE')
                     ->click('.btnEdit2')
-                    ->clear('.id2.col-2')
-                    ->type('.id2.col-2', 'yyyyy')
+                    ->clear('.id2.col-1')
+                    ->type('.id2.col-1', 'yyyyy')
                     ->assertSee('yyyyy')
                     ->click('.btnSave2')
-                    ->waitForText('Evaluación grabada.')
-                    ->assertSee('Evaluación grabada.')
+                    ->waitForText('Evaluacion grabada.')
+                    ->assertSee('Evaluacion grabada.')
                     ->waitUntilMissing('.toast', 11);
 
         $this->assertDatabaseHas('evaluaciones', [
