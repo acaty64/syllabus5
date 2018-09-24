@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Curso;
 use App\Linea;
 use App\Unidad;
 use Illuminate\Http\Request;
@@ -12,103 +13,42 @@ use PDF;
 
 class PDFController extends Controller
 {
-    public function PDFdompdf()
-    {
-        $view = \View::make('pdf.simple', [])->render();
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        return $pdf->stream('dompdf');
-    }
-
-    public function PDFSimple()
-    {   
-        $pdf = \PDF::loadView('pdf.simple',[])
-                    ->setPaper('a4')
-                    ->setOrientation('landscape')
-                    ->setOption('enable-javascript', true)
-                    ->setOption('images', true)
-                    ->setOption('javascript-delay', 3500)
-                    ->setOption('no-stop-slow-scripts', true)
-                    ->setOption('enable-smart-shrinking', true);
-        return $pdf->stream('pdf.simple');
-    }
-
-    public function showSimple()
-    {
-        return view('pdf.simple');
-    }
-
-    public function PDFexample()
-    {
-        $view = \View::make('pdf.example', [])->render();
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        return $pdf->stream('dompdf');
-
-        $pdf = \PDF::loadView('pdf.example',[])
-                    ->setPaper('a4')
-                    ->setOrientation('landscape')
-                    ->setOption('enable-javascript', true)
-                    ->setOption('images', true)
-                    ->setOption('javascript-delay', 3500)
-                    ->setOption('no-stop-slow-scripts', true)
-                    ->setOption('enable-smart-shrinking', true);
-        return $pdf->stream('pdf.example');
-        
-        /* Esto NO funciona 
-        return PDF::loadFile('http://syllabus.test/PDFshow')->inline('github.pdf');
-        */
-
-        /* Esto funciona bien 
-        return PDF::loadFile('http://www.github.com')->inline('github.pdf');
-        */
-
-/*
-        $view = View::make('pdf.example');
-        $html = $view->render();
-        return \PDF::loadView($html, 'A4', 'portrait')->show();
-
-        $pdf = App::make('snappy.pdf.wrapper');
-        $pdf->loadHTML($html);
-        return $pdf->inline();
-*/
-    }
-
-    public function showExample()
-    {
-        return view('pdf.example');
-    }
 
 
-    public function ViewSyllabus($semestre, $cod_curso, $pdf)
+    public function ViewSyllabus($semestre, $cod_curso, $view)
     {
         $data = $this->syllabus($semestre, $cod_curso);
-//return $data;
-        if($pdf == 'true'){
-            $snappy = \PDF::loadView('pdf.syllabus',$data)
-                        ->setPaper('a4')
-                        ->setOrientation('landscape')
-                        ->setOption('enable-javascript', true)
-                        ->setOption('images', true)
-                        ->setOption('javascript-delay', 3500)
-                        ->setOption('no-stop-slow-scripts', true)
-                        ->setOption('enable-smart-shrinking', true);
-            return $snappy->stream('pdf.syllabus');
-            /* 
-            $pdf->setOption('header-html', base_path('views/Modulos/Funcional/OrdemServico/Os/header.blade.php'));
-            $pdf->setOption('footer-html', base_path('views/Modulos/Funcional/OrdemServico/Os/footer.blade.php'));
-            */
-
-/*
-            $view = \View::make('pdf.syllabus', $data)->render();
-            $pdf = \App::make('dompdf.wrapper');
-            $pdf->loadHTML($view)->setPaper('a4', 'portrait');
-            return $pdf->stream('dompdf');
-*/
-        }else{
-            return view('pdf.syllabus')->with($data);
+        $headerHtml = url('/') . '/PDF/syllabus/header';
+        $footerHtml = url('/') . '/PDF/syllabus/footer';
+        $snappy = \PDF::loadView('pdf.syllabus',$data)
+                    ->setPaper('a4')
+                    ->setOrientation('Portrait')
+                    ->setOption('enable-javascript', true)
+                    ->setOption('images', true)
+                    ->setOption('javascript-delay', 3500)
+                    ->setOption('no-stop-slow-scripts', true)
+                    ->setOption('enable-smart-shrinking', true)
+                    ->setOption('header-html', $headerHtml)
+                    ->setOption('footer-html', $footerHtml)
+                    ->setOption('header-spacing', 5)
+                    ->setOption('footer-spacing', 5)
+                    ->setOption('margin-top', 30)
+                    ->setOption('margin-bottom', 30);
+        switch ($view) {
+            case 'screen':
+                return $snappy->stream('pdf.syllabus');
+                break;
+            case 'download':
+                $outputFile = $cod_curso . "_" . $semestre . ".pdf";
+                return $snappy->download($outputFile);
+                break;
+            case 'tests':
+                return view('pdf.syllabus')->with($data);
+                break;        
+            default:
+                # code...
+                break;
         }
-
     }
 
 
@@ -310,7 +250,13 @@ class PDFController extends Controller
             $lineas[$key]['html']=$registros[$key]['html'];
         };
 
-        $new_data = ['lineas'=>$lineas];
+        $wcurso = Curso::where('cod_curso', $cod_curso)->first()->wcurso;
+
+        $new_data = [
+            'cod_curso' => $cod_curso,
+            'wcurso' => $wcurso,
+            'lineas' => $lineas
+        ];
 
         return $new_data;
     }

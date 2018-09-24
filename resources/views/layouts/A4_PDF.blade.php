@@ -12,17 +12,9 @@
 	@yield('css')
 </head>
 <body class='body'>
-	<div id="app">
-		<div class='titulo'>@yield('title')</div>
-		<div class='contenido'>
-				@yield('content')
-		</div>
-		<!--footer class='footer'>
-			@yield('template.partials.footer_PDF')
-		</footer-->
+	<div class='contenido'>
+		@yield('content')
 	</div>
-	    <!-- Scripts -->
-	    <script src="{{ asset('js/app.js') }}"></script>
-
+	@yield('style')
 </body>
 </html>

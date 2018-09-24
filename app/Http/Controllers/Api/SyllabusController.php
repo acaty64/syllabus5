@@ -1098,7 +1098,7 @@ class SyllabusController extends Controller
                 [
                     'view' => true,
                     'col' => 5,
-                    'cols' => 1,
+                    'cols' => 2,
                     'offset' => 1,
                     'align' => 'left',
                     'texto' => $collection[$key]['semana'],
