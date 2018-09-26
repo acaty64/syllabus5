@@ -1080,7 +1080,7 @@ class SyllabusController extends Controller
                 [
                     'view' => true,
                     'col' => 2,
-                    'cols' => 2,
+                    'cols' => 3,
                     'offset' => 2,
                     'align' => 'left',
                     'texto' => $collection[$key]['texto'],

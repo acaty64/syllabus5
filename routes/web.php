@@ -9,17 +9,17 @@ Route::get('/show/{semestre}/{cod_curso}', [
 	'uses'	=> 'SyllabusController@show'
 ]);
 
-Route::get('/PDF/{semestre}/{cod_curso}/{view}', [
+Route::get('/PDF/syllabus/{semestre}/{cod_curso}/{view}', [
 	'as'	=> 'PDF',
 	'uses'	=> 'PDFController@ViewSyllabus'
 ]);
 
-Route::get('/PDF/syllabus/header', function () {
-    return view('layouts.partials.header_PDF');
+Route::get('/header/PDF/syllabus/{semestre}', function ($semestre) {
+    return view('layouts.partials.header_PDF', ['semestre'=>$semestre]);
 });
 
-Route::get('/PDF/syllabus/footer', function () {
-    return view('layouts.partials.footer_PDF');
+Route::get('/footer/PDF/syllabus/{semestre}', function ($semestre) {
+    return view('layouts.partials.footer_PDF', ['semestre'=>$semestre]);
 });
 
 /*

@@ -9,12 +9,23 @@
 	<title>@yield('title','default')</title>
 	<!--link href="css/estilos_pdf.css" rel="stylesheet" type="text/css" -->
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-	@yield('css')
 </head>
 <body class='body'>
 	<div class='contenido'>
-		@yield('content')
+		@yield('content') 
 	</div>
 	@yield('style')
 </body>
 </html>
+		   <!--
+		   		<style>
+		.body {
+		   	background-image: url("images/watermark.gif");
+		   	background-position: center; /* Center the image */
+		   	height: 1500px; /* You must set a specified height */
+  			background-position: center; /* Center the image */
+		   	background-size: auto;
+		}
+	</style>
+background="{{ asset('images/watermark.gif') }}" 
+		   	background-repeat: no-repeat;-->

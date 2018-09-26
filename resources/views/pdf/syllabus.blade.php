@@ -41,10 +41,17 @@
         .col-2.titulo3, .col-3.titulo3,  .col-4.titulo3,  .col-6.titulo3, 
         .col-2.contenidos, .col-3.contenidos, .col-4.contenidos,  .col-6.contenidos,
         .col-3.generales,
-        .col-3.evaluaciones, .col-4.evaluaciones, .col-5.evaluaciones,
         .col-2.bibliografias, .col-3.bibliografias 
         {
             margin-left: 0px;
+        }
+
+        .sumillas,
+        .competencias,
+        .contenidos,
+        .estrategias
+        {
+            text-align: justify;
         }
 
         .examenes {

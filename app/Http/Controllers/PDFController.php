@@ -13,13 +13,11 @@ use PDF;
 
 class PDFController extends Controller
 {
-
-
-    public function ViewSyllabus($semestre, $cod_curso, $view)
+    public function ViewSyllabus($semestre, $cod_curso, $output)
     {
         $data = $this->syllabus($semestre, $cod_curso);
-        $headerHtml = url('/') . '/PDF/syllabus/header';
-        $footerHtml = url('/') . '/PDF/syllabus/footer';
+        $headerHtml = url('/') . '/header/PDF/syllabus/' . $semestre;
+        $footerHtml = url('/') . '/footer/PDF/syllabus/' . $semestre;
         $snappy = \PDF::loadView('pdf.syllabus',$data)
                     ->setPaper('a4')
                     ->setOrientation('Portrait')
@@ -32,9 +30,9 @@ class PDFController extends Controller
                     ->setOption('footer-html', $footerHtml)
                     ->setOption('header-spacing', 5)
                     ->setOption('footer-spacing', 5)
-                    ->setOption('margin-top', 30)
+                    ->setOption('margin-top', 40)
                     ->setOption('margin-bottom', 30);
-        switch ($view) {
+        switch ($output) {
             case 'screen':
                 return $snappy->stream('pdf.syllabus');
                 break;
@@ -46,6 +44,7 @@ class PDFController extends Controller
                 return view('pdf.syllabus')->with($data);
                 break;        
             default:
+                dd('Error PDF');
                 # code...
                 break;
         }
