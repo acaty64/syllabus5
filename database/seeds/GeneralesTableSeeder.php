@@ -37,7 +37,7 @@ class GeneralesTableSeeder extends Seeder
             'semestre' => '20181', 
             'texto' => 'Horas: ',
             'modelo' => 'curso',
-            'campo' => 'horas',
+            'campo' => 'texto_horas',
             'orden' => 4,
         ]);
         General::create([
@@ -51,7 +51,7 @@ class GeneralesTableSeeder extends Seeder
 			'semestre' => '20181', 
             'texto' => 'Ciclo: ',
 			'modelo' => 'curso',
-			'campo' => 'ciclo',
+			'campo' => 'ciclo_romano',
 			'orden' => 6,
 		]);
     }

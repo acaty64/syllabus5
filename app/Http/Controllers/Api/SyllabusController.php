@@ -726,6 +726,7 @@ class SyllabusController extends Controller
             $new_data['editing'] = false;
             $new_data['tipo'] = $data;
             $new_data['subtipo'] = $data;
+//if($campo == 'texto_semestre'){ dd($$modelo); };
             $new_data['data'] = [
                     [
                         'view' => true,
@@ -744,6 +745,9 @@ class SyllabusController extends Controller
                         'texto' => $$modelo[$campo]
                     ],
                 ];
+
+
+
             array_push($datos0, $new_data);
         }
         return $datos0;          
