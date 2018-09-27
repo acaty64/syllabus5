@@ -206,6 +206,7 @@ class A04_AddTest extends DuskTestCase
             $browser->visit('/show/20181/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Evaluaciones', 10)
                     ->press('Evaluaciones')
                     ->assertSee('EVALUACIONES')
                     ->click('.btnEditarnew');

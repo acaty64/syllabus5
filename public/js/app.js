@@ -48262,7 +48262,7 @@ var render = function() {
                             class: _vm.rowClass(item, _vm.newItem),
                             attrs: {
                               name: "newText",
-                              rows: "6",
+                              rows: "10",
                               wrap: "hard",
                               align: _vm.align(item)
                             },
@@ -50434,6 +50434,31 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
+        /*
+                RecallEvaluaciones: (context) =>{            
+                    var request = {
+                        'data': {
+                            'tipo': 'RecallEvaluaciones',
+                        },
+                        'semestre': context.state.semestre,
+                        'cod_curso': context.state.cod_curso,
+                        'new': false
+                    };
+                    var URLdomain = window.location.host;
+                    var protocol = window.location.protocol;
+                    var url = protocol+'//'+URLdomain+'/api/saveData/';
+                    axios.post(url, request).then(response=>{
+                        var evaluaciones = response.data.data;
+        console.log('RecallEvaluaciones data:', evaluaciones);
+                        context.commit('eliminar', 'evaluaciones');
+                        context.commit('eliminar', 'examenes');
+                        context.commit('agregar', evaluaciones);
+                        context.commit('sortLineasRow');
+                    }).catch(function (error) {
+                        console.log('error RecallEvaluaciones: ', error);
+                    });
+                },
+        */
         RecallCompetencias: function RecallCompetencias(context) {
             var request = {
                 'data': {
@@ -50481,6 +50506,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 };
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');
+                };
+                if (context.state.status == 'evaluaciones') {
+                    var linea_examenes = context.state.lineas.filter(function (elinea) {
+                        console.log('BorrarContenido linea.id: ', linea.id);
+                        return elinea.tipo == 'examenes' && elinea.subtipo == 'examenes' && elinea.id == linea.id;
+                    });
+                    console.log('BorrarContenido: ', linea_examenes);
+                    context.commit('eliminarLinea', linea_examenes[0]);
                 }
             }).catch(function (error) {
                 console.log('error BorrarContenido: ', error);
@@ -50536,6 +50569,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');
                 }
+                if (context.state.status == 'evaluaciones') {
+                    context.dispatch('RecallEvaluaciones');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
@@ -50560,6 +50596,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 }
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');
+                }
+                if (context.state.status == 'evaluaciones') {
+                    context.dispatch('RecallEvaluaciones');
                 }
                 context.commit('setDefault');
             }).catch(function (error) {

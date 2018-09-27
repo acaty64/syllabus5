@@ -21,7 +21,7 @@
                     <div class="row">
                         <span v-if="switchEdit && active_line == 'new'">
                             <span v-for="item in newItem.data">
-                                <textarea name="newText" rows="6" wrap="hard" :class="rowClass(item, newItem)" :align="align(item)" v-model="item.texto">"{{item.texto}}"</textarea>
+                                <textarea name="newText" rows="10" wrap="hard" :class="rowClass(item, newItem)" :align="align(item)" v-model="item.texto">"{{item.texto}}"</textarea>
                             </span>                            
                         </span>
                     </div>

@@ -34,3 +34,8 @@ Route::post('/deleteData', [
 	'as'	=> 'deleteData',
 	'uses'	=> 'Api\SyllabusController@deleteData'
 ]);
+
+Route::post('/upload/evaluaciones', [
+	'as'	=> 'upload',
+	'uses'	=> 'Api\SyllabusController@upload_evaluaciones'
+]);

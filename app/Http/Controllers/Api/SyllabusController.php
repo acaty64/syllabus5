@@ -399,6 +399,14 @@ class SyllabusController extends Controller
                 $proceso = 'recallCompetencias';
                 $success = true;
                 break;
+/*
+            case 'recallEvaluaciones' :
+                $id = 0;
+                $dataNew = $this->upload_evaluaciones($request);
+                $proceso = 'recallEvaluaciones';
+                $success = true;
+                break;
+*/
         };
         return [
                 'success'=>$success,
@@ -480,7 +488,7 @@ class SyllabusController extends Controller
             $datos = $this->insertData($datos, $new_data);
         }
 
-        $new_data = $this->upload_evaluaciones($datos, $request);
+        $new_data = $this->upload_evaluaciones($request);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -1017,7 +1025,7 @@ class SyllabusController extends Controller
         return $datos0;
     }
     
-    protected function upload_evaluaciones($datos, $request)
+    protected function upload_evaluaciones($request)
     {
         $datos0 = [];
 
@@ -1027,12 +1035,11 @@ class SyllabusController extends Controller
                     ->toArray();
 
         /* examenes */
-        $collection = collect($datos)
-                    ->where('tipo', 'titulo1')
-                    ->where('subtipo', 'contenidos');
-        $row_titulo = $collection->first()['row'];        
+        $collect_items = collect($this->upload_titulo1($request))
+                        ->where('subtipo', 'contenidos')->first();
+        $row_titulo = $collect_items['row'];
 
-        $collection = collect($evaluaciones)->where('tipo','1');
+        $collection = collect($evaluaciones)->where('semana','>','0');
 
         foreach ($collection as $key => $value) {
             $new_data = [];
@@ -1055,12 +1062,10 @@ class SyllabusController extends Controller
             ];
             array_push($datos0, $new_data); 
         }           
-
         /* Evaluaciones */
-        $collection = collect($datos)
-                    ->where('tipo', 'titulo1')
-                    ->where('subtipo', 'evaluaciones');
-        $row_titulo = $collection->first()['row'];        
+        $collect_items = collect($this->upload_titulo1($request))
+                        ->where('subtipo', 'evaluaciones')->first();
+        $row_titulo = $collect_items['row'];
 
         $collection = collect($evaluaciones);
 

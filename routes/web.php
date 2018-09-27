@@ -22,6 +22,7 @@ Route::get('/footer/PDF/syllabus/{semestre}', function ($semestre) {
     return view('layouts.partials.footer_PDF', ['semestre'=>$semestre]);
 });
 
+
 /*
 
 Route::get('/PDFdompdf', [

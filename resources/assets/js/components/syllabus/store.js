@@ -499,6 +499,31 @@ console.log('despues de agregar: ', state.lineas);
     },
 
     actions: {
+/*
+        RecallEvaluaciones: (context) =>{            
+            var request = {
+                'data': {
+                    'tipo': 'RecallEvaluaciones',
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/saveData/';
+            axios.post(url, request).then(response=>{
+                var evaluaciones = response.data.data;
+console.log('RecallEvaluaciones data:', evaluaciones);
+                context.commit('eliminar', 'evaluaciones');
+                context.commit('eliminar', 'examenes');
+                context.commit('agregar', evaluaciones);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallEvaluaciones: ', error);
+            });
+        },
+*/
         RecallCompetencias: (context) =>{            
             var request = {
                 'data': {
@@ -533,7 +558,7 @@ console.log('RecallCompetencias data:', competencias);
                     'semestre': context.state.semestre,
                     'cod_curso': context.state.cod_curso,
                 },
-            };
+            }; 
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/deleteData/';
@@ -546,7 +571,16 @@ console.log('RecallCompetencias data:', competencias);
                 };
                 if(context.state.status == 'bibliografias'){
                     context.dispatch('OrdenarPorAutor');
-                }                
+                };
+                if(context.state.status == 'evaluaciones'){
+                    var linea_examenes = context.state.lineas.
+                        filter(function(elinea) {
+                            return elinea.tipo == 'examenes' 
+                                    && elinea.subtipo == 'examenes'
+                                    && elinea.id == linea.id 
+                        });
+                    context.commit('eliminarLinea', linea_examenes[0]);
+                };               
             }).catch(function (error) {
                 console.log('error BorrarContenido: ', error);
             });
@@ -601,6 +635,9 @@ console.log('RecallCompetencias data:', competencias);
                 if(context.state.status == 'bibliografias'){
                     context.dispatch('OrdenarPorAutor');
                 }
+                if(context.state.status == 'evaluaciones'){
+                    context.dispatch('RecallEvaluaciones');
+                }
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
@@ -625,6 +662,9 @@ console.log('RecallCompetencias data:', competencias);
                 }
                 if(context.state.status == 'bibliografias'){
                     context.dispatch('OrdenarPorAutor');
+                }
+                if(context.state.status == 'evaluaciones'){
+                    context.dispatch('RecallEvaluaciones');
                 }
                 context.commit('setDefault');
             }).catch(function (error) {
