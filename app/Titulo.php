@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Titulo extends Model
 {
 	protected $fillable = [
-	    'semestre', 'tipo', 'subtipo', 'texto', 'orden',
+	    'plan', 'tipo', 'subtipo', 'texto', 'orden',
     ];
 }

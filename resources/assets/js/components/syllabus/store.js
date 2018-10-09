@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state:{
+//        especialidad: "",
         semestre: "",
         cod_curso: "",
         lineas: [],
@@ -190,7 +191,11 @@ console.log('despues de agregar: ', state.lineas);
         setNuevo(state, [type, value]){
             state.nuevo[type] = value;
         },
-
+/*
+        setEspecialidad(state, especialidad){
+            state.especialidad = especialidad;
+        },
+*/
         setSemestre(state, semestre){
             state.semestre = semestre;
         },

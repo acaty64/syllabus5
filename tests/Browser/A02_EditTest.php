@@ -33,7 +33,7 @@ class A02_EditTest extends DuskTestCase
         
         // SUMILLAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitFor('.sumillas', 20)
@@ -57,11 +57,13 @@ class A02_EditTest extends DuskTestCase
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            /*
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitFor('.unidades', 20)
-                    ->press('Unidades')
+            */
+            $browser->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
                     ->click('.btnEdit2')
@@ -82,7 +84,7 @@ class A02_EditTest extends DuskTestCase
 /************** COMPETENCIAS ESPECIFICAS SE EXTRAE DESDE UNIDADES
         // COMPETENCIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Competencias', 10)
@@ -114,7 +116,7 @@ class A02_EditTest extends DuskTestCase
 
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitFor('.contenidos', 20)
@@ -137,7 +139,7 @@ class A02_EditTest extends DuskTestCase
 
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Estrategias', 10)
@@ -163,7 +165,7 @@ class A02_EditTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Evaluaciones', 10)
@@ -187,7 +189,7 @@ class A02_EditTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Bibliografias', 10)

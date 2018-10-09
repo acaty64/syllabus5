@@ -1,88 +1,165 @@
 <?php
-
 use App\Competencia;
 use Illuminate\Database\Seeder;
-
 class CompetenciasTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '1',
-			'texto' => 'Comprende el papel de la información contable en los Negocios. Relación entre la contabilidad y la Administración y la toma de decisiones.',
-			'orden' => 1,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000001',
+	            'texto' => 'Capacidad de abstracción, análisis y síntesis.',
+	            'orden' => 1
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '1',
-			'texto' => 'Conoce y ejecuta los Estados Financieros de una empresa comercial, industrial y de servicios.',
-			'orden' => 2,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000002',
+	            'texto' => 'Capacidad de aplicar los conocimientos en la práctica.',
+	            'orden' => 2
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '1',
-			'texto' => 'Toma de decisiones, en base a un análisis financiero, dentro de las funciones de operación, inversión y financiamiento y análisis de los costos.',
-			'orden' => 3,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000003',
+	            'texto' => 'Capacidad para organizar y planificar el tiempo.',
+	            'orden' => 3
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '1',
-			'texto' => 'Planifica la gestión de la empresa a futuro.',
-			'orden' => 4,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000004',
+	            'texto' => 'Conocimientos sobre el área de estudio y la profesión.',
+	            'orden' => 4
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '1',
-			'texto' => 'Capacidad de trabajo en equipo.',
-			'orden' => 5,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000005',
+	            'texto' => 'Responsabilidad social y compromiso ciudadano.',
+	            'orden' => 5
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '2',
-			'texto' => 'Conoce, Analiza y describe las diferentes empresas que se desarrollan en nuestro país y la importancia que tiene en ellas la contabilidad gerencia, desde la óptica de los estados financieros: Estado de Situación Financiera y Estado de Resultados.',
-			'orden' => 1,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000006',
+	            'texto' => 'Capacidad de comunicación oral y escrita.',
+	            'orden' => 6
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '2',
-			'texto' => 'Analiza y diagnostica los Estados financieros básicos de diferentes empresas, mediante el análisis vertical y horizontal así como los ratios financieros.',
-			'orden' => 2,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000007',
+	            'texto' => 'Capacidad de comprensión de un segundo idioma.',
+	            'orden' => 7
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '2',
-			'texto' => 'Desarrolla un plan financiero para una empresa: Presupuesto de ventas, Presupuesto de cobranzas, presupuesto de producción, presupuesto de compras, presupuesto de pagos, presupuesto de pagos, presupuesto de gastos, entre otros.',
-			'orden' => 3,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000008',
+	            'texto' => 'Capacidad de investigación.',
+	            'orden' => 8
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '2',
-			'texto' => 'Estudia la importancia de la estructura de costos de una empresa y su implicancia en la planificación financiera.',
-			'orden' => 4,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000009',
+	            'texto' => 'Capacidad de aprender y actualizarse permanentemente.',
+	            'orden' => 9
 		]);
-    	Competencia::create([
-			'semestre' => '20181',
-			'cod_curso' => '100048', 
-			'item' => '2',
-			'texto' => 'Elabora estados financieros proyectados, para diagnosticar el futuro de la empresa.',
-			'orden' => 5,
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000010',
+	            'texto' => 'Habilidades para buscar, procesar y analizar información procedente de fuentes diversas.',
+	            'orden' => 10
 		]);
-
-
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000011',
+	            'texto' => 'Capacidad crítica y autocrítica.',
+	            'orden' => 11
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000012',
+	            'texto' => 'Capacidad para actuar en nuevas situaciones.',
+	            'orden' => 12
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000013',
+	            'texto' => 'Capacidad creativa.',
+	            'orden' => 13
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000014',
+	            'texto' => 'Capacidad para identificar, plantear y resolver problemas.',
+	            'orden' => 14
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000015',
+	            'texto' => 'Capacidad para tomar decisiones.',
+	            'orden' => 15
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000016',
+	            'texto' => 'Capacidad de trabajo en equipo.',
+	            'orden' => 16
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000017',
+	            'texto' => 'Habilidades interpersonales.',
+	            'orden' => 17
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000018',
+	            'texto' => 'Capacidad de motivar y conducir hacia metas comunes.',
+	            'orden' => 18
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000019',
+	            'texto' => 'Compromiso con la preservación del medio ambiente.',
+	            'orden' => 19
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000020',
+	            'texto' => 'Compromiso con su medio socio-cultural.',
+	            'orden' => 20
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000021',
+	            'texto' => 'Valoración y respeto por la diversidad y multiculturalidad.',
+	            'orden' => 21
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000022',
+	            'texto' => 'Habilidad para trabajar en contextos internacionales.',
+	            'orden' => 22
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000023',
+	            'texto' => 'Habilidad para trabajar en forma autónoma.',
+	            'orden' => 23
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000024',
+	            'texto' => 'Capacidad para formular y gestionar proyectos.',
+	            'orden' => 24
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000025',
+	            'texto' => 'Compromiso ético.',
+	            'orden' => 25
+		]);
+        Competencia::create([
+	            'plan' => '8',
+	            'cod_comp' => '000026',
+	            'texto' => 'Compromiso con la calidad.',
+	            'orden' => 26
+		]);
     }
 }

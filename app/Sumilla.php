@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Sumilla extends Model
 {
     protected $fillable = [
-        'semestre', 'cod_curso', 'texto', 'orden',
+        'plan', 'cod_curso', 'texto', 'orden',
     ];
 }

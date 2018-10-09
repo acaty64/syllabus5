@@ -49,10 +49,12 @@ class SyllabusController extends Controller
     public function show($semestre, $cod_curso)
     {
         $datos = [
+//            'especialidad' => $especialidad,
             'semestre' => $semestre,
-            'cod_curso' => $cod_curso
+            'cod_curso' => $cod_curso,
         ];
         return view('app.show')
+//                ->with('especialidad', $especialidad)
                 ->with('semestre', $semestre)
                 ->with('cod_curso', $cod_curso);
     }

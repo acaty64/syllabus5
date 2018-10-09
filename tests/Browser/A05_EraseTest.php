@@ -37,7 +37,7 @@ class A05_EraseTest extends DuskTestCase
             $selector = '.col-1.sumillas';
             $texto = 'El curso tiene como ';
             $mess = 'Sumilla eliminada.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 10)
@@ -52,7 +52,7 @@ class A05_EraseTest extends DuskTestCase
                     ->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('sumillas', [
-                        'semestre' => '20181',
+                        'plan' => '8',
                         'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
@@ -64,7 +64,7 @@ class A05_EraseTest extends DuskTestCase
             $selector = '.id1.col-1.contenidos';
             $texto = 'Reconoce el recorrido de las operaciones';
             $mess = 'Contenido eliminado.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Contenidos', 10)
@@ -81,7 +81,7 @@ class A05_EraseTest extends DuskTestCase
             $browser->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('contenidos', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'procedimiento' => $texto
                     ]);
@@ -94,7 +94,7 @@ class A05_EraseTest extends DuskTestCase
             $selector = '.id1.col-1.unidades';
             $texto = 'ANALISIS E INTERPRETACION DE LOS ESTADOS FINANCIEROS.';
             $mess = 'Unidad eliminada.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Unidades', 10)
@@ -113,7 +113,7 @@ class A05_EraseTest extends DuskTestCase
             $browser->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('unidades', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
@@ -133,7 +133,7 @@ class A05_EraseTest extends DuskTestCase
             $selector = '.col-1.estrategias';
             $texto = 'El curso tiene como ';
             $mess = 'Estrategias eliminadas.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Estrategias', 10)
@@ -151,7 +151,7 @@ class A05_EraseTest extends DuskTestCase
                     ->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('estrategias', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
@@ -164,7 +164,7 @@ class A05_EraseTest extends DuskTestCase
             $selector = '.col-1.evaluacion';
             $texto = 'Primer Examen Parcial';
             $mess = 'Evaluacion eliminada.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Evaluaciones', 10)
@@ -182,7 +182,7 @@ class A05_EraseTest extends DuskTestCase
                     ->assertDontSee($texto);
 
                 $this->assertDatabaseMissing('estrategias', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
@@ -194,7 +194,7 @@ class A05_EraseTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $selector = '.col-1.bibliografias';
             $mess = 'Bibliografía eliminada.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Bibliografias', 10)
@@ -212,7 +212,7 @@ class A05_EraseTest extends DuskTestCase
                     ->assertDontSee('Flores Soria, Jaime');
 
                 $this->assertDatabaseMissing('bibliografias', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'autor' => 'Flores Soria, Jaime'
                     ]);

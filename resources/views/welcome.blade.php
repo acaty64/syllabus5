@@ -96,10 +96,10 @@
                 </div>
 
                 <div class="links">
-                    <a href="/show/20181/100048">Visualizar</a><br>
-                    <a href="/PDF/syllabus/20181/100048/screen">PDF En pantalla</a><br> 
-                    <a href="/PDF/syllabus/20181/100048/download">PDF Descarga</a><br>
-                    <a href="/PDF/syllabus/20181/100048/tests">PDF Test</a><br>
+                    <a href="/show/20191/170010">Visualizar</a><br>
+                    <a href="/PDF/syllabus/20191/100048/screen">PDF En pantalla</a><br> 
+                    <a href="/PDF/syllabus/20191/100048/download">PDF Descarga</a><br>
+                    <a href="/PDF/syllabus/20191/100048/tests">PDF Test</a><br>
                     <!--a href="http://syllabus.test/PDFdompdf">PDF dompdf</a><br>
                     <a href="http://syllabus.test/PDFshowSimple">Show simple page</a><br>
                     <a href="http://syllabus.test/PDFSimple">PDF simple page</a><br>

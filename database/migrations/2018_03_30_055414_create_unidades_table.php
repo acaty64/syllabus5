@@ -18,7 +18,7 @@ class CreateUnidadesTable extends Migration
             $table->char('semestre',6);
             $table->char('cod_curso',6);
             $table->integer('semana');
-            $table->char('texto', 100);
+            $table->mediumText('texto', 100);
             $table->mediumText('logro');
             $table->integer('orden')->nullable();
             $table->timestamps();

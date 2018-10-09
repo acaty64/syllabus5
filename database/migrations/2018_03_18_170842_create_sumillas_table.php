@@ -15,10 +15,10 @@ class CreateSumillasTable extends Migration
     {
         Schema::create('sumillas', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('semestre',6);
+            $table->char('plan',1);
             $table->char('cod_curso',6);
             $table->mediumText('texto');
-            $table->integer('orden');
+//            $table->integer('orden');
             $table->timestamps();
         });
     }

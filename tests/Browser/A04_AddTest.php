@@ -33,17 +33,19 @@ class A04_AddTest extends DuskTestCase
         $this->artisan('cache:clear');
 
         $id = 1;
-        $sumilla = Sumilla::findOrFail($id);
-        $sumilla->delete();
+        $sumillas = Sumilla::where('cod_curso','100048')->get();
+        foreach ($sumillas as $sumilla) {
+            $sumilla->delete();
+        }
         // SUMILLAS
         $this->browse(function (Browser $browser) {
             $selector = '.col-1.sumillas';
             $texto = 'El curso tiene como proposito ...';
             $mess = 'Sumilla grabada.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
-                    ->waitForText('Sumillas', 10)
+                    ->waitForText('Sumillas', 20)
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
                     ->waitFor('.btnEditarnew')
@@ -58,7 +60,7 @@ class A04_AddTest extends DuskTestCase
                     ->waitForText($texto);
 
                 $this->assertDatabaseHas('sumillas', [
-                        'semestre' => '20181',
+                        'plan' => '8',
                         'cod_curso' => '100048',
                         'texto' => $texto
                     ]);
@@ -69,7 +71,7 @@ class A04_AddTest extends DuskTestCase
 /*
         // COMPETENCIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Competencias')
@@ -93,7 +95,7 @@ class A04_AddTest extends DuskTestCase
 */
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Unidades', 10)
@@ -117,7 +119,7 @@ class A04_AddTest extends DuskTestCase
                     ->waitForText('Nuevo texto LOGRO.');
 
                 $this->assertDatabaseHas('unidades', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => 'NUEVO TEXTO UNIDAD.',
                         'logro' => 'Nuevo texto LOGRO.'
@@ -129,7 +131,7 @@ class A04_AddTest extends DuskTestCase
 
         $this->artisan('cache:clear');
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Contenidos')
@@ -156,7 +158,7 @@ class A04_AddTest extends DuskTestCase
 
 
             $this->assertDatabaseHas('contenidos', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'concepto' => 'Nuevo Concepto',
                         'procedimiento' => 'Nuevo Procedimiento',
@@ -170,7 +172,7 @@ class A04_AddTest extends DuskTestCase
         $estrategia->delete();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Estrategias', 20)
@@ -194,7 +196,7 @@ class A04_AddTest extends DuskTestCase
 
 
             $this->assertDatabaseHas('estrategias', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => 'Nueva estrategia',
                     ]);        
@@ -203,7 +205,7 @@ class A04_AddTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Evaluaciones', 10)
@@ -223,7 +225,7 @@ class A04_AddTest extends DuskTestCase
 
 
             $this->assertDatabaseHas('evaluaciones', [
-                        'semestre' => '20181',
+                        'semestre' => '20191',
                         'cod_curso' => '100048',
                         'texto' => 'Nueva evaluacion',
                         'porcentaje' => '10',
@@ -234,7 +236,7 @@ class A04_AddTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Bibliografias')
@@ -259,7 +261,7 @@ class A04_AddTest extends DuskTestCase
 
             $this->assertDatabaseHas('bibliografias', [
                         "cod_curso"=> "100048",
-                        "semestre"=>"20181",
+                        "semestre"=>"20191",
                         "autor" => "Nuevo autor",
                         "titulo" => "Nuevo titulo",
                         "editorial" => "Nuevo editorial",

@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
-	protected $appends = ['texto_horas', 'ciclo_romano'];
+	protected $appends = [ 'texto_horas', 
+                           'ciclo_romano',
+                        ];
 
     protected function getTextoHorasAttribute()
     {
@@ -28,7 +30,6 @@ class Curso extends Model
     		'9' => 'IX',
     		'10' => 'X'
     	];
-
     	return $num[$this->ciclo];
     }
 

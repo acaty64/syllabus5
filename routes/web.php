@@ -1,8 +1,27 @@
 <?php 
 
+use App\Curso;
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
+
+Route::get('/malla/{siglas}', [
+	'as'	=> 'malla',
+	'uses'	=> 'MallaController@index'
+]);
+
+Route::get('/grupos', [
+	'as'	=> 'grupos',
+	'uses'	=> 'GrupoController@index'
+]);
+
+Route::get('/cursogrupo/{cod_grupo}', [
+	'as'	=> 'cursogrupo.index',
+	'uses'	=> 'CursoGrupoController@index'
+]);
+
 
 Route::get('/show/{semestre}/{cod_curso}', [
 	'as'	=> 'show',

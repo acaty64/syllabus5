@@ -13,7 +13,7 @@ class TitulosTableSeeder extends Seeder
     public function run()
     {
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'generales', 
 			'texto' => 'DATOS GENERALES',
@@ -21,7 +21,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'sumillas', 
 			'texto' => 'SUMILLA',
@@ -29,7 +29,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'competencias', 
 			'texto' => 'SISTEMA DE COMPETENCIAS',
@@ -37,7 +37,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
 			'item' => '1',
@@ -46,7 +46,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '2',
 			'subtipo' => 'competencias', 
 			'item' => '2',
@@ -55,7 +55,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'contenidos', 
 			'texto' => 'PROGRAMACIÓN DE CONTENIDOS',
@@ -63,7 +63,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'SEMANA',
@@ -73,7 +73,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'CONCEPTUAL' ,
@@ -83,7 +83,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'PROCEDIMENTAL',
@@ -93,7 +93,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '3',
 			'subtipo' => 'contenidos', 
 			'texto' => 'ACTIVIDAD DE APRENDIZAJE',
@@ -103,7 +103,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'estrategias', 
 			'texto' => 'ESTRATEGIAS METODOLÓGICAS',
@@ -111,7 +111,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'evaluaciones', 
 			'texto' => 'EVALUACIONES',
@@ -119,7 +119,7 @@ class TitulosTableSeeder extends Seeder
 		]);
 
     	Titulo::create([
-			'semestre' => '20181', 
+			'plan' => '8', 
 			'tipo' => '1',
 			'subtipo' => 'bibliografias', 
 			'texto' => 'BIBLIOGRAFÍA',

@@ -45194,6 +45194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['semestre', 'cod_curso'],
+    //        props:['especialidad', 'semestre', 'cod_curso'],
     mounted: function mounted() {
         console.log('SyllabusComponent.vue mounted.');
         this.setData();
@@ -45209,6 +45210,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('view', tipo);
         },
         setData: function setData() {
+            //console.log('setData: ', this.especialidad);
+            //                this.$store.commit('setEspecialidad', this.especialidad);
             this.$store.commit('setSemestre', this.semestre);
             this.$store.commit('setCod_curso', this.cod_curso);
         },
@@ -45217,6 +45220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var request = {
+                //                      'especialidad': this.especialidad,
                 'cod_curso': this.cod_curso,
                 'semestre': this.semestre
             };
@@ -45472,7 +45476,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         viewTexto: function viewTexto(item) {
-            var newText = item.texto.toString().replace(/\n/g, '<br>');
+            if (item.texto != null) {
+                var newText = item.texto.toString().replace(/\n/g, '<br>');
+            } else {
+                var newText = '';
+            }
             return newText;
         },
         viewUnidad: function viewUnidad(item) {
@@ -49941,6 +49949,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     state: {
+        //        especialidad: "",
         semestre: "",
         cod_curso: "",
         lineas: [],
@@ -50115,6 +50124,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
             state.nuevo[type] = value;
         },
+
+        /*
+                setEspecialidad(state, especialidad){
+                    state.especialidad = especialidad;
+                },
+        */
         setSemestre: function setSemestre(state, semestre) {
             state.semestre = semestre;
         },
@@ -50509,12 +50524,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 };
                 if (context.state.status == 'evaluaciones') {
                     var linea_examenes = context.state.lineas.filter(function (elinea) {
-                        console.log('BorrarContenido linea.id: ', linea.id);
                         return elinea.tipo == 'examenes' && elinea.subtipo == 'examenes' && elinea.id == linea.id;
                     });
-                    console.log('BorrarContenido: ', linea_examenes);
                     context.commit('eliminarLinea', linea_examenes[0]);
-                }
+                };
             }).catch(function (error) {
                 console.log('error BorrarContenido: ', error);
             });

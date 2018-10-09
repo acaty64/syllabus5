@@ -15,11 +15,12 @@ class CreateCompetenciasTable extends Migration
     {
         Schema::create('competencias', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('semestre',6);
-            $table->char('cod_curso',6);
-            $table->char('item',1);
+            $table->char('plan',1);
+            $table->char('cod_comp',6);
+//            $table->char('cod_curso',6);
+//            $table->char('item',1);
             $table->mediumText('texto');
-            $table->integer('orden');
+            $table->integer('orden')->nullable();
             $table->timestamps();
         });
     }

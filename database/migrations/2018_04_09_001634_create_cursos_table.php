@@ -15,6 +15,8 @@ class CreateCursosTable extends Migration
     {
         Schema::create('cursos', function (Blueprint $table) {
             $table->increments('id') ;
+//            $table->char('especialidad', 3) ;
+//            $table->char('plan', 1) ;
             $table->char('cod_curso', 6) ;
             $table->char('wcurso', 100) ;
             $table->integer('ht') ;
@@ -22,7 +24,7 @@ class CreateCursosTable extends Migration
             $table->integer('horas');
             $table->integer('creditos') ;
             $table->char('prereq', 6) ;
-            $table->char('wprereq', 100) ;
+            $table->mediumText('wprereq') ;
             $table->integer('ciclo') ;
             $table->timestamps() ;
         });

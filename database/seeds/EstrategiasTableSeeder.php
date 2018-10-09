@@ -13,7 +13,7 @@ class EstrategiasTableSeeder extends Seeder
     public function run()
     {
         Estrategia::create([
-			'semestre' => '20181', 
+			'semestre' => '20191', 
 			'cod_curso' => '100048', 
 			'texto' => 'Lecturas
 Los materiales asignados previamente deberán ser leídos para el desarrollo de cada sesión de los cuales se tomarán evaluaciones permanentes en cada sesión. Es importante leer los materiales asignados, de manera que se pueda complementar el tratamiento de los mismos en clase.

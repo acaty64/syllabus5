@@ -88,8 +88,12 @@
                 }
             },
 
-            viewTexto(item){                         
-                var newText = item.texto.toString().replace(/\n/g, '<br>');
+            viewTexto(item){
+                if(item.texto != null){
+                    var newText = item.texto.toString().replace(/\n/g, '<br>');
+                }else{
+                    var newText = '';
+                }
                 return newText;
             },
 

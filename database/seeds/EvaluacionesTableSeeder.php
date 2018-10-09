@@ -13,7 +13,7 @@ class EvaluacionesTableSeeder extends Seeder
     public function run()
     {
         Evaluacion::create([
-            'semestre' => '20181',
+            'semestre' => '20191',
             'cod_curso' => '100048',
             'semana' => 4,
 //            'tipo' => '1',
@@ -21,7 +21,7 @@ class EvaluacionesTableSeeder extends Seeder
             'porcentaje' => 10,
         ]);
         Evaluacion::create([
-            'semestre' => '20181',
+            'semestre' => '20191',
             'cod_curso' => '100048',
             'semana' => 8,
 //            'tipo' => '1',
@@ -29,7 +29,7 @@ class EvaluacionesTableSeeder extends Seeder
             'porcentaje' => 20,
         ]);
         Evaluacion::create([
-            'semestre' => '20181',
+            'semestre' => '20191',
             'cod_curso' => '100048',
             'semana' => 12,
 //            'tipo' => '1',
@@ -37,7 +37,7 @@ class EvaluacionesTableSeeder extends Seeder
             'porcentaje' => 20,
         ]);
         Evaluacion::create([
-            'semestre' => '20181',
+            'semestre' => '20191',
             'cod_curso' => '100048',
             'semana' => 17,
 //            'tipo' => '1',
@@ -45,7 +45,7 @@ class EvaluacionesTableSeeder extends Seeder
             'porcentaje' => 30,
         ]);
         Evaluacion::create([
-            'semestre' => '20181',
+            'semestre' => '20191',
             'cod_curso' => '100048',
             'semana' => 0,
 //            'tipo' => '2',

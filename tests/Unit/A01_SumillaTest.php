@@ -26,8 +26,8 @@ class A01_SumillaTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"cod_curso"=> "100048",  
-					"orden"=>1,  
-					"semestre"=>"20181", 
+//					"orden"=>1,  
+					"plan" => "8", 
 					"tipo"=>$tipo,
 					"data"=>[ $datos ]
 				];
@@ -52,8 +52,8 @@ class A01_SumillaTest extends TestCase
     	$data = [
     				"id"=>1, 
 					"cod_curso"=> "100048",  
-					"orden"=>1,  
-					"semestre"=>"20181", 
+//					"orden"=>1,  
+					"plan" => "8", 
 					"tipo"=>$tipo,
     				"texto"=>"Lorem Ipsum"
 				];
@@ -61,8 +61,8 @@ class A01_SumillaTest extends TestCase
 		$this->assertDatabaseHas($tipo, [ 
 					"id"=>1,
 					"cod_curso"=> "100048",  
-					"orden"=>1,  
-					"semestre"=>"20181",
+//					"orden"=>1,  
+					"plan" => "8",
     				"texto"=>"Lorem Ipsum"
 				]);
 
@@ -71,8 +71,8 @@ class A01_SumillaTest extends TestCase
 			"data"=> [
 				"id"=> "1",
 				"cod_curso"=> "100048",  
-				"orden"=>1,  
-				"semestre"=>"20181", 
+//				"orden"=>1,  
+				"plan" => "8", 
 				"tipo"=>"sumillas",
 				"data"=>[
 						["texto"=>"Nuevo texto"],
@@ -85,8 +85,8 @@ class A01_SumillaTest extends TestCase
         $this->post('api/saveData', $request);
 		$this->assertDatabaseHas('sumillas',[ 
 					"cod_curso"=> "100048",  
-					"orden"=>1,  
-					"semestre"=>"20181",
+//					"orden"=>1,  
+					"plan" => "8",
     				"texto"=>"Nuevo texto"
 				]);
     }
@@ -105,7 +105,7 @@ class A01_SumillaTest extends TestCase
 				"tipo"=>"sumillas",
 				"id"=> "1",
 				"cod_curso"=> "100048",
-				"semestre"=>"20181", 
+				"plan" => "8", 
 				],
 			];
 		$this->post('api/deleteData', $request);
@@ -113,7 +113,7 @@ class A01_SumillaTest extends TestCase
 		$this->assertDatabaseMissing('sumillas',[ 
 					"id"=>1,  
 					"cod_curso"=> "100048",  
-					"semestre"=>"20181",
+					"plan" => "8",
     				"texto"=>"Nuevo texto"
 				]);
 

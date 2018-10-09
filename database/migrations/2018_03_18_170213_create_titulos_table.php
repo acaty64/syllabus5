@@ -15,7 +15,7 @@ class CreateTitulosTable extends Migration
     {
         Schema::create('titulos', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('semestre',6);
+            $table->char('plan',8);
             $table->char('tipo',3);
             $table->char('subtipo',20);
             $table->char('item',1)->default('0');

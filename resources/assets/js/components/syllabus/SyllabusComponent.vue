@@ -73,6 +73,7 @@
 
     export default {
         props:['semestre', 'cod_curso'],
+//        props:['especialidad', 'semestre', 'cod_curso'],
         mounted() {
             console.log('SyllabusComponent.vue mounted.');
             this.setData();
@@ -87,11 +88,14 @@
                 this.$store.commit('view', tipo);
             },
             setData() {
+//console.log('setData: ', this.especialidad);
+//                this.$store.commit('setEspecialidad', this.especialidad);
                 this.$store.commit('setSemestre', this.semestre);
                 this.$store.commit('setCod_curso', this.cod_curso);
             },
             getData: function() {
                 var request = {
+//                      'especialidad': this.especialidad,
                       'cod_curso': this.cod_curso,
                       'semestre' : this.semestre
                   };

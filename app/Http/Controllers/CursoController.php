@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Curso;
+use App\Grupo;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
@@ -12,7 +12,7 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($grupo)
     {
         //
     }

@@ -6,6 +6,7 @@ use App\Bibliografia;
 use App\Competencia;
 use App\Contenido;
 use App\Curso;
+use App\CursoCompetencia;
 use App\Estrategia;
 use App\Evaluacion;
 use App\General;
@@ -26,14 +27,12 @@ class SyllabusController extends Controller
                 if($request->new){
                     try {
                         $sumilla = Sumilla::create([
-                            'semestre'=>$request->data["semestre"],
+                            'plan'=>env("PLAN"),
                             'cod_curso'=>$request->data["cod_curso"],
                             'texto'=>$request->data['data'][0]["texto"],
-                            'orden'=>$request->data["orden"],
+//                            'orden'=>$request->data["orden"],
                         ]);
-
                         $id = $sumilla->id;
-
                         $_request = $request;
                         $_request->semestre = $request->data['semestre'];
                         $_request->cod_curso = $request->data['cod_curso'];
@@ -423,12 +422,6 @@ class SyllabusController extends Controller
      */
     public function index(Request $request)
     {
-        $datos = [];
-        $semestre = $request->semestre;
-        $cod_curso = $request->cod_curso;
-        
-        $curso = Curso::all()->where('cod_curso', $request->cod_curso)->first();
-
         /*  Datos de acceso de prueba  */
         $acceso = [
                 'generales' => true,
@@ -442,6 +435,18 @@ class SyllabusController extends Controller
                 'evaluaciones' => true, [false, true, true],
                 'bibliografias' => true
             ];
+        /* Fin datos de acceso de prueba */
+
+
+        $plan = env('PLAN');
+        $datos = [];
+        //$especialidad = $request->especialidad;
+        $semestre = $request->semestre;
+        $cod_curso = $request->cod_curso;
+        
+        $curso = Curso::all()->where('cod_curso', $cod_curso)
+                ->first();
+        //        ->where('especialidad', $especialidad)
 
         $new_data = $this->upload_titulo0($request, $curso);
         if(!empty($new_data)){
@@ -469,6 +474,7 @@ class SyllabusController extends Controller
         }
 
         $new_data = $this->upload_unidades($datos, $request);
+//return $new_data;
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -515,11 +521,12 @@ class SyllabusController extends Controller
     {
         $id = $request->data['id'];
         $semestre = $request->data['semestre'];
+        $plan = env('PLAN');
         $cod_curso = $request->data['cod_curso'];
         switch ($request->data['tipo']) {
             case 'sumillas' :
                 $res = Sumilla::find($id);
-                if($res->semestre == $semestre && $res->cod_curso == $cod_curso){
+                if($res->plan == $plan && $res->cod_curso == $cod_curso){
                     $res->delete();
                     $success = true;
                 }else{
@@ -588,7 +595,7 @@ class SyllabusController extends Controller
     protected function titulos($request)
     {
         /* Selecciona los titulos del semestre*/
-        $titulos = Titulo::all()->where('semestre', $request->semestre)
+        $titulos = Titulo::all()->where('plan', env('PLAN'))
                 ->sortBy('orden')->toArray();
         foreach ($titulos as $key => $value) {
             $titulos[$key]['tipo'] = 'titulo' . $titulos[$key]['tipo'];
@@ -626,7 +633,7 @@ class SyllabusController extends Controller
     protected function upload_titulo1($request)
     {
         /* titulo1 */
-        $titulos = Titulo::all()->where('semestre', $request->semestre)
+        $titulos = Titulo::all()->where('plan', env('PLAN'))
                         ->where('tipo','1')
                         ->sortBy('orden'); 
         $collection = collect($titulos)->where('tipo', '1');
@@ -660,7 +667,7 @@ class SyllabusController extends Controller
     protected function upload_titulo2($request)
     {
         /* titulo2 */
-        $titulo1 = Titulo::all()->where('semestre', $request->semestre)
+        $titulo1 = Titulo::all()->where('plan', env('PLAN'))
                         ->where('tipo','1')
                         ->where('subtipo', 'competencias')
                         ->first();
@@ -668,11 +675,12 @@ class SyllabusController extends Controller
 //        $titulos = $this->titulos($request);
 //        $collection = collect($titulos)->where('tipo', 'titulo2');
         $collection = Titulo::all()
-                        ->where('semestre', $request->semestre)
+                        ->where('plan', env('PLAN'))
                         ->where('tipo','2')
                         ->where('subtipo', 'competencias')
                         ->sortBy('orden');
         $datos0 = [];
+
         foreach ($collection as $key => $value) {
             $new_data = [];
             $new_data['id'] = $collection[$key]['id'];
@@ -755,10 +763,11 @@ class SyllabusController extends Controller
 
     protected function upload_sumillas($datos, $request)
     {
-        $sumillas = Sumilla::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
+        $plan = env('PLAN');
+        $sumillas = Sumilla::all()->where('plan', $plan)
+                    ->where('cod_curso', $request->cod_curso)->first();
+//                    ->toArray();
+//dd($sumillas);
         /* Sumillas */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -769,10 +778,12 @@ class SyllabusController extends Controller
         $data1 = $$data;
         $datos0 = [];
         $new_data = [];
-
-        if(!empty($$data)){
-            $new_data['id'] = $data1[0]['id'];
-            $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+        if(!empty($$data) || !is_null($$data)){
+            $$data = $$data->toArray();
+//            $new_data['id'] = $data1[0]['id'];
+            $new_data['id'] = $data1['id'];
+//            $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
+            $new_data['row'] = 1 * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             //$new_data['week'] = '';
             $new_data['editing'] = true;
@@ -785,7 +796,8 @@ class SyllabusController extends Controller
                         'cols' => 7,
                         'offset' => 2,
                         'align' => 'justify',
-                        'texto' => $$data[0]['texto']
+                        //'texto' => $$data[0]['texto']
+                        'texto' => $$data['texto']
                     ],
             ];
             array_push($datos0, $new_data);
@@ -797,24 +809,33 @@ class SyllabusController extends Controller
     {
         $datos0 = [];
 
+        $competencias = CursoCompetencia::where('plan', env('PLAN'))
+                    ->where('cod_curso', $request->cod_curso)->get();
+
+/*
         $competencias = Competencia::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
-
+*/
         /* Competencias Generales*/
+
         $collect_items = collect($this->upload_titulo2($request))->first();
 
         $row_titulo = $collect_items['row'];
         $xitem = $collect_items['item'];
-        $collection = collect($competencias)->where('item', $xitem);
+        //$collection = collect($competencias)->where('item', $xitem);
+        $collection = $competencias;
         foreach ($collection as $key2 => $value2) {
             $new_data = [];
             $new_data['id'] = $collection[$key2]['id'];
-            $new_data['row'] = $collection[$key2]['orden'] * 100 + $row_titulo;
+//dd($collection[$key2]->orden);
+            //$new_data['row'] = $collection[$key2]['orden'] * 100 + $row_titulo;
+            $new_data['row'] = $collection[$key2]->orden * 10 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['tipo'] = 'competencias';
             $new_data['subtipo'] = 'competencias';
-            $new_data['item'] = $collection[$key2]['item'];
+            //$new_data['item'] = $collection[$key2]['item'];
+            $new_data['item'] = '1';
             $new_data['editing'] = false;
             $new_data['data'] = [
                     [
@@ -823,7 +844,7 @@ class SyllabusController extends Controller
                         'cols' => 7,
                         'offset' => 2,
                         'align' => 'justify',
-                        'texto' => $collection[$key2]['texto']
+                        'texto' => $collection[$key2]->wcomp
                     ]
                 ];
             array_push($datos0, $new_data); 
@@ -832,7 +853,8 @@ class SyllabusController extends Controller
         /* Competencias Especificas*/
         $collect_items = collect($this->upload_titulo2($request))->last();
         $row_titulo = $collect_items['row'];
-        $xitem = $collect_items['item'];
+        //$xitem = $collect_items['item'];
+        $xitem = '2';
         $logros = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
@@ -864,17 +886,17 @@ class SyllabusController extends Controller
     protected function upload_titulo3($request)
     {
         $datos0 = [];
-        $unidades = Unidad::all()->where('semestre', $request->semestre)
+        $unidades = Unidad::all()->where('plan', env('PLAN'))
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 
         $titulo3 = Titulo::all()
-                    ->where('semestre', $request->semestre)
+                    ->where('plan', env('PLAN'))
                     ->where('tipo', '3')
                     ->sortBy('orden');
 
         $titulo1 = Titulo::all()
-                    ->where('semestre', $request->semestre)
+                    ->where('plan', env('PLAN'))
                     ->where('tipo', '1')
                     ->where('subtipo', 'contenidos')
                     ->first();
@@ -911,12 +933,13 @@ class SyllabusController extends Controller
     {
         $datos0 = [];
 
-        $titulos = Titulo::all()->where('semestre', $request->semestre)
+        $titulos = Titulo::all()->where('plan', env('PLAN'))
                 ->sortBy('orden')->toArray();
 
         $unidades = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
+//return $unidades;
         /* unidades */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -962,8 +985,9 @@ class SyllabusController extends Controller
             ];
             array_push($datos0, $new_data);
         }
-        return $datos0;
 
+
+        return $datos0;
     }
 
     protected function upload_contenidos($datos, $request)

@@ -35,7 +35,7 @@ class A03_EditTest extends DuskTestCase
             $selector = '.id1.sumillas';
             $texto = 'El curso tiene como propósito';
             $error = 'Inserte el texto SUMILLA.';
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)
@@ -55,7 +55,7 @@ class A03_EditTest extends DuskTestCase
         // COMPETENCIAS
 /*
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Competencias')
@@ -80,7 +80,7 @@ class A03_EditTest extends DuskTestCase
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Unidades')
@@ -127,7 +127,7 @@ class A03_EditTest extends DuskTestCase
 
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Contenidos')
@@ -185,7 +185,7 @@ class A03_EditTest extends DuskTestCase
 
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Estrategias', 20)
@@ -212,7 +212,7 @@ class A03_EditTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Evaluaciones', 20)
@@ -258,7 +258,7 @@ class A03_EditTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20181/100048')
+            $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Bibliografias', 20)

@@ -14,7 +14,7 @@ class BibliografiasTableSeeder extends Seeder
     {
 
         Bibliografia::create([
-        	'semestre' => '20181',
+        	'semestre' => '20191',
             'cod_curso' => '100048',
 //            'tipo' => '1',
             'autor' => 'Flores Soria, Jaime',
@@ -26,7 +26,7 @@ class BibliografiasTableSeeder extends Seeder
 		]);
 
         Bibliografia::create([
-        	'semestre' => '20181',
+        	'semestre' => '20191',
             'cod_curso' => '100048',
 //            'tipo' => '1',
             'autor' => 'Pascual Chávez, Ackerman',
@@ -38,7 +38,7 @@ class BibliografiasTableSeeder extends Seeder
 		]);
 
         Bibliografia::create([
-        	'semestre' => '20181',
+        	'semestre' => '20191',
             'cod_curso' => '100048',
 //            'tipo' => '1',
             'autor' => 'Díaz Izquierdo, Pedro; Quiroz Pacheco, Juan',

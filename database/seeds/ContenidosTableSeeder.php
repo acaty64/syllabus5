@@ -13,7 +13,7 @@ class ContenidosTableSeeder extends Seeder
     public function run()
     {
         Contenido::create([
-            'semestre' => '20181', 
+            'semestre' => '20191', 
             'cod_curso' => '100048', 
             'semana' => 1,
             'concepto' => 'La contabilidad gerencial.\n‐ Qué es la contabilidad. El ciclo contable. Los Estados Financieros.\n‐Qué es la contabilidad gerencial. Objetivos e importancia de la contabilidad gerencial.\n‐Diferencias entre la contabilidad gerencial y la contabilidad financiera. Usuarios de la información. Tipo de información. Normas de regulación.',
@@ -21,7 +21,7 @@ class ContenidosTableSeeder extends Seeder
             'actividad' => 'Exposición dialogada\nTaller',
 		]);
 		Contenido::create([
-            'semestre' => '20181', 
+            'semestre' => '20191', 
             'cod_curso' => '100048', 
             'semana' => 2,
             'concepto' => 'La Contabilidad de Costos Empresariales.\n‐ Concepto. Importancia y su aplicación. Relación entre la contabilidad Gerencial y la Contabilidad de Costos.',
@@ -29,7 +29,7 @@ class ContenidosTableSeeder extends Seeder
             'actividad' => 'Dinámica grupal/debate en clase',
 		]);
 		Contenido::create([
-            'semestre' => '20181', 
+            'semestre' => '20191', 
             'cod_curso' => '100048', 
             'semana' => 3,
             'concepto' => 'Elementos de los Estados Financieros:\n‐ Balance General: Activo, pasivo y patrimonio.\n‐ Estado de Resultados: Ingresos y Gastos',
