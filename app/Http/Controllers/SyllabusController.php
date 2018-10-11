@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\General;
 use App\Titulo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SyllabusController extends Controller
 {
@@ -48,13 +49,15 @@ class SyllabusController extends Controller
 //    public function show($id)
     public function show($semestre, $cod_curso)
     {
+        /*
         $datos = [
-//            'especialidad' => $especialidad,
             'semestre' => $semestre,
             'cod_curso' => $cod_curso,
+            'user_id' => Auth::user()->id
         ];
+        */
         return view('app.show')
-//                ->with('especialidad', $especialidad)
+                ->with('user_id', Auth::user()->id)
                 ->with('semestre', $semestre)
                 ->with('cod_curso', $cod_curso);
     }

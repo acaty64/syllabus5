@@ -2,9 +2,10 @@
 
 namespace Tests\Browser;
 
-use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
+use App\Acceso;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
 
 class A01_ViewTest extends DuskTestCase
 {
@@ -17,8 +18,20 @@ class A01_ViewTest extends DuskTestCase
     public function testView()
     {
         $this->artisan('db:seed');
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
+
+//        Artisan::call('db:seed', ['--class' => 'AccesoTableSeeder', '--database' => 'mysql_tests']);
+
+        $user = $this->defaultUser();
+        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
+
+        $userAcceso = $this->defaultUserAcceso([
+                'user_id' => $user->id,
+                'acceso_id' => $acceso_id 
+            ]);
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user)
+                    ->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('I. DATOS GENERALES', 20)

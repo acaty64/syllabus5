@@ -45193,7 +45193,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['semestre', 'cod_curso'],
+    props: ['semestre', 'cod_curso', 'user_id'],
     //        props:['especialidad', 'semestre', 'cod_curso'],
     mounted: function mounted() {
         console.log('SyllabusComponent.vue mounted.');
@@ -45220,16 +45220,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var request = {
-                //                      'especialidad': this.especialidad,
                 'cod_curso': this.cod_curso,
-                'semestre': this.semestre
+                'semestre': this.semestre,
+                'user_id': this.user_id
             };
             //console.log('request: ',request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/index/';
             __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(url, request).then(function (response) {
-                //console.log('response: ',response.data.data);
+                //console.log('response.data: ',response.data);
                 //this.lineas = response.data.data;
                 _this.$store.commit('setLineas', response.data.data);
                 _this.$store.commit('sortLineasRow');

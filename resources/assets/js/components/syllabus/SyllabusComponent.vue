@@ -72,7 +72,7 @@
     import axios from 'axios'
 
     export default {
-        props:['semestre', 'cod_curso'],
+        props:['semestre', 'cod_curso', 'user_id'],
 //        props:['especialidad', 'semestre', 'cod_curso'],
         mounted() {
             console.log('SyllabusComponent.vue mounted.');
@@ -95,16 +95,16 @@
             },
             getData: function() {
                 var request = {
-//                      'especialidad': this.especialidad,
                       'cod_curso': this.cod_curso,
-                      'semestre' : this.semestre
+                      'semestre' : this.semestre,
+                      'user_id': this.user_id,
                   };
 //console.log('request: ',request);
                 var URLdomain = window.location.host;
                 var protocol = window.location.protocol;
                 var url = protocol+'//'+URLdomain+'/api/index/';
                 axios.post(url, request).then(response=>{
-//console.log('response: ',response.data.data);
+//console.log('response.data: ',response.data);
                     //this.lineas = response.data.data;
                     this.$store.commit('setLineas', response.data.data);
                     this.$store.commit('sortLineasRow');

@@ -30,5 +30,8 @@ class DatabaseSeeder extends Seeder
         $this->call(GruposTableSeeder::class);
         $this->call(CursoGrupoTableSeeder::class);
         $this->call(CursoCompetenciaTableSeeder::class);
+        $this->call(AccesoTableSeeder::class);
+//        $this->call(UserTableSeeder::class);
+//        $this->call(UserAccesoTableSeeder::class);
     }
 }

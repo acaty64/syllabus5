@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Sumilla;
 use App\Titulo;
 use App\Unidad;
+use App\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -427,16 +428,19 @@ class SyllabusController extends Controller
                 'generales' => true,
                 'sumillas' => true,
                 'competencias' => true,
-                    'competencias_generales'=> false,
-                    'competencias_especificas'=> false,
-                'unidades' => true, [true, true],
+                'unidades' => true,
                 'contenidos' => true,
                 'estrategias' => true,
-                'evaluaciones' => true, [false, true, true],
+                'evaluaciones' => true,
                 'bibliografias' => true
             ];
         /* Fin datos de acceso de prueba */
-
+        if(!$request->user_id){
+            $acceso = "";
+        }else{
+            $user = User::find($request->user_id);
+            $acceso = $user->acceso;
+        }
 
         $plan = env('PLAN');
         $datos = [];
@@ -886,7 +890,7 @@ class SyllabusController extends Controller
     protected function upload_titulo3($request)
     {
         $datos0 = [];
-        $unidades = Unidad::all()->where('plan', env('PLAN'))
+        $unidades = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
                     ->toArray();
 

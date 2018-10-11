@@ -1,17 +1,7 @@
 <?php 
 
 use App\Curso;
-use App\User;
 use Illuminate\Http\Request;
-
-Route::auth();
-
-/*
-Route::get('/', function () {
-	$user = User::find(1);
-	dd($user->acceso);
-});
-*/
 
 Route::get('/', function () {
 	return view('welcome');
@@ -31,6 +21,7 @@ Route::get('/cursogrupo/{cod_grupo}', [
 	'as'	=> 'cursogrupo.index',
 	'uses'	=> 'CursoGrupoController@index'
 ]);
+
 
 Route::get('/show/{semestre}/{cod_curso}', [
 	'as'	=> 'show',
@@ -85,7 +76,3 @@ Route::post('/index', [
 ]);
 */
 
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

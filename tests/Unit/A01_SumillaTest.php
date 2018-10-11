@@ -2,12 +2,15 @@
 
 namespace Tests\Unit;
 
+use App\Acceso;
 use App\Contenido;
 use App\Sumilla;
+use App\UserAcceso;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class A01_SumillaTest extends TestCase
@@ -26,7 +29,6 @@ class A01_SumillaTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"cod_curso"=> "100048",  
-//					"orden"=>1,  
 					"plan" => "8", 
 					"tipo"=>$tipo,
 					"data"=>[ $datos ]

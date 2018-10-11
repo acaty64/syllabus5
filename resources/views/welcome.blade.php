@@ -100,32 +100,9 @@
                     <a href="/PDF/syllabus/20191/100048/screen">PDF En pantalla</a><br> 
                     <a href="/PDF/syllabus/20191/100048/download">PDF Descarga</a><br>
                     <a href="/PDF/syllabus/20191/100048/tests">PDF Test</a><br>
-                    <!--a href="http://syllabus.test/PDFdompdf">PDF dompdf</a><br>
-                    <a href="http://syllabus.test/PDFshowSimple">Show simple page</a><br>
-                    <a href="http://syllabus.test/PDFSimple">PDF simple page</a><br>
-                    <a href="http://syllabus.test/PDFshowExample">Show example-component</a><br>
-                    <a href="http://syllabus.test/PDFexample">PDF example-component</a><br-->
                 </div>
             </div>
         </div>
-        <table>
-            <thead>
-                <tr class="row">
-                    <th class="col-1 col-xs-1 unidades">Semana</th>
-                    <th class="col-2 col-xs-4 unidades">Texto</th>
-                    <th class="col-3 col-xs-4 unidades">Logro</th>
-                    <th class="col-4 col-xs-2 unidades">Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="row">
-                    <td class="col-1 col-xs-1 unidades">data</td>
-                    <td class="col-2 col-xs-4 unidades">data</td>
-                    <td class="col-3 col-xs-4 unidades">data</td>
-                    <td class="col-4 col-xs-2 unidades">data</td>
-                </tr>
-            </tbody>
-        </table>
     </body>
 </html>
 

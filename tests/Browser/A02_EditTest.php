@@ -2,10 +2,11 @@
 
 namespace Tests\Browser;
 
+use App\Acceso;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
 use Tests\DuskData;
 use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
     /**
      * 1. Sumillas Ok
@@ -32,8 +33,17 @@ class A02_EditTest extends DuskTestCase
         $this->artisan('cache:clear');
         
         // SUMILLAS
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
+        $user = $this->defaultUser();
+        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
+
+        $userAcceso = $this->defaultUserAcceso([
+                'user_id' => $user->id,
+                'acceso_id' => $acceso_id 
+            ]);
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user)
+                    ->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitFor('.sumillas', 20)
@@ -57,12 +67,6 @@ class A02_EditTest extends DuskTestCase
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            /*
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitFor('.unidades', 20)
-            */
             $browser->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
@@ -81,46 +85,10 @@ class A02_EditTest extends DuskTestCase
         });
         // End UNIDADES
 
-/************** COMPETENCIAS ESPECIFICAS SE EXTRAE DESDE UNIDADES
-        // COMPETENCIAS
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Competencias', 10)
-                    ->press('Competencias')
-                    ->assertSee('COMPETENCIAS')
-                    ->assertSee('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac nunc facilisis, aliquet elit vitae, dapibus ipsum. Nulla ut quam ultrices, suscipit nulla a, tristique sapien.');
-            $browser->driver->executeScript('window.scrollTo(0, 500);');
-            $reg = 7;
-            $col = 2;
-            $selector = '.id' . $reg . '.col-' . $col; 
-            $btnEdit = '.btnEdit' . $reg;
-            $btnSave = '.btnSave' . $reg;
-            $browser->waitFor($btnEdit)
-                    ->click($btnEdit)
-                    ->clear($selector)
-                    ->type($selector, 'yyyyy')
-                    ->assertSee('yyyyy')
-                    ->click($btnSave)
-                    ->waitForText('Competencia grabada.')
-                    ->assertSee('Competencia grabada.')
-                    ->waitUntilMissing('.toast', 11);
-
-        $this->assertDatabaseHas('competencias', [
-                        'texto' => 'yyyyy'
-                    ]);
-        });
-        // End COMPETENCIAS
-********************/
 
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitFor('.contenidos', 20)
-                    ->press('Contenidos')
+            $browser->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
                     ->click('.btnEdit3')
@@ -139,11 +107,7 @@ class A02_EditTest extends DuskTestCase
 
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Estrategias', 10)
-                    ->press('Estrategias')
+            $browser->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->assertSee('Lecturas')
                     ->assertSee('Editar')
@@ -165,11 +129,7 @@ class A02_EditTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Evaluaciones', 10)
-                    ->press('Evaluaciones')
+            $browser->press('Evaluaciones')
                     ->assertSee('EVALUACIONES')
                     ->waitForText('PORCENTAJE')
                     ->click('.btnEdit2')
@@ -189,11 +149,7 @@ class A02_EditTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Bibliografias', 10)
-                    ->press('Bibliografias')
+            $browser->press('Bibliografias')
                     ->assertSee('BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
                     ->click('.btnEdit2')

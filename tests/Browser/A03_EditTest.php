@@ -2,10 +2,11 @@
 
 namespace Tests\Browser;
 
+use App\Acceso;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
 use Tests\DuskData;
 use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
     /**
      * 1. Sumillas Ok
@@ -31,11 +32,20 @@ class A03_EditTest extends DuskTestCase
         $this->artisan('cache:clear');
 
         // SUMILLAS
-        $this->browse(function (Browser $browser) {
+        $user = $this->defaultUser();
+        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
+
+        $userAcceso = $this->defaultUserAcceso([
+                'user_id' => $user->id,
+                'acceso_id' => $acceso_id 
+            ]);
+
+        $this->browse(function (Browser $browser) use ($user) {
             $selector = '.id1.sumillas';
             $texto = 'El curso tiene como propósito';
             $error = 'Inserte el texto SUMILLA.';
-            $browser->visit('/show/20191/100048')
+            $browser->loginAs($user)
+                    ->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)
@@ -80,11 +90,7 @@ class A03_EditTest extends DuskTestCase
 
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Unidades')
-                    ->press('Unidades')
+            $browser->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
                     ->click('.btnEdit2');
@@ -127,11 +133,7 @@ class A03_EditTest extends DuskTestCase
 
         // CONTENIDOS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Contenidos')
-                    ->press('Contenidos')
+            $browser->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
                     ->click('.btnEdit3');
@@ -185,11 +187,7 @@ class A03_EditTest extends DuskTestCase
 
         // ESTRATEGIAS
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Estrategias', 20)
-                    ->press('Estrategias')
+            $browser->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->assertSee('Lecturas');
 //                    ->click('.btnEdit3');
@@ -212,11 +210,7 @@ class A03_EditTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Evaluaciones', 20)
-                    ->press('Evaluaciones')
+            $browser->press('Evaluaciones')
                     ->assertSee('EVALUACIÓN')
                     ->click('.btnEdit2');
 
@@ -258,11 +252,7 @@ class A03_EditTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Bibliografias', 20)
-                    ->press('Bibliografias')
+            $browser->press('Bibliografias')
                     ->assertSee('VII. BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
                     ->click('.btnEdit2');

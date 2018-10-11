@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Acceso;
 use App\Estrategia;
 use App\Sumilla;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -38,11 +39,21 @@ class A04_AddTest extends DuskTestCase
             $sumilla->delete();
         }
         // SUMILLAS
-        $this->browse(function (Browser $browser) {
+        $user = $this->defaultUser();
+        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
+
+        $userAcceso = $this->defaultUserAcceso([
+                'user_id' => $user->id,
+                'acceso_id' => $acceso_id 
+            ]);
+
+        $this->browse(function (Browser $browser) use ($user) {
+                    
             $selector = '.col-1.sumillas';
             $texto = 'El curso tiene como proposito ...';
             $mess = 'Sumilla grabada.';
-            $browser->visit('/show/20191/100048')
+            $browser->loginAs($user)
+                    ->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)
@@ -95,11 +106,7 @@ class A04_AddTest extends DuskTestCase
 */
         // UNIDADES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Unidades', 10)
-                    ->press('Unidades')
+            $browser->press('Unidades')
                     ->assertSee('UNIDADES')
                     ->assertSee('LA CONTABILIDAD GERENCIAL.')
                     ->click('.btnEditarnew');
@@ -131,10 +138,7 @@ class A04_AddTest extends DuskTestCase
 
         $this->artisan('cache:clear');
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->press('Contenidos')
+            $browser->press('Contenidos')
                     ->assertSee('CONTENIDOS')
                     ->assertSee('La contabilidad gerencial.')
                     ->waitFor('.btnEditarnew', 20)
@@ -168,14 +172,12 @@ class A04_AddTest extends DuskTestCase
 
         // ESTRATEGIAS
         $id = 1;
-        $estrategia = Estrategia::findOrFail($id);
-        $estrategia->delete();
+        $estrategia = Estrategia::truncate();
 
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
-                    ->waitForText('Estrategias', 20)
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->waitFor('.btnEditarnew', 20)
@@ -205,11 +207,7 @@ class A04_AddTest extends DuskTestCase
 
         // EVALUACIONES
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Evaluaciones', 10)
-                    ->press('Evaluaciones')
+            $browser->press('Evaluaciones')
                     ->assertSee('EVALUACIONES')
                     ->click('.btnEditarnew');
 
@@ -236,11 +234,7 @@ class A04_AddTest extends DuskTestCase
 
         // BIBLIOGRAFIA
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
-                    ->waitFor('.SyllabusComponent', 20)
-                    ->waitFor('.Vista', 20)
-                    ->waitForText('Bibliografias')
-                    ->press('Bibliografias')
+            $browser->press('Bibliografias')
                     ->assertSee('VII. BIBLIOGRAFÍA')
                     ->assertSee('Autor(es)')
                     ->click('.btnEditarnew');
