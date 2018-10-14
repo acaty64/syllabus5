@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CursoGrupo;
+use App\Grupo;
 use App\Join;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -24,9 +25,11 @@ class DownloadController extends Controller
 
 	public function downloadGrupo($siglas)
 	{
+		$wgrupo = Grupo::where('cod_grupo', $siglas)->first()->wgrupo;
 		return view('app.download', [
 			'url_proceso' => url('download/' . $siglas),
 			'zipFile' => $siglas . "_" . env('SEMESTRE') . ".zip",
+			'titulo_pagina' => 'Descarga de Syllabus. Grupo: ' . $wgrupo,
 		]);
 	}
 
