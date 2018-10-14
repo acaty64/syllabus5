@@ -3,26 +3,43 @@
 use App\Curso;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 Route::auth();
 
-/*
-Route::get('/', function () {
-	$user = User::find(1);
-	dd($user->acceso);
-});
-*/
+
+Route::get('/downloadGrupo/{siglas}', [
+	'as'	=> 'downloadGrupo',
+	'uses'	=> 'DownloadController@downloadGrupo'
+]);
+
+
 
 Route::get('/', function () {
 	return view('welcome');
 });
+
+Route::get('/downloadFile/{fileName}/{type}', [
+	'as'	=> 'download.file',
+	'uses'	=> 'DownloadController@downloadFile'
+]);
+
+Route::get('/user/redirect', [
+	'as'	=> 'user.redirect',
+	'uses'	=> 'UserAccesoController@redirect'
+]);
 
 Route::get('/malla/{siglas}', [
 	'as'	=> 'malla',
 	'uses'	=> 'MallaController@index'
 ]);
 
-Route::get('/grupos', [
+Route::get('PDF/malla/{siglas}', [
+	'as'	=> 'PDF.malla',
+	'uses'	=> 'PDFController@malla'
+]);
+
+Route::get('/grupos/{type}', [
 	'as'	=> 'grupos',
 	'uses'	=> 'GrupoController@index'
 ]);
@@ -37,6 +54,21 @@ Route::get('/show/{semestre}/{cod_curso}', [
 	'uses'	=> 'SyllabusController@show'
 ]);
 
+Route::get('/edit/{semestre}/{cod_curso}', [
+	'as'	=> 'edit',
+	'uses'	=> 'SyllabusController@show'
+]);
+
+Route::get('/show/{semestre}/{cod_curso}', [
+	'as'	=> 'curso.show',
+	'uses'	=> 'CursoController@show'
+]);
+
+Route::get('/cursos/index', [
+	'as'	=> 'cursos.index',
+	'uses'	=> 'CursoController@index'
+]);
+
 Route::get('/PDF/syllabus/{semestre}/{cod_curso}/{view}', [
 	'as'	=> 'PDF',
 	'uses'	=> 'PDFController@ViewSyllabus'
@@ -49,6 +81,11 @@ Route::get('/header/PDF/syllabus/{semestre}', function ($semestre) {
 Route::get('/footer/PDF/syllabus/{semestre}', function ($semestre) {
     return view('layouts.partials.footer_PDF', ['semestre'=>$semestre]);
 });
+
+Route::get('/download/{cod_grupo}', [
+	'as'	=> 'download.grupo',
+	'uses'	=> 'DownloadController@Grupo'
+]);
 
 
 /*

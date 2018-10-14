@@ -18,13 +18,6 @@ class User extends Authenticatable
         return $val->acceso;
     }
 
-/*
-    protected function getAccesoAttribute()
-    {
-        //$val = UserAcceso::where('user_id', $this->id)->first();
-        $val = $this->belongsTo(UserAcceso::class, 'id', 'user_id');
-        return $val;
-    }
     /**
      * The attributes that are mass assignable.
      *

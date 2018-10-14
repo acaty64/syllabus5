@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Curso;
 use App\Grupo;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,14 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($grupo)
+    public function index()
     {
-        //
+        $cursos = Curso::orderBy('wcurso')->paginate(10);
+
+        return view('app.cursos', [
+                'data' => $cursos, 
+                'titulo_pagina' => 'Syllabus por Curso'
+            ]);
     }
 
     /**
@@ -44,9 +50,12 @@ class CursoController extends Controller
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Curso $curso)
+    public function show($semestre, $cod_curso)
     {
-        //
+        return view('app.show')
+                ->with('semestre', $semestre)
+                ->with('cod_curso', $cod_curso)
+                ->with('user_id', 0);
     }
 
     /**
@@ -55,9 +64,12 @@ class CursoController extends Controller
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function edit(Curso $curso)
+    public function edit($semestre, $cod_curso)
     {
-        //
+        return view('app.show')
+                ->with('semestre', $semestre)
+                ->with('cod_curso', $cod_curso)
+                ->with('user_id', Auth::id());
     }
 
     /**

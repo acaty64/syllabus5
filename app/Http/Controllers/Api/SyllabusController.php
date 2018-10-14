@@ -424,22 +424,25 @@ class SyllabusController extends Controller
     public function index(Request $request)
     {
         /*  Datos de acceso de prueba  */
-        $acceso = [
-                'generales' => true,
-                'sumillas' => true,
-                'competencias' => true,
-                'unidades' => true,
-                'contenidos' => true,
-                'estrategias' => true,
-                'evaluaciones' => true,
-                'bibliografias' => true
-            ];
         /* Fin datos de acceso de prueba */
         if(!$request->user_id){
-            $acceso = "";
+            $acceso = '';
         }else{
-            $user = User::find($request->user_id);
-            $acceso = $user->acceso;
+            if($request->user_id == 0){
+                $acceso = [
+                        'generales' => false,
+                        'sumillas' => false,
+                        'competencias' => false,
+                        'unidades' => false,
+                        'contenidos' => false,
+                        'estrategias' => false,
+                        'evaluaciones' => false,
+                        'bibliografias' => false
+                    ];
+            }else{
+                $user = User::find($request->user_id);
+                $acceso = $user->acceso;
+            }
         }
 
         $plan = env('PLAN');

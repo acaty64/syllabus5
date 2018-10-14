@@ -48,7 +48,7 @@ class A05_EraseTest extends DuskTestCase
             $texto = 'El curso tiene como ';
             $mess = 'Sumilla eliminada.';
             $browser->loginAs($user)
-                    ->visit('/show/20191/100048')
+                    ->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 10)

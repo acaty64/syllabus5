@@ -104,7 +104,7 @@
                 var protocol = window.location.protocol;
                 var url = protocol+'//'+URLdomain+'/api/index/';
                 axios.post(url, request).then(response=>{
-//console.log('response.data: ',response.data);
+console.log('response.data.acceso: ',response.data.acceso);
                     //this.lineas = response.data.data;
                     this.$store.commit('setLineas', response.data.data);
                     this.$store.commit('sortLineasRow');
@@ -118,3 +118,10 @@
         },
     }
 </script>
+
+
+<!--
+
+                    <a href="{{ route('PDF', [env('SEMESTRE'), $cod_curso, 'screen']) }}" class="btn btn-success" data-toggle="tooltip" title="PDF view" name = "{{'PDF_view'.$cod_curso}}"><span class="glyphicon glyphicon-fullscreen" aria-hidden='true'></span></a>
+                <a href="{{ route('PDF', [env('SEMESTRE'), $cod_curso, 'download']) }}" class="btn btn-success" data-toggle="tooltip" title="PDF download" name = "{{'PDF_dwnl'.$cod_curso}}"><span class="glyphicon glyphicon-download-alt" aria-hidden='true'></span></a>
+-->

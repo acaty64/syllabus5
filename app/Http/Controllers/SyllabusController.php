@@ -57,7 +57,7 @@ class SyllabusController extends Controller
         ];
         */
         return view('app.show')
-                ->with('user_id', Auth::user()->id)
+                ->with('user_id', Auth::id())
                 ->with('semestre', $semestre)
                 ->with('cod_curso', $cod_curso);
     }

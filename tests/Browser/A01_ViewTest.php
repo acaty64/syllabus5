@@ -31,7 +31,7 @@ class A01_ViewTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit('/show/20191/100048')
+                    ->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('I. DATOS GENERALES', 20)

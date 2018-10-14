@@ -53,7 +53,7 @@ class A04_AddTest extends DuskTestCase
             $texto = 'El curso tiene como proposito ...';
             $mess = 'Sumilla grabada.';
             $browser->loginAs($user)
-                    ->visit('/show/20191/100048')
+                    ->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)
@@ -175,7 +175,7 @@ class A04_AddTest extends DuskTestCase
         $estrategia = Estrategia::truncate();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/20191/100048')
+            $browser->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Estrategias')

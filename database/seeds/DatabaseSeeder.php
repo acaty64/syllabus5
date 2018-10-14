@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CursoGrupoTableSeeder::class);
         $this->call(CursoCompetenciaTableSeeder::class);
         $this->call(AccesoTableSeeder::class);
-//        $this->call(UserTableSeeder::class);
-//        $this->call(UserAccesoTableSeeder::class);
+        $this->call(UserTableSeeder::class);
+        $this->call(UserAccesoTableSeeder::class);
     }
 }

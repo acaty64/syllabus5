@@ -45229,7 +45229,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/index/';
             __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(url, request).then(function (response) {
-                //console.log('response.data: ',response.data);
+                console.log('response.data.acceso: ', response.data.acceso);
                 //this.lineas = response.data.data;
                 _this.$store.commit('setLineas', response.data.data);
                 _this.$store.commit('sortLineasRow');

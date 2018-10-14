@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'UCSS') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -28,15 +28,28 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
+                    <a href="http://www.ucss.edu.pe" target="_blank">
+                        <img class="navbar-brand" src="{{asset('images/logo-ucss.png')}}" ></img></a>
+                    <p>{{ env('SEMESTRE') }}</p>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
+                    <ul class="nav navbar-nav navbar-left">
+                    @guest
+                    @else
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Consulta</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ route('cursos.index') }}">Por curso</a></li>
+                                <li><a href="{{ route('malla', ['adm']) }}">En malla curricular</a></li>
+                                <li><a href="{{ route('grupos', ['show']) }}">Por Grupo Temático</a></li>
+                            </ul>
+                        </li>
+                            <li><a href="{{ route('user.redirect') }}">Edición</a></li>
+                            <li><a href="{{ route('grupos', ['download']) }}">Descarga de Archivos</a></li>
+                        <li><a href="{{ URL::previous() }}">Anterior</a></li>
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -44,7 +57,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <!--li><a href="{{ route('register') }}">Register</a></li-->
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
@@ -77,5 +90,11 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    @yield('jquery')
+    @yield('js')
+    
+    <!-- Style -->
+    @yield('style')
 </body>
 </html>
+
