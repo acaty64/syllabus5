@@ -5,7 +5,6 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state:{
-//        especialidad: "",
         semestre: "",
         cod_curso: "",
         lineas: [],
@@ -72,15 +71,11 @@ export const store = new Vuex.Store({
             //console.log('despues de eliminar: ', state.lineas);
         },
         agregar (state, newLineas){
-console.log('antes de agregar: ', state.lineas);
-console.log('newLineas: ', newLineas);
             for(var xlinea in newLineas){
                 state.lineas.push(newLineas[xlinea]);
             }
-console.log('despues de agregar: ', state.lineas);
         },
         setNewItemValue(state, data){
-//console.info('setNewItemValue data:', data);
             var field = data[0];
             var value = data[1];
             switch (field){
@@ -135,7 +130,6 @@ console.log('despues de agregar: ', state.lineas);
             state.lineas.sort(function (a, b){
                 return (a.row - b.row);
             });
-//console.log('sortLineasRow:', state.lineas);
         },
 
         sortAutor(state){
@@ -191,11 +185,7 @@ console.log('despues de agregar: ', state.lineas);
         setNuevo(state, [type, value]){
             state.nuevo[type] = value;
         },
-/*
-        setEspecialidad(state, especialidad){
-            state.especialidad = especialidad;
-        },
-*/
+
         setSemestre(state, semestre){
             state.semestre = semestre;
         },
@@ -497,38 +487,12 @@ console.log('despues de agregar: ', state.lineas);
                     // code block
                     break;
             }
-//console.log('setNewItem', item);
             state.newItem = item;
             return item;
         }
     },
 
     actions: {
-/*
-        RecallEvaluaciones: (context) =>{            
-            var request = {
-                'data': {
-                    'tipo': 'RecallEvaluaciones',
-                },
-                'semestre': context.state.semestre,
-                'cod_curso': context.state.cod_curso,
-                'new': false
-            };
-            var URLdomain = window.location.host;
-            var protocol = window.location.protocol;
-            var url = protocol+'//'+URLdomain+'/api/saveData/';
-            axios.post(url, request).then(response=>{
-                var evaluaciones = response.data.data;
-console.log('RecallEvaluaciones data:', evaluaciones);
-                context.commit('eliminar', 'evaluaciones');
-                context.commit('eliminar', 'examenes');
-                context.commit('agregar', evaluaciones);
-                context.commit('sortLineasRow');
-            }).catch(function (error) {
-                console.log('error RecallEvaluaciones: ', error);
-            });
-        },
-*/
         RecallCompetencias: (context) =>{            
             var request = {
                 'data': {
@@ -543,7 +507,6 @@ console.log('RecallEvaluaciones data:', evaluaciones);
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var competencias = response.data.data;
-console.log('RecallCompetencias data:', competencias);
                 context.commit('eliminar', 'competencias');
                 context.commit('agregar', competencias);
                 context.commit('sortLineasRow');
@@ -624,12 +587,10 @@ console.log('RecallCompetencias data:', competencias);
                 'data': linea,
                 'new': false
             };
-//console.log('store.SaveLinea.request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-//console.log('SaveLinea response: ',response.data);
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
@@ -643,6 +604,7 @@ console.log('RecallCompetencias data:', competencias);
                 if(context.state.status == 'evaluaciones'){
                     context.dispatch('RecallEvaluaciones');
                 }
+                context.commit('sortLineasRow');
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveLinea: ', error);
@@ -653,12 +615,10 @@ console.log('RecallCompetencias data:', competencias);
                 'data': linea,
                 'new': true
             };
-//console.log('SaveNewLinea request: ', request);
             var URLdomain = window.location.host;
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-//console.log('SaveNewLinea response: ', response.data);
                 context.commit('agregar', response.data.data);
                 context.commit('setNewItemValue', ['button', 'Editar']);
                 if(context.state.status == 'unidades'){
@@ -671,6 +631,7 @@ console.log('RecallCompetencias data:', competencias);
                 if(context.state.status == 'evaluaciones'){
                     context.dispatch('RecallEvaluaciones');
                 }
+                context.commit('sortLineasRow');
                 context.commit('setDefault');
             }).catch(function (error) {
                 console.log('error SaveNewLinea: ', error);
