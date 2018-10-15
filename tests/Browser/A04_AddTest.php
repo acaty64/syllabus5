@@ -180,6 +180,7 @@ class A04_AddTest extends DuskTestCase
                     ->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
+                    ->waitForText('Estrategias', 20)
                     ->press('Estrategias')
                     ->assertSee('V. ESTRATEGIAS METODOLÓGICAS')
                     ->waitFor('.btnEditarnew', 20)
