@@ -37,6 +37,7 @@
 			//url: '/proceso.php',
 			progressUrl: '/progreso.txt',
 			trigger: '#proceso',
+			back: '#back',
 			finished: function () {
 				var zipFile = document.getElementById("zipFile").value;
 				window.location.assign("{{route('download.file', [$zipFile, 'zip'])}}");
@@ -63,6 +64,7 @@
 			 */
 			_oConfig = $.extend({
 				trigger: "#progress-trigger",
+				back: '#back',
 				progressBar: $(this),
 				url: _und,
 				progressUrl: '/progreso.txt',
@@ -77,6 +79,7 @@
 				_bFinalizado = false;
 				// Deshabilita boton
 				$(_oConfig.trigger).prop("disabled", true);
+				$(_oConfig.back).prop("hidden", true);
 				// Llamada a Ajax
 				$.ajax({
 					url: _oConfig.url,
@@ -86,6 +89,7 @@
 						_oConfig.finished();
 						// Habilita boton
 						$(_oConfig.trigger).prop("disabled", false);
+						$(_oConfig.back).prop("hidden", false);
 					},
 				});
 				_getProgreso();

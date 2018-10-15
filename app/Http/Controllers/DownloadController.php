@@ -38,8 +38,8 @@ class DownloadController extends Controller
     	$semestre = env('SEMESTRE');
 
     	/* Borrar todos los archivos del path output */
-    	File::delete(File::glob(base_path('public/output/') . '*.pdf'));
-    	File::delete(File::glob(base_path('public/output/') . '*.zip'));
+    	File::delete(File::glob(base_path('storage/output/') . '*.pdf'));
+    	File::delete(File::glob(base_path('storage/output/') . '*.zip'));
     	
     	/* Datos Iniciales para barra de progreso */
 		$sFile = base_path("public/progreso.txt");
@@ -47,10 +47,8 @@ class DownloadController extends Controller
 		/* Fin de Datos Iniciales para barra de progreso */
 
     	/* Crea el archivo .zip */
-
-    	$public_dir=public_path().DIRECTORY_SEPARATOR.'uploads/post/zip';
     	$zipFileName = $cod_grupo . "_" . $semestre . ".zip";
-    	$outputFileZip = base_path('public/output/') . $zipFileName;
+    	$outputFileZip = base_path('storage/output/') . $zipFileName;
     	$zip = new ZipArchive();
     	/* Fin Creacion de archivo .zip */
     	if ($zip->open($outputFileZip, ZipArchive::CREATE) === TRUE) {
@@ -58,6 +56,7 @@ class DownloadController extends Controller
 	    	$cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
 	    	/* Datos Iniciales para barra de progreso */
 	    	$totRegistros = count($cursos);
+            file_put_contents($sFile, 1);
 	    	$nRegistro = 0;
 			/* Fin de Datos Iniciales para barra de progreso */    	
 	    	foreach ($cursos as $key => $curso) {
@@ -68,10 +67,10 @@ class DownloadController extends Controller
 	    		$cod_curso = $curso->cod_curso;
 		    	$data = $this->join->syllabus($semestre, $cod_curso);
 		        $snappy = $this->join->snappy($data, $semestre);
-		        $outputFile = base_path('public/output/') . $cod_curso . "_" . $semestre . ".pdf";
+		        $outputFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
 		        $snappy->save($outputFile);
 	            // Add File in ZipArchive
-		        $xFile = base_path('public/output/') . $cod_curso . "_" . $semestre . ".pdf";
+		        $xFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
 	            $zip->addFile($xFile);
 	    	}
             // Close ZipArchive     
@@ -95,7 +94,7 @@ class DownloadController extends Controller
 		            'Content-Type' => 'application/octet-stream',
 		        );
 		        // Create Download Response
-		        $file_in = public_path() . DIRECTORY_SEPARATOR . 'output' . DIRECTORY_SEPARATOR . $fileName;
+		        $file_in = storage_path() . DIRECTORY_SEPARATOR . 'output' . DIRECTORY_SEPARATOR . $fileName;
     	//dd(file_exists($file_in));
 		        if(file_exists($file_in)){
 		            return response()->download($file_in,$fileName,$headers);

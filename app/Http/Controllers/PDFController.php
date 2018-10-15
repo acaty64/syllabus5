@@ -30,7 +30,7 @@ class PDFController extends Controller
         $outputFile = $cod_curso . "_" . $semestre . ".pdf";
         switch ($output) {
             case 'screen':
-                return $snappy->stream('pdf.syllabus');
+                return $snappy->stream($outputFile);
                 break;
             case 'download':
                 return $snappy->download($outputFile);

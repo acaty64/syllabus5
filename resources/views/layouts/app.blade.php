@@ -38,18 +38,24 @@
                     <ul class="nav navbar-nav navbar-left">
                     @guest
                     @else
-                        <li class="dropdown">
+                        <li class="dropdown consulta">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Consulta</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ route('cursos.index') }}">Por curso</a></li>
-                                <li><a href="{{ route('malla', ['adm']) }}">En malla curricular</a></li>
-                                <li><a href="{{ route('grupos', ['show']) }}">Por Grupo Temático</a></li>
+                                <li><a class="xCurso" href="{{ route('cursos.index') }}">Por curso</a></li>
+                                <li><a class="malla" href="{{ route('malla', ['adm']) }}">En malla curricular</a></li>
+                                <li><a class="xGrupo" href="{{ route('grupos', ['show']) }}">Por Grupo Temático</a></li>
                             </ul>
                         </li>
+                        <!--
+                        @if(Auth::user()->acceso->cod_acceso != 'cons')
                             <li><a href="{{ route('user.redirect') }}">Edición</a></li>
-                            <li><a href="{{ route('grupos', ['download']) }}">Descarga de Archivos</a></li>
+                        @endif
+                        -->
+                        @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
+                            <li><a class='download' href="{{ route('grupos', ['download']) }}">Descarga de Archivos</a></li>
+                        @endif
                         <li><a href="{{ URL::previous() }}">Anterior</a></li>
-                        @endguest
+                    @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
