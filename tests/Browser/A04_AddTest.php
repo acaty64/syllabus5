@@ -173,10 +173,11 @@ class A04_AddTest extends DuskTestCase
         // ESTRATEGIAS
         $id = 1;
         $estrategia = Estrategia::truncate();
-        
+
         $this->artisan('cache:clear');
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/edit/20191/100048')
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user)
+                    ->visit('/edit/20191/100048')
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->press('Estrategias')
