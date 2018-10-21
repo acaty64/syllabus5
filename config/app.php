@@ -169,6 +169,7 @@ return [
          */
         Laracasts\Flash\FlashServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        //Spatie\Backup\BackupServiceProvider::class,
         //Barryvdh\DomPDF\ServiceProvider::class,
         
         /*
