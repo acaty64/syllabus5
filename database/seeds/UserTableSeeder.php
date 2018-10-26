@@ -13,8 +13,8 @@ class UserTableSeeder extends Seeder
     public function run()
     {
     	User::create([
-    		'name' => 'Ana Arashiro Tamashiro',
-    		'email' => 'aarashiro@ucss.edu.pe',
+    		'name' => 'Master del Modulo',
+    		'email' => 'master@ucss.edu.pe',
     		'password' => bcrypt('123456'),
     	]);
     }

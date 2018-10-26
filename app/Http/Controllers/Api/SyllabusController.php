@@ -45,7 +45,6 @@ class SyllabusController extends Controller
                         }
 
                         $dataNew = $this->upload_sumillas($datos, $_request);
-
                         //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'sumillas';
