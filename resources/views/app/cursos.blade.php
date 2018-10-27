@@ -39,5 +39,5 @@
     </style>
 @endsection
 
-@section('view','app/cursogrupo.blade.php')
+@section('view','app/cursos.blade.php')
 

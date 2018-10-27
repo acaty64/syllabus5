@@ -112,7 +112,7 @@
     @yield('style')
 
     <!-- Footer -->
-    @yield('partials.footer')
+    @include('layouts.partials.footer')
 
 </body>
 </html>

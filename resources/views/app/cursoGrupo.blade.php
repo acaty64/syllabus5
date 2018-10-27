@@ -3,6 +3,7 @@
 @section('title','Cursos')
 
 @section('content')
+    <h1 class="text-center">{{ $titulo_pagina }}</h1>
     <table style="width:50%" align="center">
       <tr  style="border-style: solid;">
         <th>Código</th>
@@ -26,5 +27,5 @@
 
 @endsection
 
-@section('view','app/cursogrupo.blade.php')
+@section('view','app/cursoGrupo.blade.php')
 
