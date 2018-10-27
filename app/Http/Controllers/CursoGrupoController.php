@@ -11,6 +11,7 @@ class CursoGrupoController extends Controller
     {
     	$cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
     	return view('app.cursoGrupo')
-                ->with('data', $cursos);
+                ->with('data', $cursos)
+                ->with('titulo_pagina', 'Cursos de Grupo: ' . $cod_grupo);
     }
 }
