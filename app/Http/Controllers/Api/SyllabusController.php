@@ -422,8 +422,6 @@ class SyllabusController extends Controller
      */
     public function index(Request $request)
     {
-        /*  Datos de acceso de prueba  */
-        /* Fin datos de acceso de prueba */
         if(!$request->user_id){
             $acceso = '';
         }else{
