@@ -22,23 +22,27 @@ class A01_SumillaTest extends TestCase
      *
      * @test
      */
-    public function addTest()
+    public function Sumilla_Add()
     {
+
+//dd($userAcceso);
     	$tipo = "sumillas";
     	$datos = ["texto"=>"Lorem Ipsum"];
     	$data = [
 					"id"=> "new",
 					"cod_curso"=> "100048",  
 					"plan" => "8", 
+					"semestre"=>'20191',
 					"tipo"=>$tipo,
-					"data"=>[ $datos ]
+					"data"=>[ $datos ],
 				];
         $request = [
 			"new"=> true,
 			"data"=> $data 	
 		];
+        $this->post('api/saveData', $request)
+        	->assertStatus(200);
 
-        $this->post('api/saveData', $request);
 		$this->assertDatabaseHas('sumillas',$datos);
     }
 
@@ -47,14 +51,13 @@ class A01_SumillaTest extends TestCase
      *
      * @test
      */
-    public function editTest()
+    public function Sumilla_Edit()
     {
-    	$this->assertTrue(true);
     	$tipo = "sumillas";
     	$data = [
     				"id"=>1, 
 					"cod_curso"=> "100048",  
-//					"orden"=>1,  
+					"semestre"=>"20191",  
 					"plan" => "8", 
 					"tipo"=>$tipo,
     				"texto"=>"Lorem Ipsum"
@@ -98,16 +101,21 @@ class A01_SumillaTest extends TestCase
      *
      * @test
      */
-    public function deleteTest()
+    public function Sumilla_Delete()
     {
-    	$this->addTest();
-    	$sumilla = Sumilla::find(1);
+		$datos =  [
+					"cod_curso"=> "100048",  
+					"plan" => "8",
+					"texto" => "Lorem Ipsum"
+				];   	
+    	$sumilla = Sumilla::create($datos);
 		$request = [
 			"data"=> [
 				"tipo"=>"sumillas",
 				"id"=> "1",
 				"cod_curso"=> "100048",
 				"plan" => "8", 
+				"semestre" => "20191",
 				],
 			];
 		$this->post('api/deleteData', $request);

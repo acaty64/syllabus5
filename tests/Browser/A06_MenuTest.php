@@ -32,11 +32,10 @@ class A06_MenuTest extends DuskTestCase
 
         // Menu MASTER
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'master',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     
@@ -62,11 +61,10 @@ class A06_MenuTest extends DuskTestCase
 
         // Menu ADMINISTRADOR
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'adm')->first()->id;
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'adm',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     
@@ -79,11 +77,10 @@ class A06_MenuTest extends DuskTestCase
 
         // Menu RESPONSABLE
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'resp')->first()->id;
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'resp',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     
@@ -97,11 +94,10 @@ class A06_MenuTest extends DuskTestCase
 
         // Menu DOCENTE
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'doc')->first()->id;
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'doc',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     
@@ -115,11 +111,10 @@ class A06_MenuTest extends DuskTestCase
 
         // Menu CONSULTA
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'cons')->first()->id;
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'doc',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     

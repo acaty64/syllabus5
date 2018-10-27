@@ -43,7 +43,13 @@
                             <ul class="dropdown-menu">
                                 <li><a class="xCurso" href="{{ route('cursos.index') }}">Por curso</a></li>
                                 <li><a class="malla" href="{{ route('malla', ['adm']) }}">En malla curricular</a></li>
-                                <li><a class="xGrupo" href="{{ route('grupos', ['show']) }}">Por Grupo Temático</a></li>
+                                
+                                @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
+                                    <li><a class="xGrupo" href="{{ route('grupos.index', ['show']) }}">Por Grupo Temático</a></li>
+                                @endif
+                                @if(Auth::user()->acceso->cod_acceso == 'resp')
+                                    <li><a class="xGrupo" href="{{ route('cursogrupo.index', ['ADM']) }}">Grupo Temático</a></li>
+                                @endif
                             </ul>
                         </li>
                         <!--
@@ -52,7 +58,10 @@
                         @endif
                         -->
                         @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
-                            <li><a class='download' href="{{ route('grupos', ['download']) }}">Descarga de Archivos</a></li>
+                            <li><a class="download" href="{{ route('grupos.index', ['download']) }}">Descarga de Archivos</a></li>
+                        @endif
+                        @if(Auth::user()->acceso->cod_acceso == 'master')
+                            <li><a class="backup" href="{{ route('backup.index') }}">Backup & Restore</a></li>
                         @endif
                         <li><a href="{{ URL::previous() }}">Anterior</a></li>
                     @endguest
@@ -101,6 +110,10 @@
     
     <!-- Style -->
     @yield('style')
+
+    <!-- Footer -->
+    @yield('partials.footer')
+
 </body>
 </html>
 

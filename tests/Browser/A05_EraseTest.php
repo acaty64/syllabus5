@@ -35,12 +35,10 @@ class A05_EraseTest extends DuskTestCase
         $id = 1;
         // SUMILLAS
         $user = $this->defaultUser();
-        $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
-
         $userAcceso = $this->defaultUserAcceso([
-                'user_id' => $user->id,
-                'acceso_id' => $acceso_id 
-            ]);
+                    'cod_acceso'=>'master',
+                    'user_id' => $user->id
+                ]);
 
         $this->browse(function (Browser $browser) use ($user) {
                     
@@ -48,7 +46,7 @@ class A05_EraseTest extends DuskTestCase
             $texto = 'El curso tiene como ';
             $mess = 'Sumilla eliminada.';
             $browser->loginAs($user)
-                    ->visit('/edit/20191/100048')
+                    ->visit(route('syllabus.edit',['20191','100048']))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 10)

@@ -20,7 +20,12 @@ class A01_ViewTest extends DuskTestCase
         $this->artisan('db:seed');
 
 //        Artisan::call('db:seed', ['--class' => 'AccesoTableSeeder', '--database' => 'mysql_tests']);
-
+        $user = $this->defaultUser();
+        $userAcceso = $this->defaultUserAcceso([
+                    'cod_acceso'=>'master',
+                    'user_id' => $user->id
+                ]);
+/*
         $user = $this->defaultUser();
         $acceso_id = Acceso::where('cod_acceso', 'master')->first()->id;
 
@@ -28,10 +33,10 @@ class A01_ViewTest extends DuskTestCase
                 'user_id' => $user->id,
                 'acceso_id' => $acceso_id 
             ]);
-
+*/
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit('/edit/20191/100048')
+                    ->visit(route('syllabus.edit',['20191','100048']))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('I. DATOS GENERALES', 20)

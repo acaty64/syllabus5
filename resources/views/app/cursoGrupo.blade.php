@@ -15,7 +15,7 @@
                 <td>{{ $fila->cod_curso }}</td>
                 <td>{{ $fila->wcurso }}</td>
                 <td>
-                    <a href="{{ route('edit', [env('SEMESTRE'), $fila->cod_curso]) }}" class="btn btn-success" data-toggle="tooltip" title="Syllabus" name = "{{'curso'.$fila->cod_curso}}"><span class="glyphicon glyphicon-expand" aria-hidden='true'></span></a>
+                    <a href="{{ route('curso.show', [env('SEMESTRE'), $fila->cod_curso]) }}" class="btn btn-success" data-toggle="tooltip" title="Syllabus" name = "{{'curso'.$fila->cod_curso}}"><span class="glyphicon glyphicon-expand" aria-hidden='true'></span></a>
                 </td>
             </tr>
         @endforeach
