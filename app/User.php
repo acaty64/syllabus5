@@ -3,19 +3,26 @@
 namespace App;
 
 use App\Acceso;
+use App\UserGrupo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use Notifiable;
-    protected $appends = ['acceso'];
+    protected $appends = ['acceso', 'grupo'];
 
     protected function getAccesoAttribute()
     {
         //$val = UserAcceso::where('user_id', $this->id)->first();
         $val = $this->belongsTo(UserAcceso::class, 'id', 'user_id')->first();
         return $val->acceso;
+    }
+
+    protected function getGrupoAttribute()
+    {
+        $val = $this->belongsTo(UserGrupo::class, 'id', 'user_id')->first();
+        return $val->grupo;
     }
 
     /**

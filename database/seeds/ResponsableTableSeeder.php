@@ -1,7 +1,7 @@
 <?php
 use App\Responsable;
 use Illuminate\Database\Seeder;
-class ResponsablesTableSeeder extends Seeder
+class ResponsableTableSeeder extends Seeder
 {
     public function run()
     {

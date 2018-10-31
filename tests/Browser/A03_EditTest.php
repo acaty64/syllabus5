@@ -43,7 +43,7 @@ class A03_EditTest extends DuskTestCase
             $texto = 'El curso tiene como propósito';
             $error = 'Inserte el texto SUMILLA.';
             $browser->loginAs($user)
-                    ->visit(route('syllabus.edit',['20191','100048']))
+                    ->visit(route('syllabus.show',['semestre'=>'20191','cod_curso'=>'100048','edit'=>true]))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)

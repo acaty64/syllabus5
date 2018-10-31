@@ -51,7 +51,7 @@ class A04_AddTest extends DuskTestCase
             $texto = 'El curso tiene como proposito ...';
             $mess = 'Sumilla grabada.';
             $browser->loginAs($user)
-                    ->visit(route('syllabus.edit',['20191','100048']))
+                    ->visit(route('syllabus.show',['semestre'=>'20191','cod_curso'=>'100048','edit'=>true]))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Sumillas', 20)
@@ -175,7 +175,7 @@ class A04_AddTest extends DuskTestCase
         $this->artisan('cache:clear');
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit(route('syllabus.edit',['20191','100048']))
+                    ->visit(route('syllabus.show',['semestre'=>'20191','cod_curso'=>'100048','edit'=>true]))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitForText('Estrategias', 20)

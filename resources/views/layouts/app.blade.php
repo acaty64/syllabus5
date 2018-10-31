@@ -43,12 +43,16 @@
                             <ul class="dropdown-menu">
                                 <li><a class="xCurso" href="{{ route('cursos.index') }}">Por curso</a></li>
                                 <li><a class="malla" href="{{ route('malla', ['adm']) }}">En malla curricular</a></li>
-                                
+                            </ul>
+                        </li>
+                        <li class="dropdown edicion">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Edición</a>
+                            <ul class="dropdown-menu">
                                 @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
                                     <li><a class="xGrupo" href="{{ route('grupos.index', ['show']) }}">Por Grupo Temático</a></li>
                                 @endif
                                 @if(Auth::user()->acceso->cod_acceso == 'resp')
-                                    <li><a class="xGrupo" href="{{ route('cursogrupo.index', ['ADM']) }}">Grupo Temático</a></li>
+                                    <li><a class="xGrupo" href="{{ route('cursogrupo.index', [Auth::user()->grupo->cod_grupo]) }}">Grupo Temático</a></li>
                                 @endif
                             </ul>
                         </li>
@@ -58,6 +62,7 @@
                         @endif
                         -->
                         @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
+                            <li><a class="send" href="{{ route('send.index') }}">Comunicados</a></li>
                             <li><a class="download" href="{{ route('grupos.index', ['download']) }}">Descarga de Archivos</a></li>
                         @endif
                         @if(Auth::user()->acceso->cod_acceso == 'master')

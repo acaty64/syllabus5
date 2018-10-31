@@ -55,7 +55,8 @@ class CursoController extends Controller
         return view('app.show')
                 ->with('semestre', $semestre)
                 ->with('cod_curso', $cod_curso)
-                ->with('user_id', 0);
+                ->with('user_id', 0)
+                ->with('edit', false);
     }
 
     /**

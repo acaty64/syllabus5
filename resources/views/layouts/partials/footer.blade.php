@@ -10,6 +10,7 @@
 	<span  class="nav navbar-nav list-group-item list-inline" style="color:blue; font-size:75%">
 		<div>Laravel v5.5</div>
 		<div>Vue js v2.5</div>
+		<div>Npm v5.6.0</div>
 	</span>	
 
 </div>

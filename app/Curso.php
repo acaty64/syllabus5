@@ -2,13 +2,27 @@
 
 namespace App;
 
+use App\CursoStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
 	protected $appends = [ 'texto_horas', 
                            'ciclo_romano',
+                           'status'
                         ];
+
+    protected $fillable = [
+        'cod_curso', 'wcurso', 'ht', 'hp', 
+        'horas', 'creditos', 'prereq', 'wprereq', 
+        'ciclo',
+    ];
+
+    protected function getStatusAttribute()
+    {
+        $val = $this->belongsTo(CursoStatus::class, 'id', 'curso_id')->first();
+        return $val;
+    }
 
     protected function getTextoHorasAttribute()
     {

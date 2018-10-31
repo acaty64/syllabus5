@@ -16,7 +16,7 @@ class CreateCursoCompetenciasTable extends Migration
         Schema::create('curso_competencias', function (Blueprint $table) {
             $table->increments('id');
             $table->char('plan', 1);
-            $table->char('cod_curso');
+            $table->char('cod_curso', 6);
             $table->char('cod_comp');
             $table->timestamps();
         });

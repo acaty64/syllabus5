@@ -45179,6 +45179,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -45193,7 +45195,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['semestre', 'cod_curso', 'user_id'],
+    props: ['semestre', 'cod_curso', 'edit', 'user_id'],
     //        props:['especialidad', 'semestre', 'cod_curso'],
     mounted: function mounted() {
         console.log('SyllabusComponent.vue mounted.');
@@ -45214,6 +45216,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //                this.$store.commit('setEspecialidad', this.especialidad);
             this.$store.commit('setSemestre', this.semestre);
             this.$store.commit('setCod_curso', this.cod_curso);
+            this.$store.commit('setEdit', this.edit);
         },
 
         getData: function getData() {
@@ -45229,7 +45232,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/index/';
             __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(url, request).then(function (response) {
-                console.log('response.data.acceso: ', response.data.acceso);
+                //console.log('response.data.acceso: ',response.data.acceso);
                 //this.lineas = response.data.data;
                 _this.$store.commit('setLineas', response.data.data);
                 _this.$store.commit('sortLineasRow');
@@ -49736,161 +49739,165 @@ var render = function() {
     _vm._v(" "),
     !_vm.loading
       ? _c("span", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default",
-              attrs: { type: "button", name: "vista" },
-              on: {
-                click: function($event) {
-                  _vm.view("vista")
-                }
-              }
-            },
-            [_vm._v("Vista")]
-          ),
-          _vm._v(" "),
-          _vm.acceso.generales
+          _vm.edit
             ? _c("span", [
                 _c(
                   "button",
                   {
                     staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "generales" },
+                    attrs: { type: "button", name: "vista" },
                     on: {
                       click: function($event) {
-                        _vm.view("generales")
+                        _vm.view("vista")
                       }
                     }
                   },
-                  [_vm._v("Generalidades")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.sumillas
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "sumillas" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("sumillas")
-                      }
-                    }
-                  },
-                  [_vm._v("Sumillas")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.competencias
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "competencias" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("competencias")
-                      }
-                    }
-                  },
-                  [_vm._v("Competencias")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.unidades
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "unidades" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("unidades")
-                      }
-                    }
-                  },
-                  [_vm._v("Unidades")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.contenidos
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "contenidos" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("contenidos")
-                      }
-                    }
-                  },
-                  [_vm._v("Contenidos")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.estrategias
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "estrategias" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("estrategias")
-                      }
-                    }
-                  },
-                  [_vm._v("Estrategias")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.evaluaciones
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "evaluaciones" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("evaluaciones")
-                      }
-                    }
-                  },
-                  [_vm._v("Evaluaciones")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.acceso.bibliografias
-            ? _c("span", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: { type: "button", name: "bibliografias" },
-                    on: {
-                      click: function($event) {
-                        _vm.view("bibliografias")
-                      }
-                    }
-                  },
-                  [_vm._v("Bibliografias")]
-                )
+                  [_vm._v("Vista")]
+                ),
+                _vm._v(" "),
+                _vm.acceso.generales
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "generales" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("generales")
+                            }
+                          }
+                        },
+                        [_vm._v("Generalidades")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.sumillas
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "sumillas" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("sumillas")
+                            }
+                          }
+                        },
+                        [_vm._v("Sumillas")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.competencias
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "competencias" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("competencias")
+                            }
+                          }
+                        },
+                        [_vm._v("Competencias")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.unidades
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "unidades" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("unidades")
+                            }
+                          }
+                        },
+                        [_vm._v("Unidades")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.contenidos
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "contenidos" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("contenidos")
+                            }
+                          }
+                        },
+                        [_vm._v("Contenidos")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.estrategias
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "estrategias" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("estrategias")
+                            }
+                          }
+                        },
+                        [_vm._v("Estrategias")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.evaluaciones
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "evaluaciones" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("evaluaciones")
+                            }
+                          }
+                        },
+                        [_vm._v("Evaluaciones")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.acceso.bibliografias
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", name: "bibliografias" },
+                          on: {
+                            click: function($event) {
+                              _vm.view("bibliografias")
+                            }
+                          }
+                        },
+                        [_vm._v("Bibliografias")]
+                      )
+                    ])
+                  : _vm._e()
               ])
             : _vm._e()
         ])
@@ -49951,6 +49958,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     state: {
         semestre: "",
         cod_curso: "",
+        edit: false,
         lineas: [],
         acceso: [],
         nuevo: {
@@ -50123,6 +50131,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         setCod_curso: function setCod_curso(state, cod_curso) {
             state.cod_curso = cod_curso;
+        },
+        setEdit: function setEdit(state, edit) {
+            state.edit = edit;
         },
         setNewItem: function setNewItem(state, item) {
             state.newItem = item;

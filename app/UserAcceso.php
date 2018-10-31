@@ -19,4 +19,10 @@ class UserAcceso extends Model
         $val = $this->belongsTo(Acceso::class, 'acceso_id', 'id')->first();
         return $val;
     }
+    public function getUserAttribute()
+    {
+        //$val = Acceso::where('id', $this->acceso_id)->first();
+        $val = $this->belongsTo(User::class, 'user_id', 'id')->first();
+        return $val;
+    }
 }

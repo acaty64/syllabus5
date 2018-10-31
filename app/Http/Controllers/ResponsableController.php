@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\General;
-use App\Titulo;
+use App\Responsable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class SyllabusController extends Controller
+class ResponsableController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class SyllabusController extends Controller
      */
     public function index()
     {
-        
+        //
     }
 
     /**
@@ -43,33 +41,21 @@ class SyllabusController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Responsable  $responsable
      * @return \Illuminate\Http\Response
      */
-//    public function show($id)
-    public function show(Request $request)
-        //$semestre, $cod_curso, $edit)
+    public function show(Responsable $responsable)
     {
-        /*
-        $datos = [
-            'semestre' => $semestre,
-            'cod_curso' => $cod_curso,
-            'user_id' => Auth::user()->id
-        ];
-        */
-        return view('app.show')
-                ->with('semestre', $request->semestre)
-                ->with('cod_curso', $request->cod_curso)
-                ->with('edit', $request->edit);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Responsable  $responsable
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Responsable $responsable)
     {
         //
     }
@@ -78,10 +64,10 @@ class SyllabusController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Responsable  $responsable
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Responsable $responsable)
     {
         //
     }
@@ -89,10 +75,10 @@ class SyllabusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Responsable  $responsable
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Responsable $responsable)
     {
         //
     }

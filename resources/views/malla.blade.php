@@ -37,7 +37,8 @@
             @foreach($fila as $key)
                 @if($key['cod_curso'] != '')
                     <td align="center">
-                        <form method="GET" action="{{ url('/show/'.$semestre.'/'.$key['cod_curso']) }}">
+                        <form method="GET" action="{{ route('curso.show', ['semestre'=>$semestre, 'cod_curso' => $key['cod_curso'], 'edit' => false]) }}">
+                        <!--form method="GET" action="{{ url('/show/'.$semestre.'/'.$key['cod_curso'].'/false') }}"-->
                             {{ csrf_field() }}
                                 <button class="btn btn-sm btn-primary" title="{{ $key['wcurso'] . chr(13) . 'PreReq: ' . $key['wprereq'] }}" type="submit">
                                 {{ $key['cod_curso'] }}</button>

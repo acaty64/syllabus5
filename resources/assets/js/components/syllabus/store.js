@@ -7,6 +7,7 @@ export const store = new Vuex.Store({
 	state:{
         semestre: "",
         cod_curso: "",
+        edit: false,
         lineas: [],
         acceso: [],
         nuevo: {
@@ -192,6 +193,10 @@ export const store = new Vuex.Store({
 
         setCod_curso(state, cod_curso){
             state.cod_curso = cod_curso;
+        },
+
+        setEdit(state, edit){
+            state.edit = edit;
         },
 
         setNewItem(state, item){

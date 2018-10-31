@@ -18,7 +18,7 @@
         "laravel/tinker": "~1.0",
         "spatie/laravel-backup": "^5.11",
         "symfony/psr-http-message-bridge": "0.2",
-        "nesbot/carbon": "^1.24"
+        "nesbot/carbon": "^1.24",
     },
     "require-dev": {
         "filp/whoops": "~2.0",

@@ -9,6 +9,7 @@ Route::get('cursogrupo/{cod_grupo}', [
 	'uses'	=> 'CursoGrupoController@index'
 ]);
 
+
 Route::fallback(function()
 {
 	return response('Página no encontrada', 404);

@@ -4,9 +4,11 @@ namespace Tests\Unit;
 
 use App\Acceso;
 use App\Contenido;
+use App\Grupo;
 use App\Sumilla;
 use App\User;
 use App\UserAcceso;
+use App\UserGrupo;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -115,6 +117,16 @@ class A00_AccesoTest extends TestCase
                     'cod_acceso'=>'resp',
                     'user_id' => $user->id
                 ]);
+        $grupo = Grupo::create([
+                'cod_grupo' => 'ADM',
+                'wgrupo' => 'ADMINISTRACION'
+            ]);
+        UserGrupo::create([
+                'semestre' => env('SEMESTRE'),
+                'user_id' => $user->id,
+                'grupo_id' => $grupo->id
+            ]);
+
         $this->actingAs($user);
         $response = $this->get('resp/cursogrupo/ADM');
         $response->assertStatus(200);
@@ -122,6 +134,8 @@ class A00_AccesoTest extends TestCase
         // A responsable don't access adm/grupos
         $response = $this->get('adm/grupos/show');
         $response->assertStatus(302);      
+
+        //$this->markTestIncomplete();
     }
 
     /**

@@ -3,7 +3,9 @@
 namespace Tests\Browser;
 
 use App\Acceso;
+use App\Grupo;
 use App\Sumilla;
+use App\UserGrupo;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskData;
@@ -42,7 +44,9 @@ class A06_MenuTest extends DuskTestCase
             $browser->loginAs($user)
                     ->visit('/')
                     ->assertSee('Consulta')
+                    ->assertSee('Edición')
                     ->assertSee('Descarga de Archivos')
+                    ->assertSee('Backup & Restore')
                     ->click('.consulta')
                     ->click('.xCurso')
                     ->assertSee('Syllabus por Curso')
@@ -51,7 +55,7 @@ class A06_MenuTest extends DuskTestCase
                     ->assertSee('Administración')
                     ->assertSee('Contabilidad')
                     ->assertSee('Economía')
-                    ->click('.consulta')
+                    ->click('.edicion')
                     ->click('.xGrupo')
                     ->assertSee('Visualización o Edición de Syllabus')
                     ->click('.download')
@@ -71,6 +75,7 @@ class A06_MenuTest extends DuskTestCase
             $browser->loginAs($user)
                     ->visit('/')
                     ->assertSee('Consulta')
+                    ->assertSee('Edición')
                     ->assertSee('Descarga de Archivos')
                     ;
         });
@@ -82,11 +87,23 @@ class A06_MenuTest extends DuskTestCase
                     'user_id' => $user->id
                 ]);
 
+        $grupo = Grupo::create([
+                'cod_grupo' => 'ADM',
+                'wgrupo' => 'ADMINISTRACION'
+            ]);
+        UserGrupo::create([
+                'semestre' => env('SEMESTRE'),
+                'user_id' => $user->id,
+                'grupo_id' => $grupo->id
+            ]);
+
+
         $this->browse(function (Browser $browser) use ($user) {
                     
             $browser->loginAs($user)
                     ->visit('/')
                     ->assertSee('Consulta')
+                    ->assertSee('Edición')
                     ->assertDontSee('Descarga de Archivos')
                     ;
 
