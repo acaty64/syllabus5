@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-class A05_EvaluacionTest extends TestCase
+class A06_EvaluacionTest extends TestCase
 {
 	use DatabaseMigrations;
 

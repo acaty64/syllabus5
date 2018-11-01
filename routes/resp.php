@@ -9,6 +9,12 @@ Route::get('cursogrupo/{cod_grupo}', [
 	'uses'	=> 'CursoGrupoController@index'
 ]);
 
+/* Acceso Responsable, Administrador, Master  */
+Route::get('consistencia/show/{curso_id}', [
+	'as'	=> 'consistencia.show',
+	'uses'	=> 'ConsistenciaController@show'
+]);
+
 
 Route::fallback(function()
 {

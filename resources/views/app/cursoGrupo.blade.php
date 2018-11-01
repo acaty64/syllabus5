@@ -4,13 +4,13 @@
 
 @section('content')
     <h1 class="text-center">{{ $titulo_pagina }}</h1>
-    <p class="text-center" style="color:red">{{ $mensaje }}</p>
-    <table style="width:50%" align="center">
+    <p class="text-center" style="color:{{ $mensaje['color'] }}">{{ $mensaje['texto'] }}</p>
+    <table style="width:80%" align="center">
       <tr  style="border-style: solid;">
-        <th>Código</th>
-        <th>Grupo</th>
-        <th>Acción</th>
-        <th>Status</th>
+        <th class="text-center">Código</th>
+        <th class="text-center">Grupo</th>
+        <th class="text-center">Acción</th>
+        <th class="text-center">Status</th>
       </tr>
         {{ csrf_field() }}
         @foreach($data as $fila)
@@ -24,16 +24,24 @@
                         'edit'=>true] ) }}" 
                         class="btn btn-success" 
                         data-toggle="tooltip" 
-                        title="Syllabus" 
+                        title="Ver o Editar Syllabus" 
                         name = "{{'curso'.$fila->cod_curso}}">
-                        <span class="glyphicon glyphicon-expand" aria-hidden='true'></span>
+                        <span class="glyphicon glyphicon-pencil" aria-hidden='true'></span>
+                    </a>
+                    <a href="{{ route( 'consistencia.show', [
+                        'curso_id'=>$fila->curso_id] ) }}" 
+                        class="btn btn-success" 
+                        data-toggle="tooltip" 
+                        title="Consistencia" 
+                        name = "{{'consistencia'.$fila->cod_curso}}">
+                        <span class="glyphicon glyphicon-check" aria-hidden='true'></span>
                     </a>
                 </td>
                 <td>
-                    @if($fila->curso->status->check == 0)
-                        Por verificar
+                    @if( $fila->curso->consistencia )
+                        <p style="color: green">Completo</p>
                     @else
-                        Verificado
+                        <p style="color: red">Incompleto</p>
                     @endif
                 </td>
             </tr>

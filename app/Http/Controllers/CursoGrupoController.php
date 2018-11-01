@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\CursoGrupo;
+use App\Grupo;
 use App\Send;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,15 +14,16 @@ class CursoGrupoController extends Controller
     public function Index($cod_grupo)
     {
     	$cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
-    	/* Identificar Mensaje */
-		$mensaje = 'El módulo de edición de syllabus NO está disponible.';
-    	if(Send::all()->count() > 0){	
-	    	Send::first()->check_today;
-	    	$user_id = Auth::id();
+	    $user_id = Grupo::where('cod_grupo', $cod_grupo)->first()->responsable->id;
+        /* Identificar Mensaje */
+        $mensaje = ['texto'=>'El módulo de edición de syllabus NO está disponible.', 'color'=>'red'];
+        if(Send::all()->count() > 0){
+            Send::first()->check_today;
 			$last_send = Send::where('user_id', $user_id)->get()->sortBy('date_send')->last();
 			if(!is_null($last_send)){
 				if($last_send->nstatus > 0){
-					$mensaje = 'El módulo de edición de syllabus está disponible hasta el día '. $last_send->date_answer;
+                    $fecha = Carbon::parse($last_send->date_answer);
+					$mensaje = ['texto'=>'El módulo de edición de syllabus está disponible hasta el día '.  $fecha->format('l d-m-Y'), 'color'=>'green'];
 				}
 			}
     	}

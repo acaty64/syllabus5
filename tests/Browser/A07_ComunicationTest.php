@@ -82,8 +82,8 @@ class A07_ComunicationTest extends DuskTestCase
                     ->press('.xGrupo')
                     ->waitForText('Cursos de Grupo:', 10)
                     ->assertSee('Cursos de Grupo: ' . $grupo->cod_grupo)
-                    ->assertSee('El módulo de edición de syllabus está disponible hasta el día '. $date_answer->toDateString())
-                    ->assertSee('Por verificar')
+                    ->assertSee('El módulo de edición de syllabus está disponible hasta el día '. Carbon::now()->addDays(1)->format('l d-m-Y'))
+                    ->assertSee('Incompleto')
                     ;
 
         });

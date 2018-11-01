@@ -2,14 +2,17 @@
 
 namespace App;
 
+use App\Consistencia;
 use App\CursoStatus;
+use App\Send;
 use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
 	protected $appends = [ 'texto_horas', 
                            'ciclo_romano',
-                           'status'
+                           'status',
+                           'consistencia'
                         ];
 
     protected $fillable = [
@@ -21,6 +24,12 @@ class Curso extends Model
     protected function getStatusAttribute()
     {
         $val = $this->belongsTo(CursoStatus::class, 'id', 'curso_id')->first();
+        return $val;
+    }
+
+    protected function getConsistenciaAttribute()
+    {
+        $val = Send::find(1)->consistencia($this->id, 'boolean');
         return $val;
     }
 
