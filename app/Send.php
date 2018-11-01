@@ -9,6 +9,7 @@ use App\CursoStatus;
 use App\Estrategia;
 use App\Sumilla;
 use App\Unidad;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Send extends Model
@@ -39,12 +40,12 @@ class Send extends Model
     	/* Envios  */
         $sends = Send::all();
 	    foreach ($sends as $send) {
-	        $today = \Carbon\Carbon::now();
+	        $today = Carbon::today('America/Lima');
 	        $grupo = User::find($send->user_id)->grupo;
 	        $cursos = $grupo->cursos;
 	        foreach ($cursos as $curso) {
 	            $status = CursoStatus::where('curso_id', $curso->curso_id)->first();
-	        	if($send->date_answer < $today->addDays(1)){
+	        	if($today < Carbon::parse($send->date_answer)->endOfDay()){
 	                $status->open = true;
 	            }else{
 	            	$status->open = false;

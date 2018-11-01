@@ -17,7 +17,7 @@
                         <span v-else-if="fila['tipo'] == 'unidades'">
                             <span v-for="item in fila.data">
                                 <span v-if="item['view']==true">
-                                    <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewUnidad(item)"></span>
+                                    <span :class="rowclass(item, fila.tipo)" :align="item.align" v-html="viewUnidad(item, fila)"></span>
                                 </span>
                             </span>
                         </span>
@@ -97,8 +97,8 @@
                 return newText;
             },
 
-            viewUnidad(item){                         
-                var newText = item.texto + '<br>Logro: ' +item.logro;
+            viewUnidad(item, linea){                         
+                var newText = 'UNIDAD ' + this.romanos[linea.orden] + ': ' + item.texto + '<br>Logro: ' + item.logro;
                 return newText;
             },
 

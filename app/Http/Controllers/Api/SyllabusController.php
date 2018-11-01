@@ -942,6 +942,7 @@ class SyllabusController extends Controller
 
         $unidades = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
+                    ->sortBy('semana')
                     ->toArray();
 //return $unidades;
         /* unidades */
@@ -950,6 +951,7 @@ class SyllabusController extends Controller
                     ->where('subtipo', 'contenidos');
         $row_titulo = $collection->first()['row'];
 
+        $orden = 0;
         $collection = collect($unidades);
         foreach ($collection as $key => $value) {
             $new_data = [];
@@ -960,6 +962,7 @@ class SyllabusController extends Controller
             $new_data['pre_row'] = $new_data['row'];
             $new_data['semana'] = $collection[$key]['semana'];
             $new_data['editing'] = false;
+            $new_data['orden'] = ++$orden;
             $new_data['data'] = [
                 [
                     'view' => false,

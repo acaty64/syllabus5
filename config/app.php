@@ -170,6 +170,7 @@ return [
          */
         Laracasts\Flash\FlashServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Jenssegers\Date\DateServiceProvider::class,
         //Spatie\Backup\BackupServiceProvider::class,
         //Barryvdh\DomPDF\ServiceProvider::class,
         
@@ -197,6 +198,7 @@ return [
 
     'aliases' => [
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'Date' => Jenssegers\Date\Date::class,
         //'PDF' => Barryvdh\DomPDF\Facade::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'App' => Illuminate\Support\Facades\App::class,

@@ -11,6 +11,7 @@ use App\UserAcceso;
 use App\UserGrupo;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Jenssegers\Date\Date;
 use Laravel\Dusk\Browser;
 use Tests\DuskData;
 use Tests\DuskTestCase;
@@ -76,13 +77,17 @@ class A07_ComunicationTest extends DuskTestCase
             $resp = User::find($responsable->id);
             $grupo = $resp->grupo;
             // Usuario RESPONSABLE
+
+
+            $fechaC = Carbon::now()->addDays(1);
+            $fecha = new Date($fechaC);
             $browser->loginAs($resp)
                     ->visit('/')
                     ->press('.edicion')
                     ->press('.xGrupo')
                     ->waitForText('Cursos de Grupo:', 10)
                     ->assertSee('Cursos de Grupo: ' . $grupo->cod_grupo)
-                    ->assertSee('El módulo de edición de syllabus está disponible hasta el día '. Carbon::now()->addDays(1)->format('l d-m-Y'))
+                    ->assertSee('El módulo de edición de syllabus está disponible hasta el día '. $fecha->format('l d-m-Y'))
                     ->assertSee('Incompleto')
                     ;
 

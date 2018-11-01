@@ -45486,8 +45486,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
             return newText;
         },
-        viewUnidad: function viewUnidad(item) {
-            var newText = item.texto + '<br>Logro: ' + item.logro;
+        viewUnidad: function viewUnidad(item, linea) {
+            var newText = 'UNIDAD ' + this.romanos[linea.orden] + ': ' + item.texto + '<br>Logro: ' + item.logro;
             return newText;
         },
         viewEvaluacion: function viewEvaluacion(item) {
@@ -45588,7 +45588,9 @@ var render = function() {
                                   class: _vm.rowclass(item, fila.tipo),
                                   attrs: { align: item.align },
                                   domProps: {
-                                    innerHTML: _vm._s(_vm.viewUnidad(item))
+                                    innerHTML: _vm._s(
+                                      _vm.viewUnidad(item, fila)
+                                    )
                                   }
                                 })
                               ])

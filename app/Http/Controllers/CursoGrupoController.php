@@ -8,6 +8,7 @@ use App\Send;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Jenssegers\Date\Date;
 
 class CursoGrupoController extends Controller
 {
@@ -22,7 +23,8 @@ class CursoGrupoController extends Controller
 			$last_send = Send::where('user_id', $user_id)->get()->sortBy('date_send')->last();
 			if(!is_null($last_send)){
 				if($last_send->nstatus > 0){
-                    $fecha = Carbon::parse($last_send->date_answer);
+                    $fechaC = Carbon::parse($last_send->date_answer);
+                    $fecha = new Date($fechaC);
 					$mensaje = ['texto'=>'El módulo de edición de syllabus está disponible hasta el día '.  $fecha->format('l d-m-Y'), 'color'=>'green'];
 				}
 			}
