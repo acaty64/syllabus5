@@ -143,21 +143,41 @@ class A04_AddTest extends DuskTestCase
                     ->click('.btnEditarnew');
 
             $selector = '.idnew.col-1';
-            $texto = 5;
+            $texto = 'Contenido grabado.';
             $browser->type('.idnew.col-1', 5)
                     ->type('.idnew.col-2', 'Nuevo Concepto')
                     ->type('.idnew.col-4', 'Nuevo Procedimiento')
                     ->type('.idnew.col-6', 'Nueva Actividad')
                     ->click('.btnGrabarnew')
-                    ->waitForText('Contenido grabado.')
+                    ->waitForText($texto)
                     ->waitUntilMissing('.toast', 11)
                     ->press('Vista')
                     ->script('window.scrollTo(0, 1500);');
 
-            $browser->waitForText('Nuevo Concepto')
+            $browser->waitForText('NUEVO TEXTO UNIDAD.')
+                    ->waitForText('Nuevo Concepto')
                     ->waitForText('Nuevo Procedimiento')
                     ->waitForText('Nueva Actividad');
 
+            // Segundo concepto
+            $browser->script('window.scrollTo(0, 0);');
+            $browser->press('Contenidos')
+                    ->waitFor('.btnEditarnew', 20)
+                    ->click('.btnEditarnew')
+                    ->type('.idnew.col-1', 6)
+                    ->type('.idnew.col-2', 'Nuevo Concepto 6')
+                    ->type('.idnew.col-4', 'Nuevo Procedimiento 6')
+                    ->type('.idnew.col-6', 'Nueva Actividad 6')
+                    ->click('.btnGrabarnew')
+                    ->waitForText($texto)
+                    ->waitUntilMissing('.toast', 11)
+                    ->press('Vista')
+                    ->script('window.scrollTo(0, 1500);');
+
+            $browser->waitForText('NUEVO TEXTO UNIDAD.')
+                    ->waitForText('Nuevo Concepto 6')
+                    ->waitForText('Nuevo Procedimiento 6')
+                    ->waitForText('Nueva Actividad 6');
 
             $this->assertDatabaseHas('contenidos', [
                         'semestre' => '20191',
@@ -165,6 +185,16 @@ class A04_AddTest extends DuskTestCase
                         'concepto' => 'Nuevo Concepto',
                         'procedimiento' => 'Nuevo Procedimiento',
                         'actividad' => 'Nueva Actividad',
+                        'semana' => 5,
+                    ]);
+
+            $this->assertDatabaseHas('contenidos', [
+                        'semestre' => '20191',
+                        'cod_curso' => '100048',
+                        'concepto' => 'Nuevo Concepto 6',
+                        'procedimiento' => 'Nuevo Procedimiento 6',
+                        'actividad' => 'Nueva Actividad 6',
+                        'semana' => 6,
                     ]);
         });
 

@@ -151,6 +151,7 @@
                     if(linea.id == 'new'){
                         this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
                             toastr.success('Contenido grabado.');
+                            this.$store.commit('newItem');
                         }).catch(function () {
                             toastr.error('El registro no ha sido grabado.');
                         });

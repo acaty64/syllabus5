@@ -38,7 +38,7 @@
                     </a>
                 </td>
                 <td>
-                    @if( $fila->curso->consistencia )
+                    @if($fila->curso->consistencia_boolean)
                         <p style="color: green">Completo</p>
                     @else
                         <p style="color: red">Incompleto</p>

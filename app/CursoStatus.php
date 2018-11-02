@@ -14,4 +14,10 @@ class CursoStatus extends Model
         'semestre', 'curso_id', 'check', 'open'
     ];
 
+    public function getCursoAttribute()
+    {
+        $val = $this->belongsTo(Curso::class, 'curso_id', 'id')->first();
+        return $val;
+    }
+
 }

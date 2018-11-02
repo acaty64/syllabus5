@@ -2,13 +2,16 @@
 
 namespace App;
 
-use App\Consistencia;
+use App\Traits\Consistencia;
+//use App\Consistencia;
 use App\CursoStatus;
 use App\Send;
 use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
+    use Consistencia;
+
 	protected $appends = [ 'texto_horas', 
                            'ciclo_romano',
                            'status',
@@ -21,18 +24,28 @@ class Curso extends Model
         'ciclo',
     ];
 
+    protected function getConsistenciaBooleanAttribute()
+    {
+        return (boolean)$this->checkear($this->id, '');
+    }
+
+    protected function getConsistenciaArrayAttribute()
+    {
+        return $this->checkear($this->id, 'array');
+    }
+
     protected function getStatusAttribute()
     {
         $val = $this->belongsTo(CursoStatus::class, 'id', 'curso_id')->first();
         return $val;
     }
-
+/*
     protected function getConsistenciaAttribute()
     {
         $val = Send::find(1)->consistencia($this->id, 'boolean');
         return $val;
     }
-
+*/
     protected function getTextoHorasAttribute()
     {
     	return $this->horas . " (" . $this->ht . " HT/" . $this->hp . " HP)";

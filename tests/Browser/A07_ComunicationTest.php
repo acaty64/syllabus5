@@ -48,7 +48,7 @@ class A07_ComunicationTest extends DuskTestCase
         $grupo = Grupo::find(5);
         $responsable = $grupo->responsable;
 
-        $this->browse(function (Browser $browser) use ($user, $responsable, $date_send, $date_answer) {                    
+        $this->browse(function (Browser $browser) use ($user, $responsable, $date_send, $date_answer, $grupo) {                    
             // Usuario ADMINISTRADOR
             $browser->loginAs($user)
                     ->visit('/adm/send')
@@ -74,6 +74,16 @@ class A07_ComunicationTest extends DuskTestCase
                         'date_answer' => $date_answer->toDateString(),
                         'date_response' => null
                     ]);
+            foreach ($grupo->cursos as $cursogrupo) {
+//dd($cursogrupo);
+                $this->assertDatabaseHas('curso_status', [
+                        'semestre' => env("SEMESTRE"),
+                        'curso_id' => $cursogrupo->curso->id,
+                        'check' => false,
+                        'open' => true
+                    ]);
+            }
+
             $resp = User::find($responsable->id);
             $grupo = $resp->grupo;
             // Usuario RESPONSABLE

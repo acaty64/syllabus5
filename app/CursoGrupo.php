@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CursoGrupo extends Model
 {
+
 	protected $table = "curso_grupos";
-	protected $appends = [ 'wcurso' ];
+	protected $appends = [ 'wcurso', 'curso', 'curso_id', 'grupo' ];
 	protected $fillable = [ 
 			'cod_curso',
 			'cod_grupo' 

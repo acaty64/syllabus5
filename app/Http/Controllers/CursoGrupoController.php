@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CursoGrupo;
 use App\Grupo;
 use App\Send;
+use App\Traits\Consistencia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class CursoGrupoController extends Controller
 {
     public function Index($cod_grupo)
     {
+        
     	$cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
 	    $user_id = Grupo::where('cod_grupo', $cod_grupo)->first()->responsable->id;
         /* Identificar Mensaje */
