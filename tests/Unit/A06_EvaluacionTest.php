@@ -21,7 +21,7 @@ class A06_EvaluacionTest extends TestCase
     public function addSimpleTest()
     {
     	$evaluacion = Evaluacion::create([
-            "semestre" => "20182", 
+            "semestre" => env('SEMESTRE'), 
             "cod_curso" => "100048", 
             "texto" => "Nueva Evaluacion",
             "porcentaje" => "20",
@@ -29,7 +29,7 @@ class A06_EvaluacionTest extends TestCase
     	]);
 
 		$this->assertDatabaseHas("evaluaciones", [
-            "semestre" => "20182", 
+            "semestre" => env('SEMESTRE'), 
             "cod_curso" => "100048", 
             "texto" => "Nueva Evaluacion",
             "porcentaje" => "20",
@@ -75,7 +75,7 @@ class A06_EvaluacionTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env("SEMESTRE"), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -94,7 +94,7 @@ class A06_EvaluacionTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env("SEMESTRE"),
 			"texto" => "Nueva evaluacion",
 			"porcentaje" => "20",
 			"semana" => "1"
@@ -141,7 +141,7 @@ class A06_EvaluacionTest extends TestCase
     	$data = [
 					"id"=> "1",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env("SEMESTRE"), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -159,7 +159,7 @@ class A06_EvaluacionTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env("SEMESTRE"),
 			"texto" => "Evaluacion modificada",
 			"porcentaje" => "15",
 			"semana" => "2"

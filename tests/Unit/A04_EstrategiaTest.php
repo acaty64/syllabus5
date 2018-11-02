@@ -27,7 +27,7 @@ class A04_EstrategiaTest extends TestCase
 					"id"=> "new",
 					"cod_curso"=> "100048",  
 					"orden"=>1,  
-					"semestre"=>"20181", 
+					"semestre"=>env('SEMESTRE'), 
 					"tipo"=>$tipo,
 					"data"=>[ $datos ]
 				];
@@ -53,7 +53,7 @@ class A04_EstrategiaTest extends TestCase
     				"id"=>1, 
 					"cod_curso"=> "100048",  
 					"orden"=>1,  
-					"semestre"=>"20181", 
+					"semestre"=>env('SEMESTRE'), 
 //					"tipo"=>$tipo,
     				"texto"=>"Lorem Ipsum"
 				];
@@ -62,7 +62,7 @@ class A04_EstrategiaTest extends TestCase
 					"id"=>1,
 					"cod_curso"=> "100048",  
 					"orden"=>1,  
-					"semestre"=>"20181",
+					"semestre"=>env('SEMESTRE'),
     				"texto"=>"Lorem Ipsum"
 				]);
 
@@ -72,7 +72,7 @@ class A04_EstrategiaTest extends TestCase
 				"id"=> "1",
 				"cod_curso"=> "100048",  
 				"orden"=>1,  
-				"semestre"=>"20181", 
+				"semestre"=>env('SEMESTRE'), 
 				"tipo"=>"estrategias",
 				"data"=>[
 						["texto"=>"Nuevo texto"],
@@ -86,7 +86,7 @@ class A04_EstrategiaTest extends TestCase
 		$this->assertDatabaseHas('estrategias',[ 
 					"cod_curso"=> "100048",  
 					"orden"=>1,  
-					"semestre"=>"20181",
+					"semestre"=>env('SEMESTRE'),
     				"texto"=>"Nuevo texto"
 				]);
     }
@@ -105,7 +105,7 @@ class A04_EstrategiaTest extends TestCase
 				"tipo"=>"estrategias",
 				"id"=> $estrategia->id,
 				"cod_curso"=> "100048",
-				"semestre"=>"20181", 
+				"semestre"=>env('SEMESTRE'), 
 				],
 			];
 		$this->post('api/deleteData', $request);
@@ -113,7 +113,7 @@ class A04_EstrategiaTest extends TestCase
 		$this->assertDatabaseMissing('estrategias',[ 
 					"id"=>1,  
 					"cod_curso"=> "100048",  
-					"semestre"=>"20181",
+					"semestre"=>env('SEMESTRE'),
     				"texto"=>"Nuevo texto"
 				]);
     }

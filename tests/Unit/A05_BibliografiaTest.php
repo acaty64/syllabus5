@@ -21,7 +21,7 @@ class A05_BibliografiaTest extends TestCase
     public function addSimpleTest()
     {
     	$bibliografia = Bibliografia::create([
-            "semestre" => "20182", 
+            "semestre" => env('SEMESTRE'), 
             "cod_curso" => "100048",
 //            "tipo"	=> 1, 
             "autor" => "Nuevo Autor",
@@ -33,7 +33,7 @@ class A05_BibliografiaTest extends TestCase
     	]);
 
 		$this->assertDatabaseHas("bibliografias", [
-            "semestre" => "20182", 
+            "semestre" => env('SEMESTRE'), 
             "cod_curso" => "100048",
 //            "tipo"	=> "1", 
             "autor" => "Nuevo Autor",
@@ -113,7 +113,7 @@ class A05_BibliografiaTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env("SEMESTRE"), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -132,7 +132,7 @@ class A05_BibliografiaTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env("SEMESTRE"),
 			"orden"=>"1",
 			"autor" => "Nuevo autor",
 			"titulo" => "Nuevo titulo",
@@ -210,7 +210,7 @@ class A05_BibliografiaTest extends TestCase
     	$data = [
 					"id"=> "1",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env("SEMESTRE"), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -229,7 +229,7 @@ class A05_BibliografiaTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env("SEMESTRE"),
 			"orden"=>"1",
 			"autor" => "Autor modificado",
 			"titulo" => "Titulo modificado",

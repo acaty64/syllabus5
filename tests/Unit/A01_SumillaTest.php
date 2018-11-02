@@ -31,8 +31,8 @@ class A01_SumillaTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"cod_curso"=> "100048",  
-					"plan" => "8", 
-					"semestre"=>'20191',
+					"plan" => env('PLAN'), 
+					"semestre"=>env('SEMESTRE'),
 					"tipo"=>$tipo,
 					"data"=>[ $datos ],
 				];
@@ -57,8 +57,8 @@ class A01_SumillaTest extends TestCase
     	$data = [
     				"id"=>1, 
 					"cod_curso"=> "100048",  
-					"semestre"=>"20191",  
-					"plan" => "8", 
+					"semestre"=>env('SEMESTRE'),  
+					"plan" => env('PLAN'), 
 					"tipo"=>$tipo,
     				"texto"=>"Lorem Ipsum"
 				];
@@ -67,7 +67,7 @@ class A01_SumillaTest extends TestCase
 					"id"=>1,
 					"cod_curso"=> "100048",  
 //					"orden"=>1,  
-					"plan" => "8",
+					"plan" => env('PLAN'),
     				"texto"=>"Lorem Ipsum"
 				]);
 
@@ -77,7 +77,7 @@ class A01_SumillaTest extends TestCase
 				"id"=> "1",
 				"cod_curso"=> "100048",  
 //				"orden"=>1,  
-				"plan" => "8", 
+				"plan" => env('PLAN'), 
 				"tipo"=>"sumillas",
 				"data"=>[
 						["texto"=>"Nuevo texto"],
@@ -91,7 +91,7 @@ class A01_SumillaTest extends TestCase
 		$this->assertDatabaseHas('sumillas',[ 
 					"cod_curso"=> "100048",  
 //					"orden"=>1,  
-					"plan" => "8",
+					"plan" => env('PLAN'),
     				"texto"=>"Nuevo texto"
 				]);
     }
@@ -105,7 +105,7 @@ class A01_SumillaTest extends TestCase
     {
 		$datos =  [
 					"cod_curso"=> "100048",  
-					"plan" => "8",
+					"plan" => env('PLAN'),
 					"texto" => "Lorem Ipsum"
 				];   	
     	$sumilla = Sumilla::create($datos);
@@ -114,8 +114,8 @@ class A01_SumillaTest extends TestCase
 				"tipo"=>"sumillas",
 				"id"=> "1",
 				"cod_curso"=> "100048",
-				"plan" => "8", 
-				"semestre" => "20191",
+				"plan" => env('PLAN'), 
+				"semestre" => env('SEMESTRE'),
 				],
 			];
 		$this->post('api/deleteData', $request);
@@ -123,7 +123,7 @@ class A01_SumillaTest extends TestCase
 		$this->assertDatabaseMissing('sumillas',[ 
 					"id"=>1,  
 					"cod_curso"=> "100048",  
-					"plan" => "8",
+					"plan" => env('PLAN'),
     				"texto"=>"Nuevo texto"
 				]);
 

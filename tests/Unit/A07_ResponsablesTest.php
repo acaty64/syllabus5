@@ -43,7 +43,7 @@ class A07_ResponsablesTest extends TestCase
             ]);
 
         UserGrupo::create([
-                'semestre'  => '20191',
+                'semestre'  => env('SEMESTRE'),
                 'user_id'   => $responsable->id,
                 'grupo_id'  => $grupo->id
             ]);
@@ -80,7 +80,7 @@ class A07_ResponsablesTest extends TestCase
 
         // Crea Status
         CursoStatus::create([
-                'semestre'      => '20191',
+                'semestre'      => env('SEMESTRE'),
                 'curso_id'      => $curso->id,
                 'check'         => false,
                 'open'          => true,

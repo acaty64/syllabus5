@@ -21,7 +21,7 @@ class A03_UnidadTest extends TestCase
     public function addSimpleTest()
     {
     	$contenido = Unidad::create([
-            'semestre' => "20182", 
+            'semestre' => env('SEMESTRE'), 
             'cod_curso' => "100048", 
             'semana' => "3",
             'texto' => "Nuevo texto de unidad",
@@ -29,7 +29,7 @@ class A03_UnidadTest extends TestCase
             'orden' => 5,
     	]);
 		$this->assertDatabaseHas("unidades", [
-            'semestre' => "20182", 
+            'semestre' => env('SEMESTRE'), 
             'cod_curso' => "100048", 
             'semana' => "3",
             'texto' => "Nuevo texto de unidad",
@@ -76,7 +76,7 @@ class A03_UnidadTest extends TestCase
     	$data = [
 					"id"=> "new",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env('SEMESTRE'), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -95,7 +95,7 @@ class A03_UnidadTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env('SEMESTRE'),
 			"semana"=>"16",
 			"texto" => "Texto de unidad",
 			"logro" => "Texto de logro",
@@ -142,7 +142,7 @@ class A03_UnidadTest extends TestCase
     	$data = [
 					"id"=> "1",
 					"button"=>"Grabar",
-					"semestre"=>"20181", 
+					"semestre"=>env('SEMESTRE'), 
 					"cod_curso"=> "100048",
 					"tipo"=>$tipo,
 					"subtipo"=>$tipo,
@@ -161,7 +161,7 @@ class A03_UnidadTest extends TestCase
 
 		$this->assertDatabaseHas($tipo, [
 			"cod_curso"=> "100048",
-			"semestre"=>"20181",
+			"semestre"=>env('SEMESTRE'),
 			"semana"=>"1",
 			"texto" => "Unidad modificada",
 			"logro" => "Logro modificado",

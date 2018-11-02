@@ -152,7 +152,7 @@ class A00_AccesoTest extends TestCase
                     'user_id' => $user->id
                 ]);
         $this->actingAs($user);
-        $response = $this->get('doc/edit/20191/100048');
+        $response = $this->get('doc/edit/'.env("SEMESTRE").'/100048');
         $response->assertStatus(200);
         $response->assertViewIs('app.show');
         // A responsable don't access resp/cursogrupo/ADM
