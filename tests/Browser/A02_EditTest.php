@@ -41,7 +41,7 @@ class A02_EditTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit(route('syllabus.show',['semestre'=>'20191','cod_curso'=>'100048','edit'=>true]))
+                    ->visit(route('syllabus.show',['semestre'=>env("SEMESTRE"),'cod_curso'=>'100048','edit'=>true]))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
                     ->waitFor('.sumillas', 20)
