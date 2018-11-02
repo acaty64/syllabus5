@@ -46516,6 +46516,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -46753,6 +46761,8 @@ var render = function() {
       _c(
         "tbody",
         [
+          _vm._m(0),
+          _vm._v(" "),
           _c("tr", [
             _c("div", { staticClass: "row" }, [
               _vm.switchEdit && _vm.active_line == "new"
@@ -46919,7 +46929,56 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-1 col-xs-1 col-xs-offset-1 unidades componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("SEMANA")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-2 col-xs-4 col-xs-offset-1 unidades componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("UNIDAD")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-3 col-xs-4 col-xs-offset-3 unidades componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("LOGRO")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass:
+              "notEditing col-6 col-xs-2 col-xs-offset-1 unidades componente",
+            attrs: { align: "center" }
+          },
+          [_c("b", [_vm._v("ACCIONES")])]
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
