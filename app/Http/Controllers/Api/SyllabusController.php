@@ -31,7 +31,6 @@ class SyllabusController extends Controller
                             'plan'=>env("PLAN"),
                             'cod_curso'=>$request->data["cod_curso"],
                             'texto'=>$request->data['data'][0]["texto"],
-//                            'orden'=>$request->data["orden"],
                         ]);
                         $id = $sumilla->id;
                         $_request = $request;
@@ -45,7 +44,6 @@ class SyllabusController extends Controller
                         }
 
                         $dataNew = $this->upload_sumillas($datos, $_request);
-                        //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'sumillas';
                     } catch (Exception $e) {
@@ -164,7 +162,6 @@ class SyllabusController extends Controller
                             $datos = $this->insertData($datos, $new_data);
                         }
 
-
                         $dataNew = [];
                         foreach ($datos as $key => $value) {
                             if($datos[$key]['tipo'] == 'contenidos' && $datos[$key]['subtipo'] == 'contenidos' ){
@@ -172,15 +169,13 @@ class SyllabusController extends Controller
                             }
                         }
 
-//                    $dataNew = $contenido;
-
                         $id = $contenido->id;
                         $success = true;
                         $proceso = 'contenidos';                        
                     } catch (Exception $e) {
                         $id = '';
                         $success = false;
-                        $proceso = 'Error add contenidos';                        
+                        $proceso = 'Error add contenidos';
                     }
                 }else{
                     $dataNew = '';
@@ -200,7 +195,7 @@ class SyllabusController extends Controller
                         }                        
                     } catch (Exception $e) {
                         $success = false;
-                        $proceso = 'Error modify contenidos';                         
+                        $proceso = 'Error modify contenidos';
                     }
                 }
                 break;
@@ -240,7 +235,6 @@ class SyllabusController extends Controller
 
                         $dataNew = $this->upload_estrategias($datos, $_request);
 
-                        //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'estrategias';
                     } catch (Exception $e) {
@@ -287,7 +281,6 @@ class SyllabusController extends Controller
 
                         $dataNew = $this->upload_evaluaciones($datos, $_request);
 
-                        //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'evaluaciones';
                     } catch (Exception $e) {
@@ -310,16 +303,7 @@ class SyllabusController extends Controller
                     }
                 }
                 break;
-/*
-                $id = $request->data['id'];
-                $evaluacion = Evaluacion::find($id);
-                $evaluacion->texto = $request->data['data'][0]['texto'];
-                $evaluacion->porcentaje = $request->data['data'][1]['texto'];
-                $evaluacion->semana = $request->data['data'][2]['texto'];
-                $evaluacion->save();
-                $proceso = 'evaluaciones';
-                break;
-*/
+
             case 'bibliografias' :
                 $id = $request->data['id'];
                 if($request->new){
@@ -356,7 +340,6 @@ class SyllabusController extends Controller
                             }
                         }
 
-                        //$dataNew[0] = $data_new;
                         $success = true;
                         $proceso = 'bibliografias';
                     } catch (Exception $e) {
@@ -451,13 +434,11 @@ class SyllabusController extends Controller
 
         $plan = env('PLAN');
         $datos = [];
-        //$especialidad = $request->especialidad;
         $semestre = $request->semestre;
         $cod_curso = $request->cod_curso;
         
         $curso = Curso::all()->where('cod_curso', $cod_curso)
                 ->first();
-        //        ->where('especialidad', $especialidad)
 
         $new_data = $this->upload_titulo0($request, $curso);
         if(!empty($new_data)){
@@ -485,7 +466,7 @@ class SyllabusController extends Controller
         }
 
         $new_data = $this->upload_unidades($datos, $request);
-//return $new_data;
+
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -683,8 +664,7 @@ class SyllabusController extends Controller
                         ->where('subtipo', 'competencias')
                         ->first();
         $row_titulo = $titulo1->orden * 10000;
-//        $titulos = $this->titulos($request);
-//        $collection = collect($titulos)->where('tipo', 'titulo2');
+
         $collection = Titulo::all()
                         ->where('plan', env('PLAN'))
                         ->where('tipo','2')
@@ -741,11 +721,9 @@ class SyllabusController extends Controller
             $new_data['id'] = $data1[$key]['id'];
             $new_data['row'] = $data1[$key]['orden'] * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
-            //$new_data['week'] = '';
             $new_data['editing'] = false;
             $new_data['tipo'] = $data;
             $new_data['subtipo'] = $data;
-//if($campo == 'texto_semestre'){ dd($$modelo); };
             $new_data['data'] = [
                     [
                         'view' => true,
@@ -765,8 +743,6 @@ class SyllabusController extends Controller
                     ],
                 ];
 
-
-
             array_push($datos0, $new_data);
         }
         return $datos0;          
@@ -777,8 +753,6 @@ class SyllabusController extends Controller
         $plan = env('PLAN');
         $sumillas = Sumilla::all()->where('plan', $plan)
                     ->where('cod_curso', $request->cod_curso)->first();
-//                    ->toArray();
-//dd($sumillas);
         /* Sumillas */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -791,12 +765,9 @@ class SyllabusController extends Controller
         $new_data = [];
         if(!empty($$data) || !is_null($$data)){
             $$data = $$data->toArray();
-//            $new_data['id'] = $data1[0]['id'];
             $new_data['id'] = $data1['id'];
-//            $new_data['row'] = $data1[0]['orden'] * 1000 + $row_titulo;
             $new_data['row'] = 1 * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
-            //$new_data['week'] = '';
             $new_data['editing'] = true;
             $new_data['tipo'] = $data;
             $new_data['subtipo'] = $data;
@@ -807,7 +778,6 @@ class SyllabusController extends Controller
                         'cols' => 7,
                         'offset' => 2,
                         'align' => 'justify',
-                        //'texto' => $$data[0]['texto']
                         'texto' => $$data['texto']
                     ],
             ];
@@ -823,29 +793,19 @@ class SyllabusController extends Controller
         $competencias = CursoCompetencia::where('plan', env('PLAN'))
                     ->where('cod_curso', $request->cod_curso)->get();
 
-/*
-        $competencias = Competencia::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-*/
         /* Competencias Generales*/
-
         $collect_items = collect($this->upload_titulo2($request))->first();
 
         $row_titulo = $collect_items['row'];
         $xitem = $collect_items['item'];
-        //$collection = collect($competencias)->where('item', $xitem);
         $collection = $competencias;
         foreach ($collection as $key2 => $value2) {
             $new_data = [];
             $new_data['id'] = $collection[$key2]['id'];
-//dd($collection[$key2]->orden);
-            //$new_data['row'] = $collection[$key2]['orden'] * 100 + $row_titulo;
             $new_data['row'] = $collection[$key2]->orden * 10 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['tipo'] = 'competencias';
             $new_data['subtipo'] = 'competencias';
-            //$new_data['item'] = $collection[$key2]['item'];
             $new_data['item'] = '1';
             $new_data['editing'] = false;
             $new_data['data'] = [
@@ -864,7 +824,6 @@ class SyllabusController extends Controller
         /* Competencias Especificas*/
         $collect_items = collect($this->upload_titulo2($request))->last();
         $row_titulo = $collect_items['row'];
-        //$xitem = $collect_items['item'];
         $xitem = '2';
         $logros = Unidad::all()->where('semestre', $request->semestre)
                     ->where('cod_curso', $request->cod_curso)
@@ -951,7 +910,7 @@ class SyllabusController extends Controller
                     ->where('cod_curso', $request->cod_curso)
                     ->sortBy('semana')
                     ->toArray();
-//return $unidades;
+
         /* unidades */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
@@ -999,7 +958,6 @@ class SyllabusController extends Controller
             ];
             array_push($datos0, $new_data);
         }
-
 
         return $datos0;
     }
@@ -1151,7 +1109,6 @@ class SyllabusController extends Controller
                     'texto' => $collection[$key]['semana'],
                     'type' => 'semana',
                 ],
-
             ];
             array_push($datos0, $new_data); 
         }
@@ -1223,7 +1180,6 @@ class SyllabusController extends Controller
             $new_data['id'] = $collection[$key]['id'];
             $new_data['tipo'] = 'bibliografias';
             $new_data['subtipo'] = 'bibliografias';
-//            $new_data['semana'] = $collection[$key]['orden'];
             $new_data['row'] = $orden * 1000 + $row_titulo;
             $new_data['pre_row'] = $new_data['row'];
             $new_data['editing'] = false;
@@ -1286,10 +1242,7 @@ class SyllabusController extends Controller
             array_push($datos0, $new_data); 
         }
 
-        //$datos0 = $this->sortBibliografias($datos0);
-
         return $datos0;
-
     }
 
     protected function sortBibliografias($datos)

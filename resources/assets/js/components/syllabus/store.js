@@ -43,15 +43,24 @@ export const store = new Vuex.Store({
 	},
 
 	mutations:{
-/////////////
-        setOrden(state, data){
-            var linea = data[0];
-            var n_orden = data[1];
-console.log('setOrden.orden: ', n_orden);
-console.log('setOrden.linea.antes: ', linea);
-            var i = findByRow(state.lineas, linea.row, linea.id);
-            state.lineas[i].orden = n_orden;
-console.log('setOrden.linea.despues: ', linea);
+        setClearNewItem(state){
+            switch(state.status){
+                case 'unidades': 
+                    state.newItem.semana = 0;
+                    state.newItem.editing = false;
+                    state.newItem.data[0].texto = '';
+                    state.newItem.data[1].texto = '';
+                    state.newItem.data[2].texto = '';
+                    break;
+                case 'contenidos': 
+                    state.newItem.semana = 0;
+                    state.newItem.editing = false;
+                    state.newItem.data[0].texto = '';
+                    state.newItem.data[1].texto = '';
+                    state.newItem.data[2].texto = '';
+                    state.newItem.data[3].texto = '';
+                    break;
+            }
         },
         setDefault(state){
             state.active_line = 0;
@@ -508,24 +517,6 @@ console.log('setOrden.linea.despues: ', linea);
     },
 
     actions: {
-        RenumUnidades: (context) =>{
-
-/////////////
-            var n_orden = 1;
-            var lineas = context.state.lineas.filter((linea) => linea.tipo == 'unidades');
-            for (var i = 0; i < lineas.length; i++) {
-//console.log('RenumUnidades.lineas[i]: ', lineas[i]);
-//console.log('RenumUnidades.orden: ',n_orden);
-                context.commit('setOrden', [lineas[i], n_orden++]);
-            }
-            /*
-            context.getters
-                setOrden(state, linea, orden)
-            */
-        },
-
-
-
         RecallUnidades: (context) =>{            
             var request = {
                 'data': {
@@ -689,6 +680,7 @@ console.log('setOrden.linea.despues: ', linea);
                 }
                 context.commit('sortLineasRow');
                 context.commit('setDefault');
+                context.commit('setClearNewItem');
             }).catch(function (error) {
                 console.log('error SaveNewLinea: ', error);
             });

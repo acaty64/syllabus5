@@ -50047,15 +50047,30 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     mutations: {
-        /////////////
+        setClearNewItem: function setClearNewItem(state) {
+            switch (state.status) {
+                case 'unidades':
+                    state.newItem.semana = 0;
+                    state.newItem.editing = false;
+                    state.newItem.data[0].texto = '';
+                    state.newItem.data[1].texto = '';
+                    state.newItem.data[2].texto = '';
+                    break;
+                case 'contenidos':
+                    state.newItem.semana = 0;
+                    state.newItem.editing = false;
+                    state.newItem.data[0].texto = '';
+                    state.newItem.data[1].texto = '';
+                    state.newItem.data[2].texto = '';
+                    state.newItem.data[3].texto = '';
+                    break;
+            }
+        },
         setOrden: function setOrden(state, data) {
             var linea = data[0];
             var n_orden = data[1];
-            console.log('setOrden.orden: ', n_orden);
-            console.log('setOrden.linea.antes: ', linea);
             var i = findByRow(state.lineas, linea.row, linea.id);
             state.lineas[i].orden = n_orden;
-            console.log('setOrden.linea.despues: ', linea);
         },
         setDefault: function setDefault(state) {
             state.active_line = 0;
@@ -50697,6 +50712,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 }
                 context.commit('sortLineasRow');
                 context.commit('setDefault');
+                context.commit('setClearNewItem');
             }).catch(function (error) {
                 console.log('error SaveNewLinea: ', error);
             });
