@@ -16,8 +16,8 @@
                 <td>{{ $fila->cod_curso }}</td>
                 <td>{{ $fila->wcurso }}</td>
                 <td>
-                    <a href="{{ route('PDF', [env('SEMESTRE'), $fila->cod_curso, 'screen']) }}" target="_blank" id="PDFview_{{ $fila->id }}" class="btn btn-success" data-toggle="tooltip" title="PDF view"><span class="glyphicon glyphicon-fullscreen" aria-hidden='true'></span></a>
-                    <a href="{{ route('PDF', [env('SEMESTRE'), $fila->cod_curso, 'download']) }}" id="PDFdown_{{ $fila->id }}" class="btn btn-success" data-toggle="tooltip" title="PDF download"><span class="glyphicon glyphicon-download-alt" aria-hidden='true'></span></a>
+                    <a href="{{ route('PDF', [env('SEMESTRE'), $fila->cod_curso, 'screen', true]) }}" target="_blank" id="PDFview_{{ $fila->id }}" class="btn btn-success" data-toggle="tooltip" title="PDF view"><span class="glyphicon glyphicon-fullscreen" aria-hidden='true'></span></a>
+                    <a href="{{ route('PDF', [env('SEMESTRE'), $fila->cod_curso, 'download', true]) }}" id="PDFdown_{{ $fila->id }}" class="btn btn-success" data-toggle="tooltip" title="PDF download"><span class="glyphicon glyphicon-download-alt" aria-hidden='true'></span></a>
                     <a href="{{ route('curso.show', [env('SEMESTRE'), $fila->cod_curso, true]) }}" id="view_{{ $fila->id }}" class="btn btn-success" data-toggle="tooltip" title="Syllabus"><span class="glyphicon glyphicon-play-circle" aria-hidden='true'></span></a>
                 </td>
             </tr>

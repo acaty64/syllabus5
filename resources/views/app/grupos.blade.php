@@ -9,6 +9,7 @@
         <th>Código</th>
         <th>Grupo</th>
         <th>Acción</th>
+        <th>Status</th>
       </tr>
         {{ csrf_field() }}
         @foreach($data as $fila)
@@ -20,6 +21,13 @@
                         <a href="{{ route('cursogrupo.index', [$fila->cod_grupo]) }}" class="btn btn-success" data-toggle="tooltip" title="Syllabus" name = "{{'cursogrupo'.$fila->cod_grupo}}"><span class="glyphicon glyphicon-expand" aria-hidden='true'></span></a>
                     @else
                         <a href="{{ route('downloadGrupo', [$fila->cod_grupo]) }}" class="btn btn-success" data-toggle="tooltip" title="Syllabus" name = "{{'cursogrupo'.$fila->cod_grupo}}"><span class="glyphicon glyphicon-download-alt" aria-hidden='true'></span></a>
+                    @endif
+                </td>
+                <td>
+                    @if($fila->consistencia)
+                        <p style="color: green">Completo</p>
+                    @else
+                        <p style="color: red">Incompleto</p>
                     @endif
                 </td>
             </tr>

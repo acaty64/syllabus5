@@ -26,12 +26,16 @@
 </head>
 <body style="border:0; margin: 0; background: white" onload="subst()">
 	<img src="{{asset('images/logo-ucss.jpg')}}" width="15%">
+	<h3 style="text-align:center">SYLLABUS</h3>
 	<table style="border-bottom: 1px solid black; width: 100%">
 		<tr>
-			<td style="text-align:center"><h3>SYLLABUS</h3></td>
-		</tr>
-		<tr>
-			<td style="text-align:left">Para uso exclusivo de los alumnos matriculados en el  semestre {{ $semestre }}.</td>
+			<td style="text-align:left">
+				<?php
+				if( $semestre !=0 ){
+					echo('Para uso exclusivo de los alumnos matriculados en el  semestre ' . $semestre . '.');
+				}
+				?>
+			</td>
 			<td style="text-align:right">
 			Página <span class="page"></span> de <span class="topage"></span>
 			</td>

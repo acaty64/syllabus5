@@ -57,5 +57,13 @@ class Grupo extends Model
         return $val; 
     }
 
+    public function getConsistenciaAttribute()
+    {
+        if($this->nchecks == $this->ncursos){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }

@@ -23,10 +23,11 @@ class PDFController extends Controller
         $this->join = $join;
     }
 
-    public function ViewSyllabus($semestre, $cod_curso, $output)
+    public function ViewSyllabus($semestre, $cod_curso, $output, $message)
     {
         $data = $this->join->syllabus($semestre, $cod_curso);
-        $snappy = $this->join->snappy($data, $semestre);
+        $snappy = $this->join->snappy($data, $semestre, $message);
+
         $outputFile = $cod_curso . "_" . $semestre . ".pdf";
         switch ($output) {
             case 'screen':

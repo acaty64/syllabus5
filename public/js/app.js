@@ -50047,6 +50047,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     mutations: {
+        /////////////
+        setOrden: function setOrden(state, data) {
+            var linea = data[0];
+            var n_orden = data[1];
+            console.log('setOrden.orden: ', n_orden);
+            console.log('setOrden.linea.antes: ', linea);
+            var i = findByRow(state.lineas, linea.row, linea.id);
+            state.lineas[i].orden = n_orden;
+            console.log('setOrden.linea.despues: ', linea);
+        },
         setDefault: function setDefault(state) {
             state.active_line = 0;
             state.switchEdit = false;
@@ -50509,6 +50519,45 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
+        RenumUnidades: function RenumUnidades(context) {
+
+            /////////////
+            var n_orden = 1;
+            var lineas = context.state.lineas.filter(function (linea) {
+                return linea.tipo == 'unidades';
+            });
+            for (var i = 0; i < lineas.length; i++) {
+                //console.log('RenumUnidades.lineas[i]: ', lineas[i]);
+                //console.log('RenumUnidades.orden: ',n_orden);
+                context.commit('setOrden', [lineas[i], n_orden++]);
+            }
+            /*
+            context.getters
+                setOrden(state, linea, orden)
+            */
+        },
+
+        RecallUnidades: function RecallUnidades(context) {
+            var request = {
+                'data': {
+                    'tipo': 'recallUnidades'
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol + '//' + URLdomain + '/api/saveData/';
+            axios.post(url, request).then(function (response) {
+                var unidades = response.data.data;
+                context.commit('eliminar', 'unidades');
+                context.commit('agregar', unidades);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallUnidades: ', error);
+            });
+        },
         RecallCompetencias: function RecallCompetencias(context) {
             var request = {
                 'data': {
@@ -50610,6 +50659,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');
+                    context.dispatch('RecallUnidades');
                 }
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');
@@ -50637,6 +50687,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');
+                    context.dispatch('RecallUnidades');
                 }
                 if (context.state.status == 'bibliografias') {
                     context.dispatch('OrdenarPorAutor');

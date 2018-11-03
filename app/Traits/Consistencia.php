@@ -43,7 +43,7 @@ trait Consistencia
 			$contenidos = Contenido::where('semestre', env("SEMESTRE"))
 							->where('cod_curso', $curso->cod_curso)
 							->where('semana', $unidad->semana)->get();
-			if(is_null($contenidos)){
+			if($contenidos->count() == 0){
 				array_push($consistencia, ['campo'=>'contenido '.$unidad->semana, 
 											'texto' => 'No se ha ingresado CONTENIDO en la unidad ' . $unidad->texto . '.']);
 				$incompleto++;

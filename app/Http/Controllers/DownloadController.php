@@ -33,7 +33,7 @@ class DownloadController extends Controller
 		]);
 	}
 
-    public function Grupo($cod_grupo)
+    public function Grupo($cod_grupo, $message)
     {
     	$semestre = env('SEMESTRE');
 
@@ -66,7 +66,7 @@ class DownloadController extends Controller
 	    		/* Fin Datos para barra de progreso */
 	    		$cod_curso = $curso->cod_curso;
 		    	$data = $this->join->syllabus($semestre, $cod_curso);
-		        $snappy = $this->join->snappy($data, $semestre);
+		        $snappy = $this->join->snappy($data, $semestre, $message);
 		        $outputFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
 		        $snappy->save($outputFile);
 	            // Add File in ZipArchive

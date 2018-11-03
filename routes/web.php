@@ -55,12 +55,6 @@ Route::get('/', function () {
 });
 
 /* Acceso Consulta, Docente, Responsable, Administrador, Master  */
-Route::get('/downloadFile/{fileName}/{type}', [
-	'as'	=> 'download.file',
-	'uses'	=> 'DownloadController@downloadFile'
-]);
-
-/* Acceso Consulta, Docente, Responsable, Administrador, Master  */
 Route::get('/user/redirect', [
 	'as'	=> 'user.redirect',
 	'uses'	=> 'UserAccesoController@redirect'
@@ -105,7 +99,7 @@ Route::get('/cursos/index', [
 ]);
 
 /* Acceso Consulta, Docente, Responsable, Administrador, Master  */
-Route::get('/PDF/syllabus/{semestre}/{cod_curso}/{view}', [
+Route::get('/PDF/syllabus/{semestre}/{cod_curso}/{view}/{message}', [
 	'as'	=> 'PDF',
 	'uses'	=> 'PDFController@ViewSyllabus'
 ]);
@@ -119,6 +113,13 @@ Route::get('/header/PDF/syllabus/{semestre}', function ($semestre) {
 Route::get('/footer/PDF/syllabus/{semestre}', function ($semestre) {
     return view('layouts.partials.footer_PDF', ['semestre'=>$semestre]);
 });
+
+
+/* Acceso Consulta, Docente, Responsable, Administrador, Master  */
+Route::get('/downloadFile/{fileName}/{type}', [
+	'as'	=> 'download.file',
+	'uses'	=> 'DownloadController@downloadFile'
+]);
 
 
 /* RUTAS DOC

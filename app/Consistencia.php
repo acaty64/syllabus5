@@ -30,7 +30,7 @@ class Consistencia extends Model
 		$unidades = Unidad::where('semestre', env("SEMESTRE"))
 							->where('cod_curso', $curso->cod_curso)->get();
 		if($unidades->count() < 3){
-			array_push($consistencia, ['unidades' => 'No se ha ingresado por lo menos 2 UNIDADES.']);
+			array_push($consistencia, ['unidades' => 'No se ha ingresado por lo menos 3 UNIDADES.']);
 			$incompleto++;
 		}else{
 			array_push($consistencia, ['unidades' => 'ok']);
@@ -61,7 +61,7 @@ class Consistencia extends Model
 		$bibliografia = Bibliografia::where('semestre', env("SEMESTRE"))
 							->where('cod_curso', $curso->cod_curso)->get();
 		if($bibliografia->count() < 3){
-			array_push($consistencia, ['bibliografia' => 'No se ha ingresado por lo menos 2 BIBLIOGRAFÍAS.']);
+			array_push($consistencia, ['bibliografia' => 'No se ha ingresado por lo menos 3 BIBLIOGRAFÍAS.']);
 			$incompleto++;
 		}else{
 			array_push($consistencia, ['bibliografia' => 'ok']);

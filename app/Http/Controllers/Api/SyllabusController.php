@@ -398,6 +398,13 @@ class SyllabusController extends Controller
                 $proceso = 'recallCompetencias';
                 $success = true;
                 break;
+            case 'recallUnidades' :
+                $datos = $this->upload_titulo1($request);
+                $id = 0;
+                $dataNew = $this->upload_unidades($datos, $request);
+                $proceso = 'recallUnidades';
+                $success = true;
+                break;
 /*
             case 'recallEvaluaciones' :
                 $id = 0;

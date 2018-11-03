@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
+
+
 /* Acceso Administrador, Master  */
 Route::get('grupos/{type}', [
 	'as'	=> 'grupos.index',

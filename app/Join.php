@@ -11,11 +11,17 @@ class Join extends Model
 		return 'FunctionSnappy';
 	}
 
-    public function snappy($data, $semestre)
+    public function snappy($data, $semestre, $message)
     {
-        $headerHtml = url('/') . '/header/PDF/syllabus/' . $semestre;
-        $footerHtml = url('/') . '/footer/PDF/syllabus/' . $semestre;
-        return \PDF::loadView('pdf.syllabus',$data)
+        if($message){
+            $headerHtml = url('/') . '/header/PDF/syllabus/' . $semestre;
+            $footerHtml = url('/') . '/footer/PDF/syllabus/' . $semestre;
+        }else{
+            $headerHtml = url('/') . '/header/PDF/syllabus/0';
+            $footerHtml = url('/') . '/footer/PDF/syllabus/0';   
+        }
+
+        return \PDF::loadView('pdf.syllabus', $data)
                     ->setPaper('a4')
                     ->setOrientation('Portrait')
                     ->setOption('enable-javascript', true)
@@ -53,6 +59,7 @@ class Join extends Model
         Linea::truncate();
 
         $datos = $rpta["data"];
+        $orden_unidad = 0;
         foreach ($datos as $key1 => $value1) {
             $linea['row'] = $datos[$key1]['row'];
             $linea['tipo'] = $datos[$key1]['tipo'];
@@ -79,8 +86,13 @@ class Join extends Model
                     break;
                 case 'unidades':
                     foreach ($datos[$key1]['data'] as $key2 => $value2) {
-                        if($datos[$key1]['data'][$key2]['view']==true){    
-                            $linea['texto'] = $datos[$key1]['data'][$key2]['texto'];
+                        if($datos[$key1]['data'][$key2]['view']==true){
+                            $texto = $datos[$key1]['data'][$key2]['texto'];
+                            if($key2 == 1){
+                                $linea['texto'] = 'UNIDAD ' . $this->getTitulo($texto, ++$orden_unidad);    
+                            }else{
+                                $linea['texto'] = $texto;    
+                            }
                             $linea['col'] = $datos[$key1]['data'][$key2]['col'];
                             $linea['cols'] = $datos[$key1]['data'][$key2]['cols'];
                             $linea['align'] = $datos[$key1]['data'][$key2]['align'];
@@ -89,7 +101,7 @@ class Join extends Model
                                 $xHtml = $xHtml.'"row col-'.$linea['col'] . ' ' . $linea['tipo'] . ' col-xs-' . $linea['cols'] . ' col-xs-offset-' . $linea['offset'].'"';
                                 $xHtml = $xHtml . " align='" . $linea['align'] . "'";
                                 $xHtml = $xHtml . '>';
-                                $xHtml = $xHtml . $datos[$key1]['data'][$key2]['texto'] . '<br> Logro: ' . $datos[$key1]['data'][$key2]['logro'];
+                                $xHtml = $xHtml . $linea['texto'] . '<br> Logro: ' . $datos[$key1]['data'][$key2]['logro'];
                                 $xHtml = $xHtml . '</span></div>';
                             $linea['html'] = $xHtml;
                             Linea::create($linea);
