@@ -38,14 +38,6 @@ Route::get('password/reset/{token}', [
 	'as'	=> 'password.reset',
 	'uses'	=> 'Auth\ResetPasswordController@showResetForm'
 ]);
-Route::post('register', [
-	'as'	=> '',
-	'uses'	=> 'Auth\RegisterController@register'
-]);
-Route::get('register', [
-	'as'	=> 'register',
-	'uses'	=> 'Auth\RegisterController@showRegistrationForm'
-]);
 /*  Fin rutas auth()               */
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -54,11 +46,12 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-/* Acceso Consulta, Docente, Responsable, Administrador, Master  */
+/* Acceso Consulta, Docente, Responsable, Administrador, Master 
 Route::get('/user/redirect', [
 	'as'	=> 'user.redirect',
 	'uses'	=> 'UserAccesoController@redirect'
 ]);
+ */
 
 /* Acceso Consulta, Docente, Responsable, Administrador, Master  */
 Route::get('/malla/{siglas}', [

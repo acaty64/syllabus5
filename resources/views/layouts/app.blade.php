@@ -56,14 +56,23 @@
                                 @endif
                             </ul>
                         </li>
-                        <!--
-                        @if(Auth::user()->acceso->cod_acceso != 'cons')
-                            <li><a href="{{ route('user.redirect') }}">Edición</a></li>
-                        @endif
-                        -->
                         @if(Auth::user()->acceso->cod_acceso == 'master' || Auth::user()->acceso->cod_acceso == 'adm')
-                            <li><a class="send" href="{{ route('send.index') }}">Comunicados</a></li>
-                            <li><a class="download" href="{{ route('grupos.index', ['download']) }}">Descarga de Archivos</a></li>
+                            <li class="dropdown comunicacion">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Comunicación</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="comunicados" href="{{ route('send.index') }}">Comunicados</a></li>
+                                    <li><a class="welcome" href="{{ route('send.index') }}">Bienvenida</a></li>
+                                </ul>
+                            <li class="dropdown mantenimiento">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Mantenimiento</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="download" href="{{ route('grupos.index', ['download']) }}">Descarga de Archivos</a></li>
+                                    <li><a class="usuarios" href="{{ route('users.index') }}">Usuarios</a></li>
+                                    <li><a class="accesos" href="#">Accesos</a></li>
+                                    <li><a class="grupos" href="#">Grupos</a></li>
+                                    <li><a class="cursos" href="#">Cursos</a></li>
+                                </ul>
+                            </li>
                         @endif
                         @if(Auth::user()->acceso->cod_acceso == 'master')
                             <li><a class="backup" href="{{ route('backup.index') }}">Backup & Restore</a></li>
@@ -104,6 +113,7 @@
             </div>
         </nav>
         <div class="container">
+            @include('flash::message')
             @yield('content')
         </div>
     </div>

@@ -45,20 +45,43 @@ class A06_MenuTest extends DuskTestCase
                     ->visit('/')
                     ->assertSee('Consulta')
                     ->assertSee('Edición')
-                    ->assertSee('Descarga de Archivos')
-                    ->assertSee('Backup & Restore')
-                    ->click('.consulta')
-                    ->click('.xCurso')
+                    ->assertSee('Comunicación')
+                    ->assertSee('Mantenimiento');
+
+            $browser->click('.consulta')
+                    ->assertSee('Por curso')
+                    ->assertSee('En malla curricular');
+
+            $browser->click('.xCurso')
                     ->assertSee('Syllabus por Curso')
                     ->click('.consulta')
                     ->click('.malla')
                     ->assertSee('Administración')
                     ->assertSee('Contabilidad')
-                    ->assertSee('Economía')
-                    ->click('.edicion')
+                    ->assertSee('Economía');
+
+            $browser->click('.edicion')
+                    ->assertSee('Por Grupo Temático')
                     ->click('.xGrupo')
-                    ->assertSee('Visualización o Edición de Syllabus')
-                    ->click('.download')
+                    ->assertSee('Visualización o Edición de Syllabus');
+        
+            $browser->click('.comunicacion')
+                    ->assertSee('Comunicados')
+                    ->assertSee('Bienvenida');
+                    
+            $browser->click('.comunicados')
+                    ->assertSee('Comunicados Enviados y por Enviar')
+                    ->click('.comunicacion')
+                    ->click('.welcome');
+//                    ->assertSee('En construccion')
+
+            $browser->click('.mantenimiento')
+                    ->assertSee('Descarga de Archivos')
+                    ->assertSee('Usuarios')
+                    ->assertSee('Accesos')
+                    ->assertSee('Cursos');
+                    
+            $browser->click('.download')
                     ->assertSee('Descarga de Syllabus por Grupo Temático')
                     ;
         });
@@ -76,7 +99,8 @@ class A06_MenuTest extends DuskTestCase
                     ->visit('/')
                     ->assertSee('Consulta')
                     ->assertSee('Edición')
-                    ->assertSee('Descarga de Archivos')
+                    ->assertSee('Comunicación')
+                    ->assertSee('Mantenimiento')
                     ;
         });
 

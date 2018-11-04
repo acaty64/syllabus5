@@ -4,96 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Acceso;
 use App\User;
+use App\UserAcceso;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $users = User::all();
-        return view('app.users')
+        $users = User::where('id','>',3)->paginate(10);
+        return view('app.users.index')
                 ->with('users', $users);
     }
-    public function password()
+
+    public function password($user_id)
     {
         dd('UserController.password');
     }
-    public function acceso()
+
+    public function acceso($user_id)
     {
         dd('UserController.acceso');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         dd('UserController.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $user = $request->user;
+        $new_user = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => bcrypt($user->password)
+            ]);
+        flash('El usuario ' . $user->name . ' ha sido creado con éxito.')->success();
+        return redirect()->route('users.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Unidad  $unidad
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Unidad $unidad)
+    public function show($user_id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Unidad  $unidad
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Unidad $unidad)
+    public function edit($user_id)
     {
-        //
+        $user = User::findOrFail($user_id);
+        return redirect()->route('users.edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unidad  $unidad
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Unidad $unidad)
+    public function update(Request $request)
     {
-        //
+        $user = User::findOrFail($request->user->id);
+        $user->name = $request->user->name;
+        $user->email = $request->user->email;
+        $user->save();
+        flash('El usuario ' . $request->user->name . ' ha sido modificado con éxito.')->success();
+        return redirect()->route('users.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Unidad  $unidad
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($user_id)
     {
         $user = User::findOrFail($user_id);
-        $acceso = Acceso::where('user_id', $user_id)->get();
-        $user->delete();
+        $acceso = UserAcceso::where('user_id', $user_id)->first();
         $acceso->delete();
+        $user->delete();
+        flash('El usuario ' . $user->name . ' ha sido eliminado con éxito.')->success();
+        return redirect()->route('users.index');
     }
 }

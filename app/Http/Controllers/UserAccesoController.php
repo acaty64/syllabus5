@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserAccesoController extends Controller
 {
-
+/*
     public function redirect()
     {
         $user_id = Auth::id();
@@ -22,9 +22,7 @@ class UserAccesoController extends Controller
                 return redirect('grupos');
                 break;
             case 'resp':
-            	/************************/
-            	$grupo = 'ADM';
-            	/************************/
+                $grupo = 'ADM';
                 return redirect('cursogrupo/'.$grupo);
                 break;
             default:
@@ -32,5 +30,7 @@ class UserAccesoController extends Controller
         }
         
     }
+            	/************************/
+            	/************************/
 
 }

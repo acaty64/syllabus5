@@ -14,6 +14,7 @@ class CreateUserAccesosTable extends Migration
     public function up()
     {
         Schema::create('user_accesos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id');
             $table->integer('acceso_id');
             $table->timestamps();
