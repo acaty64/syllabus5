@@ -82,15 +82,12 @@ export const store = new Vuex.Store({
             state.lineas = state.lineas.
                 filter(linea => linea != xlinea );
         },
-
-        eliminar(state, componente){
-            //console.log('antes de eliminar: ', state.lineas);
-            state.lineas = state.lineas.
-                    filter(function(linea) { return linea.tipo != componente });
-
-            //console.log('despues de eliminar: ', state.lineas);
+        eliminarComponente(state, componente){
+            state.lineas = state.lineas.filter(
+                    function(linea) { return linea.tipo != componente }
+                );
         },
-        agregar (state, newLineas){
+        agregarNewLineas (state, newLineas){
             for(var xlinea in newLineas){
                 state.lineas.push(newLineas[xlinea]);
             }
@@ -517,6 +514,27 @@ export const store = new Vuex.Store({
     },
 
     actions: {
+        RecallContenidos: (context) =>{            
+            var request = {
+                'data': {
+                    'tipo': 'recallContenidos',
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol+'//'+URLdomain+'/api/saveData/';
+            axios.post(url, request).then(response=>{
+                var contenidos = response.data.data;
+                context.commit('eliminarComponente', 'contenidos');
+                context.commit('agregarNewLineas', contenidos);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallContenidos: ', error);
+            });
+        },
         RecallUnidades: (context) =>{            
             var request = {
                 'data': {
@@ -531,8 +549,8 @@ export const store = new Vuex.Store({
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var unidades = response.data.data;
-                context.commit('eliminar', 'unidades');
-                context.commit('agregar', unidades);
+                context.commit('eliminarComponente', 'unidades');
+                context.commit('agregarNewLineas', unidades);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallUnidades: ', error);
@@ -552,8 +570,8 @@ export const store = new Vuex.Store({
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var competencias = response.data.data;
-                context.commit('eliminar', 'competencias');
-                context.commit('agregar', competencias);
+                context.commit('eliminarComponente', 'competencias');
+                context.commit('agregarNewLineas', competencias);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallCompetencias: ', error);
@@ -612,8 +630,8 @@ export const store = new Vuex.Store({
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
                 var titulo3 = response.data.data;
-                context.commit('eliminar', 'titulo3');
-                context.commit('agregar', titulo3);
+                context.commit('eliminarComponente', 'titulo3');
+                context.commit('agregarNewLineas', titulo3);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallTitulo3: ', error);
@@ -639,6 +657,9 @@ export const store = new Vuex.Store({
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
+                if(context.state.status == 'contenidos'){
+                    context.dispatch('RecallContenidos');
+                }
                 if(context.state.status == 'unidades'){
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');
@@ -665,8 +686,11 @@ export const store = new Vuex.Store({
             var protocol = window.location.protocol;
             var url = protocol+'//'+URLdomain+'/api/saveData/';
             axios.post(url, request).then(response=>{
-                context.commit('agregar', response.data.data);
+                context.commit('agregarNewLineas', response.data.data);
                 context.commit('setNewItemValue', ['button', 'Editar']);
+                if(context.state.status == 'contenidos'){
+                    context.dispatch('RecallContenidos');
+                }
                 if(context.state.status == 'unidades'){
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');

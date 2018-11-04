@@ -47614,27 +47614,43 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         grabar: function grabar(linea) {
             toastr.closeButton = false;
             toastr.debug = false;
-            toastr.showDuration = 50;
+            toastr.showDuration = 100;
             if (this.consistencia(linea)) {
                 if (linea.id == 'new') {
-                    this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
-                        toastr.success('Contenido grabado.');
-                        this.$store.commit('newItem');
-                    }).catch(function () {
-                        toastr.error('El registro no ha sido grabado.');
-                    });
+                    this.$store.dispatch('SaveNewLinea', linea);
+                    toastr.success('Contenido grabado.');
                 } else {
                     linea.semana = linea.data[0].texto;
-                    //console.log('contenidos grabar linea a:', linea);
                     var linea = this.recalcRow(linea);
-                    //console.log('contenidos grabar linea b:', linea);
-                    this.$store.dispatch('SaveLinea', linea).then(function () {
-                        toastr.success('Contenido grabado.');
-                    }).catch(function () {
-                        toastr.error('El registro no ha sido grabado.');
-                    });
+                    this.$store.dispatch('SaveLinea', linea);
+                    toastr.success('Contenido grabado.');
                 }
             };
+
+            /*
+                            toastr.closeButton = false;
+                            toastr.debug = false;
+                            toastr.showDuration = 50;
+                            if(this.consistencia(linea)){                
+                                if(linea.id == 'new'){
+                                    this.$store.dispatch('SaveNewLinea', this.newItem).then(function () {
+                                        toastr.success('Contenido grabado.');
+                                        this.$store.commit('newItem');
+                                    }).catch(function () {
+                                        toastr.error('El registro no ha sido grabado.');
+                                    });
+                                }else{
+                                    linea.semana = linea.data[0].texto;
+                                    var linea = this.recalcRow(linea);
+                                    this.$store.dispatch('SaveLinea', linea).then(function() {
+                                            toastr.success('Contenido grabado.');
+                                    }).catch(function () {
+                                        toastr.error('El registro no ha sido grabado.');
+                                    });
+            
+                                }
+                            };
+            */
         },
         recalcRow: function recalcRow(oldLinea) {
             var _this = this;
@@ -50066,12 +50082,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                     break;
             }
         },
-        setOrden: function setOrden(state, data) {
-            var linea = data[0];
-            var n_orden = data[1];
-            var i = findByRow(state.lineas, linea.row, linea.id);
-            state.lineas[i].orden = n_orden;
-        },
         setDefault: function setDefault(state) {
             state.active_line = 0;
             state.switchEdit = false;
@@ -50097,15 +50107,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 return linea != xlinea;
             });
         },
-        eliminar: function eliminar(state, componente) {
-            //console.log('antes de eliminar: ', state.lineas);
+        eliminarComponente: function eliminarComponente(state, componente) {
             state.lineas = state.lineas.filter(function (linea) {
                 return linea.tipo != componente;
             });
-
-            //console.log('despues de eliminar: ', state.lineas);
         },
-        agregar: function agregar(state, newLineas) {
+        agregarNewLineas: function agregarNewLineas(state, newLineas) {
             for (var xlinea in newLineas) {
                 state.lineas.push(newLineas[xlinea]);
             }
@@ -50534,24 +50541,27 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
 
     actions: {
-        RenumUnidades: function RenumUnidades(context) {
-
-            /////////////
-            var n_orden = 1;
-            var lineas = context.state.lineas.filter(function (linea) {
-                return linea.tipo == 'unidades';
+        RecallContenidos: function RecallContenidos(context) {
+            var request = {
+                'data': {
+                    'tipo': 'recallContenidos'
+                },
+                'semestre': context.state.semestre,
+                'cod_curso': context.state.cod_curso,
+                'new': false
+            };
+            var URLdomain = window.location.host;
+            var protocol = window.location.protocol;
+            var url = protocol + '//' + URLdomain + '/api/saveData/';
+            axios.post(url, request).then(function (response) {
+                var contenidos = response.data.data;
+                context.commit('eliminarComponente', 'contenidos');
+                context.commit('agregarNewLineas', contenidos);
+                context.commit('sortLineasRow');
+            }).catch(function (error) {
+                console.log('error RecallContenidos: ', error);
             });
-            for (var i = 0; i < lineas.length; i++) {
-                //console.log('RenumUnidades.lineas[i]: ', lineas[i]);
-                //console.log('RenumUnidades.orden: ',n_orden);
-                context.commit('setOrden', [lineas[i], n_orden++]);
-            }
-            /*
-            context.getters
-                setOrden(state, linea, orden)
-            */
         },
-
         RecallUnidades: function RecallUnidades(context) {
             var request = {
                 'data': {
@@ -50566,8 +50576,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 var unidades = response.data.data;
-                context.commit('eliminar', 'unidades');
-                context.commit('agregar', unidades);
+                context.commit('eliminarComponente', 'unidades');
+                context.commit('agregarNewLineas', unidades);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallUnidades: ', error);
@@ -50587,8 +50597,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 var competencias = response.data.data;
-                context.commit('eliminar', 'competencias');
-                context.commit('agregar', competencias);
+                context.commit('eliminarComponente', 'competencias');
+                context.commit('agregarNewLineas', competencias);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallCompetencias: ', error);
@@ -50644,8 +50654,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
                 var titulo3 = response.data.data;
-                context.commit('eliminar', 'titulo3');
-                context.commit('agregar', titulo3);
+                context.commit('eliminarComponente', 'titulo3');
+                context.commit('agregarNewLineas', titulo3);
                 context.commit('sortLineasRow');
             }).catch(function (error) {
                 console.log('error RecallTitulo3: ', error);
@@ -50671,6 +50681,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                 var save = response.data.proceso + 'Saved';
                 context.commit('saveLinea', linea);
                 context.commit('changePre_row', linea.row);
+                if (context.state.status == 'contenidos') {
+                    context.dispatch('RecallContenidos');
+                }
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');
@@ -50697,8 +50710,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             var protocol = window.location.protocol;
             var url = protocol + '//' + URLdomain + '/api/saveData/';
             axios.post(url, request).then(function (response) {
-                context.commit('agregar', response.data.data);
+                context.commit('agregarNewLineas', response.data.data);
                 context.commit('setNewItemValue', ['button', 'Editar']);
+                if (context.state.status == 'contenidos') {
+                    context.dispatch('RecallContenidos');
+                }
                 if (context.state.status == 'unidades') {
                     context.dispatch('RecallTitulo3');
                     context.dispatch('RecallCompetencias');

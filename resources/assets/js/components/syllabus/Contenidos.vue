@@ -146,6 +146,24 @@
             grabar(linea) {
                 toastr.closeButton = false;
                 toastr.debug = false;
+                toastr.showDuration = 100;
+                if(this.consistencia(linea)){                
+                    if(linea.id == 'new'){
+                        this.$store.dispatch('SaveNewLinea', linea);
+                        toastr.success('Contenido grabado.');
+                    }else{
+                        linea.semana = linea.data[0].texto;
+                        var linea = this.recalcRow(linea);
+                        this.$store.dispatch('SaveLinea', linea);
+                        toastr.success('Contenido grabado.');
+                    }
+                };
+
+
+
+/*
+                toastr.closeButton = false;
+                toastr.debug = false;
                 toastr.showDuration = 50;
                 if(this.consistencia(linea)){                
                     if(linea.id == 'new'){
@@ -157,9 +175,7 @@
                         });
                     }else{
                         linea.semana = linea.data[0].texto;
-//console.log('contenidos grabar linea a:', linea);
                         var linea = this.recalcRow(linea);
-//console.log('contenidos grabar linea b:', linea);
                         this.$store.dispatch('SaveLinea', linea).then(function() {
                                 toastr.success('Contenido grabado.');
                         }).catch(function () {
@@ -168,6 +184,7 @@
 
                     }
                 };
+*/
             },
             recalcRow(oldLinea){
                 var xsemana = oldLinea.semana;
