@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 Route::auth();
+
 /* Ruta auth()  */
 Route::get('login', [
 	'as'	=> 'login',
@@ -115,66 +116,8 @@ Route::get('/downloadFile/{fileName}/{type}', [
 ]);
 
 
-/* RUTAS DOC
-/* Acceso Docente, Responsable, Administrador, Master 
-Route::get('/edit/{semestre}/{cod_curso}', [
-	'as'	=> 'edit',
-	'uses'	=> 'SyllabusController@show'
-]);
- */
-
-
-/* RUTAS RESP
-/* Acceso Responsable, Administrador, Master 
-Route::get('/cursogrupo/{cod_grupo}', [
-	'as'	=> 'cursogrupo.index',
-	'uses'	=> 'CursoGrupoController@index'
-]);
-*/
-
-
-/* RUTAS ADM
-/* Acceso Administrador, Master  
-Route::get('/grupos/{type}', [
-	'as'	=> 'grupos',
-	'uses'	=> 'GrupoController@index'
-]);
-/* Acceso Administrador, Master  
-Route::get('/download/{cod_grupo}', [
-	'as'	=> 'download.grupo',
-	'uses'	=> 'DownloadController@Grupo'
-]);
-/* Acceso Administrador, Master  
-Route::get('/downloadGrupo/{siglas}', [
-	'as'	=> 'downloadGrupo',
-	'uses'	=> 'DownloadController@downloadGrupo'
-]);
-*/
-
-/*   RUTAS SYS
-Route::get('backup', [
-	'as'	=> 'backup.index',
-	'uses'	=> 'BackupController@index'
-]);
-
-Route::get('backup/destroy/{file}', [
-	'as'	=> 'backup.destroy',
-	'uses'	=> 'BackupController@destroy'
-]);
-
-Route::get('backup/create', [
-	'as'	=> 'backup.create',
-	'uses'	=> 'BackupController@create'
-]);
-
-Route::get('backup/download/{file}', [
-	'as'	=> 'backup.download',
-	'uses'	=> 'BackupController@download'
-]);
-
-Route::get('backup/restore/{file}', [
-	'as'	=> 'backup.restore',
-	'uses'	=> 'BackupController@restore'
-]);
-
-*/
+/*  Pagina en construccion       */
+Route::get('enConstruccion', function()
+{
+	return view('enConstruccion');
+});

@@ -1,6 +1,9 @@
 <?php 
 
+use App\Mail\Welcome;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 Route::post('register', [
@@ -68,22 +71,39 @@ Route::get('/send', [
 	'as'	=> 'send.index',
 	'uses'	=> 'SendController@index'
 ]);
-
 /* Acceso Administrador, Master  */
 Route::get('/send/create', [
 	'as'	=> 'send.create',
 	'uses'	=> 'SendController@create'
 ]);
-
 /* Acceso Administrador, Master  */
 Route::post('/send/store', [
 	'as'	=> 'send.store',
 	'uses'	=> 'SendController@store'
 ]);
+/* Acceso Administrador, Master  */
+Route::get('/send/show', [
+	'as'	=> 'send.show',
+	'uses'	=> 'SendController@show'
+]);
+
+Route::get('/send/test', function()
+{
+    $flimite = Carbon::now()->addWeek();
+    $fecha = new Date($flimite);
+
+    $datos = collect([
+                    'name' => 'John Doe',
+                    'email' => 'jdoe@gmail.com',
+                    'limite' => $fecha->format('l d-M-Y')
+                ]);
+
+    Mail::to($datos['email'], $datos['name'])->send(new Welcome($datos)) ;
+ //               ->send(new Welcome($datos));        
+});
 
 Route::fallback(function()
 {
 	return response('Página no encontrada', 404);
 });
-
 

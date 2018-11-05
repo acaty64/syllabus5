@@ -42,7 +42,7 @@
         <table style="width:10%" align="center">
             <tr>
                 <td align="center">
-                    <button type="submit" class="btn btn-success grabar">Grabar Comunicación</button>
+                    <button type="submit" class="btn btn-success enviar">Enviar Comunicación</button>
                 </td>         
             </tr>
         </table>

@@ -52,15 +52,15 @@ class A07_ComunicationTest extends DuskTestCase
             // Usuario ADMINISTRADOR
             $browser->loginAs($user)
                     ->visit('/adm/send')
-                    ->assertSee('Comunicados Enviados y por Enviar')
+                    ->assertSee('Comunicados Enviados')
                     ->press('.crear')
                     ->assertSee('Crear Nuevo Comunicado')
                     ->waitForText($responsable->email, 10)
                     ->select('flimite', $date_answer)
                     ->click('#userGrupo_5')
                     ->script('window.scrollTo(0, 300);');
-            $browser->press('.grabar')
-                    ->assertSee('Comunicados Enviados y por Enviar')
+            $browser->press('.enviar')
+                    ->assertSee('Comunicados Enviados')
                     ->assertSee($responsable->name)
                     ->assertSee($date_send)
                     ->assertSee($date_answer);

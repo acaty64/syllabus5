@@ -1,5 +1,5 @@
 <?php
-
+ 
 use App\Grupo;
 use App\Responsable;
 use App\User;
@@ -16,23 +16,8 @@ class UserGrupoTableSeeder extends Seeder
      */
     public function run()
     {
-    	// Agrega los usuarios
-        $acceso_id = 3; //Responsables
-    	$responsables = Responsable::all()->unique('cod_doc');
-    	foreach ($responsables as $responsable) {
-    		$user = User::create([
-    				'name' 		=> str_random(10),
-            		'email' 	=> str_random(10) . '@gmail.com',
-            		'cod_doc' 	=> $responsable->cod_doc,
-            		'password' 	=> bcrypt('secret'),
-    			]);
 
-            $userAcceso = UserAcceso::create([
-                    'user_id' => $user->id,
-                    'acceso_id' => $acceso_id
-                ]);
-    	}
-    	// Agrega userGrupo 
+    	// Agrega userGrupo desde tabla Responsable
     	$DocGrupos = Responsable::all();
     	foreach ($DocGrupos as $docGrupo) {
     		$user_id = User::where('cod_doc', $docGrupo->cod_doc)->first()->id;

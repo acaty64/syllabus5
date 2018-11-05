@@ -6,11 +6,15 @@ use App\Acceso;
 use App\Curso;
 use App\CursoStatus;
 use App\Grupo;
+use App\Mail\Welcome;
 use App\Send;
 use App\User;
 use App\UserAcceso;
 use App\UserGrupo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Jenssegers\Date\Date;
 
 class SendController extends Controller
 {
@@ -25,19 +29,13 @@ class SendController extends Controller
             Send::first()->check_today;
         }
         $sends = Send::all()->sortBy('date_send');
-        /* Por cada envio */
-            /* Datos del receptor */
-            /* Grupo del receptor */
-            /* Cursos del grupo */
-            /* Status del curso */
 
-        $titulo_pagina = 'Comunicados Enviados y por Enviar';
+        $titulo_pagina = 'Comunicados Enviados';
         return view('app.sends.index')
             ->with('data', $sends)
             ->with('titulo_pagina', $titulo_pagina);
     }
 
-    
 
     /**
      * Show the form for creating a new resource.
@@ -98,8 +96,21 @@ class SendController extends Controller
                         'ncursos' => $ncursos,
                         'ncheck' => $nchecks,
                         'nstatus' => $nopen,
-
                 ]);
+
+            // Envia correo electrónico
+            $responsable = $check->grupo->responsable;
+            $flimite = $request->flimite;
+            $fecha = new Date($flimite);
+
+            $datos = [
+                        'name' => $responsable->name,
+                        'email' => $responsable->email,
+                        'limite' => $fecha->format('l d-M-Y')
+                    ];
+            Mail::to( $datos['email'] , $datos['name'] ) 
+                ->send(new Welcome($datos));
+
         }
         return redirect(route('send.index'));
 
@@ -111,32 +122,18 @@ class SendController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
-    }
+        $flimite = Carbon::now()->addWeek();
+        $fecha = new Date($flimite);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $datos = [
+                    'name' => 'John Doe',
+                    'email' => 'jdoe@gmail.com',
+                    'limite' => $fecha->format('l d-M-Y')
+                ];
+        return view('mail.welcome')
+            ->with('datos', $datos);
     }
 
     /**

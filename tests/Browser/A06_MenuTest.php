@@ -67,15 +67,16 @@ class A06_MenuTest extends DuskTestCase
         
             $browser->click('.comunicacion')
                     ->assertSee('Comunicados')
-                    ->assertSee('Bienvenida');
+                    ->assertSee('Vista Previa');
                     
             $browser->click('.comunicados')
-                    ->assertSee('Comunicados Enviados y por Enviar')
+                    ->assertSee('Comunicados Enviados')
                     ->click('.comunicacion')
-                    ->click('.welcome');
+                    ->click('.preview');
 //                    ->assertSee('En construccion')
 
-            $browser->click('.mantenimiento')
+            $browser->visit('/')
+                    ->click('.mantenimiento')
                     ->assertSee('Descarga de Archivos')
                     ->assertSee('Usuarios')
                     ->assertSee('Accesos')

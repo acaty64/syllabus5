@@ -32,4 +32,3 @@ Route::fallback(function()
 {
 	return response('Página no encontrada', 404);
 });
-
