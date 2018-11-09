@@ -2,7 +2,7 @@
     
     set -e
     
-    phpenv local 7.1
+    phpenv local 7.2
     
     cp .env.dusk.codeship .env
 
