@@ -2,7 +2,7 @@
     
     set -e
     
-    phpenv local 7.2
+    phpenv local 7.2.9
 
     mysql -e 'create database syllabus_tests;'
 
