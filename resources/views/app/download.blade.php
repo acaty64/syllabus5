@@ -4,6 +4,9 @@
 @section('content')
 	<h1 class="text-center">{{ $titulo_pagina }}</h1>
 	<input id="url_proceso" type="hidden" value="{{ $url_proceso }}"></input>
+	<input id="cod_grupo" type="hidden" value="{{ $data_route['cod_grupo'] }}"></input>
+	<input id="message" type="hidden" value="{{ $data_route['message'] }}"></input>
+	{{ csrf_field() }}
 	<input id="zipFile" type="hidden" value="{{ $zipFile }}"></input>
 	<div class="container panel panel-default">
 		<div class="panel-body">
@@ -29,12 +32,19 @@
 
 //	$document.ready(function () {
 	$('#proceso').click(function (){
-//console.log('#url_proceso', document.getElementById("url_proceso").value);
+//console.log('#data_route', document.getElementById("data_route").value);
 		var url_proceso = document.getElementById("url_proceso").value;
+		var siglas = document.getElementById("cod_grupo").value;
+		var mensaje = document.getElementById("message").value;
+		var token = document.getElementsByName("_token")[0].value;
+
 //console.log('data', url_proceso);
 		$('#barra-progreso').progressBar({
 			url: url_proceso,
 			//url: '/proceso.php',
+			cod_grupo: siglas,
+			message: mensaje,
+			_token: token,
 			progressUrl: '/progreso.txt',
 			trigger: '#proceso',
 			back: '#back',
@@ -67,6 +77,9 @@
 				back: '#back',
 				progressBar: $(this),
 				url: _und,
+				cod_grupo: _und,
+				message: _und,
+				_token: _und,
 				progressUrl: '/progreso.txt',
 				finished: function () { return false; }
 			}, oConfig);
@@ -83,7 +96,11 @@
 				// Llamada a Ajax
 				$.ajax({
 					url: _oConfig.url,
-					success: function () {
+					data: { cod_grupo: _oConfig.cod_grupo, 
+							message: _oConfig.message
+						},
+					type: "POST",
+					success: function (result,status,xhr) {
 						_mostrarProgreso(100);
 						_bFinalizado = true;
 						_oConfig.finished();
@@ -104,7 +121,9 @@
 
 				oProgressBar.css("width", nPorcentaje + "%");
 				oProgressBar.text(nPorcentaje + "%");
-				oProgressBar.attr("aria-valuenow", nPorcentaje);				
+				oProgressBar.attr("aria-valuenow", nPorcentaje + "%");				
+				oProgressBar.attr("aria-valuemin", "10%");
+				oProgressBar.attr("aria-valuemax", "100%");
 			};
 
 			/** 
@@ -159,4 +178,3 @@
 @endsection
 
 @section('view','app/download.blade.php')
-

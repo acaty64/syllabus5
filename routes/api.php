@@ -39,3 +39,15 @@ Route::post('/upload/evaluaciones', [
 	'as'	=> 'upload',
 	'uses'	=> 'Api\SyllabusController@upload_evaluaciones'
 ]);
+
+/* Acceso Administrador, Master  */
+Route::post('/descarga', [
+	'as'	=> 'descarga.grupo',
+	'uses'	=> 'Api\DownloadController@descargaGrupo'
+]);
+
+/* Acceso Administrador, Master  */
+Route::get('downloadGrupo', [
+	'as'	=> 'downloadGrupo',
+	'uses'	=> 'Api\DownloadController@downloadGrupo'
+]);

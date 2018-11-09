@@ -112,7 +112,7 @@ Route::get('/footer/PDF/syllabus/{semestre}', function ($semestre) {
 /* Acceso Consulta, Docente, Responsable, Administrador, Master  */
 Route::get('/downloadFile/{fileName}/{type}', [
 	'as'	=> 'download.file',
-	'uses'	=> 'DownloadController@downloadFile'
+	'uses'	=> 'Api\DownloadController@downloadFile'
 ]);
 
 

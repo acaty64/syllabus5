@@ -54,17 +54,6 @@ Route::get('grupos/{type}', [
 	'uses'	=> 'GrupoController@index'
 ]);
 
-/* Acceso Administrador, Master  */
-Route::get('download/{cod_grupo}', [
-	'as'	=> 'download.grupo',
-	'uses'	=> 'DownloadController@Grupo'
-]);
-
-/* Acceso Administrador, Master  */
-Route::get('/downloadGrupo/{siglas}', [
-	'as'	=> 'downloadGrupo',
-	'uses'	=> 'DownloadController@downloadGrupo'
-]);
 
 /* Acceso Administrador, Master  */
 Route::get('/send', [

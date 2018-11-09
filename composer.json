@@ -5,8 +5,9 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": "7.2.9",
         "barryvdh/laravel-dompdf": "^0.8.2",
+        "dompdf/dompdf": "0.8.0 as 0.6.2",
         "barryvdh/laravel-snappy": "^0.4.1",
         "facebook/webdriver": "^1.6",
         "fideloper/proxy": "~3.3",

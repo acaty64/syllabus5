@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
 use App\Grupo;
 use Illuminate\Http\Request;
 

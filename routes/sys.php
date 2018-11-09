@@ -5,27 +5,27 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::get('backup', [
 	'as'	=> 'backup.index',
-	'uses'	=> 'BackupController@index'
+	'uses'	=> 'Sys\BackupController@index'
 ]);
 
 Route::get('backup/destroy/{file}', [
 	'as'	=> 'backup.destroy',
-	'uses'	=> 'BackupController@destroy'
+	'uses'	=> 'Sys\BackupController@destroy'
 ]);
 
 Route::get('backup/create', [
 	'as'	=> 'backup.create',
-	'uses'	=> 'BackupController@create'
+	'uses'	=> 'Sys\BackupController@create'
 ]);
 
 Route::get('backup/download/{file}', [
 	'as'	=> 'backup.download',
-	'uses'	=> 'BackupController@download'
+	'uses'	=> 'Sys\BackupController@download'
 ]);
 
 Route::get('backup/restore/{file}', [
 	'as'	=> 'backup.restore',
-	'uses'	=> 'BackupController@restore'
+	'uses'	=> 'Sys\BackupController@restore'
 ]);
 
 Route::fallback(function()

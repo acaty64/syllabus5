@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\CursoGrupo;
 use App\Grupo;
+use App\Http\Controllers\Controller;
 use App\Join;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -23,18 +24,36 @@ class DownloadController extends Controller
 	 	$this->join = $join;
 	}
 
-	public function downloadGrupo($siglas)
+	public function downloadGrupo(Request $request)
 	{
-		$wgrupo = Grupo::where('cod_grupo', $siglas)->first()->wgrupo;
-		return view('app.download', [
-			'url_proceso' => url('download/' . $siglas),
-			'zipFile' => $siglas . "_" . env('SEMESTRE') . ".zip",
-			'titulo_pagina' => 'Descarga de Syllabus. Grupo: ' . $wgrupo,
-		]);
-	}
+/*dd(route('descarga.grupo', [
+                'cod_grupo' => $siglas, 
+                'message' => $message]));
+*/
+        $siglas = $request->cod_grupo;
+        $message = $request->message;
+        $wgrupo = Grupo::where('cod_grupo', $request->cod_grupo)->first()->wgrupo;
+        $data = [
+                'cod_grupo' => $siglas, 
+                'message' => $message
+            ];
+        $route = pathinfo(route('descarga.grupo'));
+//dd($route['dirname'].'/'.$route['basename']);
+        return view('app.download', [
+            'url_proceso' => $route['dirname'].'/'.$route['basename'],
+            'data_route' => $data,
+            //url('download/' . $siglas),
+            'zipFile' => $siglas . "_" . env('SEMESTRE') . ".zip",
+            'titulo_pagina' => 'Descarga de Syllabus. Grupo: ' . $wgrupo,
+            'message' => $message,
+        ]);
+    }
 
-    public function Grupo($cod_grupo, $message)
+    //public function descargaGrupo($cod_grupo, $message)
+    public function descargaGrupo(Request $request)
     {
+        $cod_grupo = $request->cod_grupo;
+        $message = $request->message;
     	$semestre = env('SEMESTRE');
 
     	/* Borrar todos los archivos del path output */
@@ -61,8 +80,8 @@ class DownloadController extends Controller
 			/* Fin de Datos Iniciales para barra de progreso */    	
 	    	foreach ($cursos as $key => $curso) {
 	    		/* Datos para barra de progreso */
-	    		$nRegistro ++;
-	    		file_put_contents($sFile, (($nRegistro) / $totRegistros)*100);
+	    		//$nRegistro ++;
+	    		file_put_contents($sFile, ((++$nRegistro) / $totRegistros)*100);
 	    		/* Fin Datos para barra de progreso */
 	    		$cod_curso = $curso->cod_curso;
 		    	$data = $this->join->syllabus($semestre, $cod_curso);
