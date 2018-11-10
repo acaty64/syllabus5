@@ -44,7 +44,7 @@ class A02_EditTest extends DuskTestCase
                     ->visit(route('syllabus.show',['semestre'=>env("SEMESTRE"),'cod_curso'=>'100048','edit'=>true]))
                     ->waitFor('.SyllabusComponent', 20)
                     ->waitFor('.Vista', 20)
-                    ->waitFor('.sumillas', 20)
+                    ->waitForText('Sumillas', 10)
                     ->press('Sumillas')
                     ->assertSee('II. SUMILLA')
                     ->assertSee('El curso tiene como propósito')
