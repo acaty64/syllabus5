@@ -11,11 +11,11 @@
 	<div class="container panel panel-default">
 		<div class="panel-body">
 			<div class="row">
-				<img src="/images/loading.gif" id="loading" type="hidden" />
+				<img src="/images/loading.gif" id="loading" class="hidden" />
 			</div>
 			<div class="row">
 				<div class="progress">
-				  <div id="barra-progreso" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="1%" aria-valuemin="5%" aria-valuemax="100%" style="width: 1%"></div>
+				  <div id="barra-progreso" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="1" aria-valuemin="5" aria-valuemax="100" style="width: 1%"></div>
 				  <span class="sr-only">0% Complete</span>
 				</div>
 			</div>
@@ -33,17 +33,13 @@
 @section('js')
 <script type="text/javascript">
 
-//	$document.ready(function () {
 	$('#proceso').click(function (){
-//console.log('#data_route', document.getElementById("data_route").value);
 		var url_proceso = document.getElementById("url_proceso").value;
 		var siglas = document.getElementById("cod_grupo").value;
 		var mensaje = document.getElementById("message").value;
 		var token = document.getElementsByName("_token")[0].value;
-//console.log('data', url_proceso);
 		$('#barra-progreso').progressBar({
 			url: url_proceso,
-			//url: '/proceso.php',
 			cod_grupo: siglas,
 			message: mensaje,
 			_token: token,
@@ -96,7 +92,7 @@
 				// Deshabilita boton
 				$(_oConfig.trigger).prop("disabled", true);
 				$(_oConfig.back).prop("hidden", true);
-				$(_oConfig.loading).css("visibility", "visible");
+				$(_oConfig.loading).removeClass('hidden');
 				// Llamada a Ajax
 				$.ajax({
 					url: _oConfig.url,
@@ -104,14 +100,14 @@
 							message: _oConfig.message
 						},
 					type: "POST",
-					success: function () {
+					success: function ($data) {
 						_mostrarProgreso(100);
 						_bFinalizado = true;
 						_oConfig.finished();
 						// Habilita boton
 						$(_oConfig.trigger).prop("disabled", false);
 						$(_oConfig.back).prop("hidden", false);
-						$(_oConfig.loading).css("visibility", "hidden");
+						$(_oConfig.loading).addClass('hidden');
 					},
 				});
 				_getProgreso();
@@ -126,9 +122,7 @@
 
 				oProgressBar.css("width", nPorcentaje + "%");
 				oProgressBar.text(nPorcentaje + "%");
-				oProgressBar.attr("aria-valuenow", nPorcentaje);				
-				oProgressBar.attr("aria-valuemin", "10");
-				oProgressBar.attr("aria-valuemax", "100");
+				oProgressBar.attr("aria-valuenow", nPorcentaje);
 			};
 
 			/** 
@@ -136,11 +130,12 @@
 			 * @param {Number} nPorcentaje Porcentaje de 0 a 100
 			 */
 			_getProgreso = function (argument) {
+
 				// llamada a AJAX
 				$.ajax({
 					url: _oConfig.progressUrl,
+					dataType: "text",
 					success: function ($Data) {
-console.log(_oConfig.progressUrl, $Data);
 						var nProgreso = parseInt($Data, 10);
 						if ($Data == "finish" || _bIniciado) {
 							nProgreso = 0;
@@ -151,7 +146,7 @@ console.log(_oConfig.progressUrl, $Data);
 						}
 						_mostrarProgreso(nProgreso);
 						if(nProgreso < 100){
-							setTimeout( _getProgreso, 100);
+							setTimeout( _getProgreso, 500);
 						}
 					},
 					error: function () {
@@ -180,8 +175,9 @@ console.log(_oConfig.progressUrl, $Data);
 	#back {
 		float: right;
 	}
-	#loading{
+	.hidden{
 		visibility: hidden;
+		display: none;
 	}
 </style>
 @endsection

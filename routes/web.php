@@ -1,9 +1,11 @@
 <?php 
 
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 Route::auth();
+
 
 /* Ruta auth()  */
 Route::get('login', [

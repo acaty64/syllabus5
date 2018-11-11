@@ -7,6 +7,8 @@ use App\Grupo;
 use App\Http\Controllers\Controller;
 use App\Join;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
@@ -30,6 +32,7 @@ class DownloadController extends Controller
                 'cod_grupo' => $siglas, 
                 'message' => $message]));
 */
+        
         $siglas = $request->cod_grupo;
         $message = $request->message;
         $wgrupo = Grupo::where('cod_grupo', $request->cod_grupo)->first()->wgrupo;
@@ -52,52 +55,64 @@ class DownloadController extends Controller
     //public function descargaGrupo($cod_grupo, $message)
     public function descargaGrupo(Request $request)
     {
+        Artisan::call('cache:clear');
         $cod_grupo = $request->cod_grupo;
         $message = $request->message;
-    	$semestre = env('SEMESTRE');
+        $semestre = env('SEMESTRE');
 
-    	/* Borrar todos los archivos del path output */
-    	File::delete(File::glob(base_path('storage/output/') . '*.pdf'));
-    	File::delete(File::glob(base_path('storage/output/') . '*.zip'));
-    	
-    	/* Datos Iniciales para barra de progreso */
-		$sFile = base_path("public/progreso.txt");
-		file_put_contents($sFile, 0);
-		/* Fin de Datos Iniciales para barra de progreso */
+        /* Borrar todos los archivos del path output */
+        File::delete(File::glob(base_path('storage/output/') . '*.pdf'));
+        File::delete(File::glob(base_path('storage/output/') . '*.zip'));
+        
+        /* Datos Iniciales para barra de progreso */
+        $sFile = base_path("public/progreso.txt");
+/*
+        $fp = fopen($sFile,"w");
+        fclose($fp);
+        unlink($sFile);
+        $control = fopen($sFile,"w+");
+        if($control == false){
+          die("No se ha podido crear el archivo.");
+        }
+*/        
+        file_put_contents($sFile, 0);
+        /* Fin de Datos Iniciales para barra de progreso */
 
-    	/* Crea el archivo .zip */
-    	$zipFileName = $cod_grupo . "_" . $semestre . ".zip";
-    	$outputFileZip = base_path('storage/output/') . $zipFileName;
-    	$zip = new ZipArchive();
-    	/* Fin Creacion de archivo .zip */
-    	if ($zip->open($outputFileZip, ZipArchive::CREATE) === TRUE) {
-	    	/* Generar los PDFs */
-	    	$cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
-	    	/* Datos Iniciales para barra de progreso */
-	    	$totRegistros = count($cursos);
-            file_put_contents($sFile, 1);
-	    	$nRegistro = 0;
-			/* Fin de Datos Iniciales para barra de progreso */    	
-	    	foreach ($cursos as $key => $curso) {
-	    		/* Datos para barra de progreso */
-	    		//$nRegistro ++;
-	    		file_put_contents($sFile, ((++$nRegistro) / $totRegistros)*100);
-	    		/* Fin Datos para barra de progreso */
-	    		$cod_curso = $curso->cod_curso;
-		    	$data = $this->join->syllabus($semestre, $cod_curso);
-		        $snappy = $this->join->snappy($data, $semestre, $message);
-		        $outputFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
-		        $snappy->save($outputFile);
-	            // Add File in ZipArchive
-		        $xFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
-	            $zip->addFile($xFile);
-	    	}
+        /* Crea el archivo .zip */
+        $zipFileName = $cod_grupo . "_" . $semestre . ".zip";
+        $outputFileZip = base_path('storage/output/') . $zipFileName;
+        $zip = new ZipArchive();
+        /* Fin Creacion de archivo .zip */
+        if ($zip->open($outputFileZip, ZipArchive::CREATE) === TRUE) {
+            /* Generar los PDFs */
+            $cursos = CursoGrupo::where('cod_grupo', $cod_grupo)->get();
+            /* Datos Iniciales para barra de progreso */
+            $totRegistros = count($cursos);
+            file_put_contents($sFile, 10);
+            $nRegistro = 0;
+            /* Fin de Datos Iniciales para barra de progreso */     
+            foreach ($cursos as $key => $curso) {
+                /* Datos para barra de progreso */
+                $nRegistro ++;
+                file_put_contents($sFile, (($nRegistro) / $totRegistros)*100);
+//                Session::put('progress', ((++$nRegistro) / $totRegistros)*100);
+
+                /* Fin Datos para barra de progreso */
+                $cod_curso = $curso->cod_curso;
+                $data = $this->join->syllabus($semestre, $cod_curso);
+                $snappy = $this->join->snappy($data, $semestre, $message);
+                $outputFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
+                $snappy->save($outputFile);
+                // Add File in ZipArchive
+                $xFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
+                $zip->addFile($xFile);
+            }
             // Close ZipArchive     
             $zip->close();
 
-	    	/* Datos para barra de progreso completo */
-	    	file_put_contents($sFile, "finish");
-	    	/* Fin Datos para barra de progreso completo */
+            /* Datos para barra de progreso completo */
+            file_put_contents($sFile, "finish");
+            /* Fin Datos para barra de progreso completo */
 	    	/* Borrar todos los archivos del path output */
 	    	//File::delete(File::glob( base_path('public/output/') . '*.*'));
     	}

@@ -20,6 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Route::resource('syllabus', 'Api\SyllabusController');
 
 
+Route::get('processing-status', function()
+{
+    return Session::get('progress');
+});
+
 Route::post('/index', [
 	'as'	=> 'index',
 	'uses'	=> 'Api\SyllabusController@index'
