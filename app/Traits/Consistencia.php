@@ -54,7 +54,8 @@ trait Consistencia
 		}
 		/* Estrategia */
 		$estrategia = Estrategia::where('semestre', env("SEMESTRE"))
-							->where('cod_curso', $curso->cod_curso)->get();
+							->where('cod_curso', $curso->cod_curso)->first();
+
 		if(is_null($estrategia)){
 			array_push($consistencia, ['campo'=>'estrategia', 
 										'texto' => 'No se ha ingresado el texto de las ESTRATEGIAS METODOLÓGICAS.']);
