@@ -259,4 +259,7 @@
         white-space: pre-wrap;
     }
 
+    .idnew {
+        background: yellow;
+    }
 </style>

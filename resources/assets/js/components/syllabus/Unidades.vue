@@ -22,7 +22,7 @@
                         <span class="notEditing col-1 col-xs-1 col-xs-offset-1 unidades componente" align='center'><b>SEMANA</b></span>
                         <span class="notEditing col-2 col-xs-4 col-xs-offset-1 unidades componente" align='center'><b>UNIDAD</b></span>
                         <span class="notEditing col-3 col-xs-4 col-xs-offset-3 unidades componente" align='center'><b>LOGRO</b></span>
-                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 unidades componente" align='center'><b>ACCIONES</b></span>
+                        <span class="notEditing col-6 col-xs-2 col-xs-offset-1 unidades componente" align='center'><b></b></span>
                     </div>                
                 </tr>                
                 <tr>
@@ -242,4 +242,7 @@
         white-space: pre-wrap;
     }
 
+    .idnew {
+        background: yellow;
+    }
 </style>

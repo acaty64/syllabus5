@@ -73,8 +73,8 @@ class A00_UsersTest extends TestCase
             'email' => $new_user->email,
         ]);
     }
-
     /** @test */
+/* BLADE EN CONSTRUCCION
     public function administrador_can_delete_a_user()
     {
         // Usuario Administrador
@@ -108,4 +108,5 @@ class A00_UsersTest extends TestCase
             'acceso_id' => $userAcceso->id,
         ]);
     }
+*/
 }

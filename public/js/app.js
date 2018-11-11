@@ -45918,7 +45918,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-1.sumillas.componente, \n.col-2.sumillas.componente,\n.col-3.sumillas.componente, \n.col-4.sumillas.componente, \n.col-6.sumillas\n{\n    margin-left: 0px;\n}\n.sumillas.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.col-1.sumillas.componente, \n.col-2.sumillas.componente,\n.col-3.sumillas.componente, \n.col-4.sumillas.componente, \n.col-6.sumillas\n{\n    margin-left: 0px;\n}\n.sumillas.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n.idnew {\n    background: yellow;\n}\n", ""]);
 
 // exports
 
@@ -46446,7 +46446,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-2.titulo3.componente, \n.col-3.titulo3.componente,  \n.col-4.titulo3.componente,  \n.col-6.titulo3.componente, \n.col-1.unidades.componente, \n.col-2.unidades.componente,\n.col-3.unidades.componente, \n.col-4.unidades.componente, \n.col-6.unidades\n{\n    margin-left: 0px;\n}\n.unidades.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.col-2.titulo3.componente, \n.col-3.titulo3.componente,  \n.col-4.titulo3.componente,  \n.col-6.titulo3.componente, \n.col-1.unidades.componente, \n.col-2.unidades.componente,\n.col-3.unidades.componente, \n.col-4.unidades.componente, \n.col-6.unidades\n{\n    margin-left: 0px;\n}\n.unidades.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n.idnew {\n    background: yellow;\n}\n", ""]);
 
 // exports
 
@@ -46973,7 +46973,7 @@ var staticRenderFns = [
               "notEditing col-6 col-xs-2 col-xs-offset-1 unidades componente",
             attrs: { align: "center" }
           },
-          [_c("b", [_vm._v("ACCIONES")])]
+          [_c("b")]
         )
       ])
     ])
@@ -47432,7 +47432,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.titulo3.componente,\n.contenidos.componente\n{\n    margin-left: 0px;\n}\n.titulo3.componente {\n    border: 0.5px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.titulo3.componente,\n.contenidos.componente\n{\n    margin-left: 0px;\n}\n.titulo3.componente {\n    border: 0.5px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n.idnew {\n    background: yellow;\n}\n", ""]);
 
 // exports
 
@@ -48064,7 +48064,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-1.estrategias.componente, \n.col-2.estrategias.componente,\n.col-3.estrategias.componente, \n.col-4.estrategias.componente, \n.col-6.estrategias\n{\n    margin-left: 0px;\n}\n.estrategias.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.col-1.estrategias.componente, \n.col-2.estrategias.componente,\n.col-3.estrategias.componente, \n.col-4.estrategias.componente, \n.col-6.estrategias\n{\n    margin-left: 0px;\n}\n.estrategias.componente {\n    border: 0px solid black;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n.idnew {\n    background: yellow;\n}\n", ""]);
 
 // exports
 
@@ -49217,7 +49217,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.col-1.bibliografias.componente,\n.col-2.bibliografias.componente,\n.col-3.bibliografias.componente,\n.col-4.bibliografias.componente,\n.col-5.bibliografias.componente,\n.col-6.bibliografias.componente,\n.col-7\n{\n    margin-left: 0px;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n\n", ""]);
+exports.push([module.i, "\n.col-1.bibliografias.componente,\n.col-2.bibliografias.componente,\n.col-3.bibliografias.componente,\n.col-4.bibliografias.componente,\n.col-5.bibliografias.componente,\n.col-6.bibliografias.componente,\n.col-7\n{\n    margin-left: 0px;\n}\n#viewTexto {\n    white-space: pre-wrap;\n}\n.idnew {\n    background: yellow;\n}\n", ""]);
 
 // exports
 

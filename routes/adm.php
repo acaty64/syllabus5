@@ -27,7 +27,7 @@ Route::post('users/store', [
 	'as'	=> 'users.store',
 	'uses'	=> 'UserController@store'
 ]);
-Route::get('users/edit', [
+Route::get('users/edit/{user_id}', [
 	'as'	=> 'users.edit',
 	'uses'	=> 'UserController@edit'
 ]);
@@ -39,11 +39,11 @@ Route::get('users/destroy/{user_id}', [
 	'as'	=> 'users.destroy',
 	'uses'	=> 'UserController@destroy'
 ]);
-Route::get('users/password', [
+Route::get('users/password/{user_id}', [
 	'as'	=> 'users.password',
 	'uses'	=> 'UserController@password'
 ]);
-Route::get('users/acceso', [
+Route::get('users/acceso/{user_id}', [
 	'as'	=> 'users.acceso',
 	'uses'	=> 'UserController@acceso'
 ]);

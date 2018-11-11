@@ -19,17 +19,17 @@ class UserController extends Controller
 
     public function password($user_id)
     {
-        dd('UserController.password');
+        return redirect('/enConstruccion');
     }
 
     public function acceso($user_id)
     {
-        dd('UserController.acceso');
+        return redirect('/enConstruccion');;
     }
 
     public function create()
     {
-        dd('UserController.create');
+        return redirect('/enConstruccion');;
     }
 
     public function store(Request $request)
@@ -51,6 +51,9 @@ class UserController extends Controller
 
     public function edit($user_id)
     {
+        return redirect('/enConstruccion');
+
+
         $user = User::findOrFail($user_id);
         return redirect()->route('users.edit');
     }
@@ -67,6 +70,10 @@ class UserController extends Controller
 
     public function destroy($user_id)
     {
+        return redirect('/enConstruccion');
+
+
+        
         $user = User::findOrFail($user_id);
         $acceso = UserAcceso::where('user_id', $user_id)->first();
         $acceso->delete();
