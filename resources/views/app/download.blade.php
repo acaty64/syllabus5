@@ -11,8 +11,11 @@
 	<div class="container panel panel-default">
 		<div class="panel-body">
 			<div class="row">
+				<img src="/images/loading.gif" id="loading" type="hidden" />
+			</div>
+			<div class="row">
 				<div class="progress">
-				  <div id="barra-progreso" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+				  <div id="barra-progreso" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="1%" aria-valuemin="5%" aria-valuemax="100%" style="width: 1%"></div>
 				  <span class="sr-only">0% Complete</span>
 				</div>
 			</div>
@@ -37,7 +40,6 @@
 		var siglas = document.getElementById("cod_grupo").value;
 		var mensaje = document.getElementById("message").value;
 		var token = document.getElementsByName("_token")[0].value;
-
 //console.log('data', url_proceso);
 		$('#barra-progreso').progressBar({
 			url: url_proceso,
@@ -74,6 +76,7 @@
 			 */
 			_oConfig = $.extend({
 				trigger: "#progress-trigger",
+				loading: '#loading',
 				back: '#back',
 				progressBar: $(this),
 				url: _und,
@@ -93,6 +96,7 @@
 				// Deshabilita boton
 				$(_oConfig.trigger).prop("disabled", true);
 				$(_oConfig.back).prop("hidden", true);
+				$(_oConfig.loading).css("visibility", "visible");
 				// Llamada a Ajax
 				$.ajax({
 					url: _oConfig.url,
@@ -100,13 +104,14 @@
 							message: _oConfig.message
 						},
 					type: "POST",
-					success: function (result,status,xhr) {
+					success: function () {
 						_mostrarProgreso(100);
 						_bFinalizado = true;
 						_oConfig.finished();
 						// Habilita boton
 						$(_oConfig.trigger).prop("disabled", false);
 						$(_oConfig.back).prop("hidden", false);
+						$(_oConfig.loading).css("visibility", "hidden");
 					},
 				});
 				_getProgreso();
@@ -121,9 +126,9 @@
 
 				oProgressBar.css("width", nPorcentaje + "%");
 				oProgressBar.text(nPorcentaje + "%");
-				oProgressBar.attr("aria-valuenow", nPorcentaje + "%");				
-				oProgressBar.attr("aria-valuemin", "10%");
-				oProgressBar.attr("aria-valuemax", "100%");
+				oProgressBar.attr("aria-valuenow", nPorcentaje);				
+				oProgressBar.attr("aria-valuemin", "10");
+				oProgressBar.attr("aria-valuemax", "100");
 			};
 
 			/** 
@@ -135,6 +140,7 @@
 				$.ajax({
 					url: _oConfig.progressUrl,
 					success: function ($Data) {
+console.log(_oConfig.progressUrl, $Data);
 						var nProgreso = parseInt($Data, 10);
 						if ($Data == "finish" || _bIniciado) {
 							nProgreso = 0;
@@ -173,6 +179,9 @@
 	}
 	#back {
 		float: right;
+	}
+	#loading{
+		visibility: hidden;
 	}
 </style>
 @endsection
