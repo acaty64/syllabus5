@@ -68,6 +68,11 @@ Route::get('/send/show', [
 	'uses'	=> 'SendController@show'
 ]);
 
+Route::get('/send/destroy/{id}', [
+	'as'	=> 'send.destroy',
+	'uses'	=> 'SendController@destroy'
+]);
+
 Route::get('/send/test', function()
 {
     $flimite = Carbon::now()->addWeek();

@@ -144,6 +144,13 @@ class SendController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $send = Send::findOrFail($id);
+        if($send){
+            $send->delete();
+            flash('El envío ' . $id . ' ha sido eliminado con éxito.')->success();
+        }else{
+            flash('El envío ' . $id . ' no existe.')->danger();
+        }
+        return redirect()->route('send.index');
     }
 }

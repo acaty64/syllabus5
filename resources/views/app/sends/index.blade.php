@@ -14,33 +14,42 @@
     </table>    
     <table style="width:80%" align="center">
       <tr  style="border-style: solid;">
+        <th>Id</th>
         <th>Receptor</th>
         <th>F.Envío</th>
         <th>F.Límite</th>
-        <th>F.Rpta</th>
         <th>Cursos</th>
-        <th>No Verificados</th>
-        <th>Verificados</th>
+        <th>Incompletos</th>
+        <th>Completos</th>
         <th>Abiertos</th>
         <th>Cerrados</th>
+        <th>Acción</th>
       </tr>
         @foreach($data as $fila)
             <tr style="border-style: solid;">
+                <td>{{ $fila->id }}</td>
                 <td>{{ $fila->user->name }}</td>
                 <td>{{ $fila->date_send }}</td>
                 <td>{{ $fila->date_answer }}</td>
-                <td>{{ $fila->date_response }}</td>
                 <td style="text-align:center;">{{ $fila->ncursos }}</td>
                 <td style="text-align:center;">{{ $fila->ncursos - $fila->nchecks }}</td>
                 <td style="text-align:center;">{{ $fila->nchecks }}</td>
                 <td style="text-align:center;">{{ $fila->nstatus }}</td>
                 <td style="text-align:center;">{{ $fila->ncursos - $fila->nstatus }}</td>
+                <td align="center">
+                    <a href="{{ route('send.destroy', $fila->id) }}" class="btn btn-danger" data-toggle="tooltip" title="Eliminar" ><span class="glyphicon glyphicon-remove" aria-hidden='true'></span></a>            
+                </td>
             </tr>
         @endforeach
     </table>
 @endsection
 
-@section('js')
+@section('style')
+<style>
+    th{
+        text-align: center;
+    }
+</style>
 
 @endsection
 
