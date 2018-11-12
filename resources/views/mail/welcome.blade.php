@@ -14,14 +14,14 @@
 						<p>Estimado docente: {{ $datos['name'] }}</p>
 						<p>Hemos activado su acceso al módulo de syllabus de la Facultad de Ciencias Económicas y Comerciales.</p>
 						<br>
-						<p>Página web: <a class="dato">{{ url('/') }}</a></p>
+						<p>Página web: <a class="dato" href="{{ url('/') }}">{{ url('/') }}</a></p>
 						<br>
 						<p>Usuario: <span class="dato">{{ $datos['email'] }}</span></p>
 						<p>Password: <span class="dato">el número de su DNI</span></p>
 						<br>
 						<p>Su acceso estará disponible hasta el: <span class="dato">{{ $datos['limite'] }}</span> </p>
 						<br>
-						<p>Por favor ingrese la información a los syllabus de los cursos a su cargo en la opción: EDICIÓN / GRUPO TEMÁTICO</p>
+						<p>Por favor ingrese la información en los syllabus de los cursos a su cargo en la opción: EDICIÓN / GRUPO TEMÁTICO</p>
 						<br>
 						<p>Saludos,</p>
 						<p>Departamento Académico de la FCEC</p>

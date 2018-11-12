@@ -18,16 +18,18 @@
                 <td>{{ $fila->cod_curso }}</td>
                 <td>{{ $fila->wcurso }}</td>
                 <td>
-                    <a href="{{ route( 'syllabus.show', [
-                        'semestre'=>env('SEMESTRE'), 
-                        'cod_curso'=>$fila->cod_curso, 
-                        'edit'=>true] ) }}" 
-                        class="btn btn-success" 
-                        data-toggle="tooltip" 
-                        title="Ver o Editar Syllabus" 
-                        name = "{{'curso'.$fila->cod_curso}}">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden='true'></span>
-                    </a>
+                    @if( $mensaje['color'] == 'green' )
+                        <a href="{{ route( 'syllabus.show', [
+                            'semestre'=>env('SEMESTRE'), 
+                            'cod_curso'=>$fila->cod_curso, 
+                            'edit'=>true] ) }}" 
+                            class="btn btn-success" 
+                            data-toggle="tooltip" 
+                            title="Ver o Editar Syllabus" 
+                            name = "{{'curso'.$fila->cod_curso}}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden='true'></span>
+                        </a>
+                    @endif
                     <a href="{{ route( 'consistencia.show', [
                         'curso_id'=>$fila->curso_id] ) }}" 
                         class="btn btn-success" 
