@@ -20,6 +20,13 @@ class User extends Authenticatable
         return $val->acceso;
     }
 
+    protected function getUserAccesoAttribute()
+    {
+        //$val = UserAcceso::where('user_id', $this->id)->first();
+        $val = $this->belongsTo(UserAcceso::class, 'id', 'user_id')->first();
+        return $val;
+    }
+
     protected function getGrupoAttribute()
     {
         $val = $this->belongsTo(UserGrupo::class, 'id', 'user_id')->first();

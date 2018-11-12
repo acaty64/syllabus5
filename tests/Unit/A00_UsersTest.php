@@ -16,8 +16,10 @@ class A00_UsersTest extends TestCase
 	use DatabaseMigrations;
 
     /** @test */
+/*  EN CONSTRUCCION
     public function administrador_can_create_a_user()
     {
+
         // Usuario Administrador
         $user = $this->defaultUser();
         $userAcceso = $this->defaultUserAcceso([
@@ -29,19 +31,33 @@ class A00_UsersTest extends TestCase
         $new_user = new User([
                     'name' => 'Nuevo Usuario',
                     'email' => 'usuario@gmail.com',
-                    'password' => 'password'
+                    'password' => 'password',
+                    'cod_doc' => '000001',
                 ]);
+
         $request = [
                 '_token' => csrf_token(),
-                'user' => $new_user
+                'id' => $new_user->id,
+                'name' => $new_user->name,
+                'email' => $new_user->email,
+                'password' => $new_user->password,
+                'cod_doc' => $new_user->cod_doc,
+                'acceso_id' => 2,
             ];
         $this->post(route('users.store'),$request);
 
         $this->assertDatabaseHas("users", [
             'name' => $new_user->name,
             'email' => $new_user->email,
+            'cod_doc' => $new_user->cod_doc,
+        ]);
+        $new_user = User::where('name', $new_user->name)->first();
+        $this->assertDatabaseHas("userAcceso", [
+            'user_id' => $new_user->id,
+            'acceso_id' => 2,
         ]);
     }
+*/
 
     /** @test */
     public function administrador_can_edit_a_user()
@@ -59,14 +75,23 @@ class A00_UsersTest extends TestCase
                     'email' => 'usuario@gmail.com',
                     'password' => 'password'
                 ]);
+        $newAcceso = $this->defaultUserAcceso([
+                    'cod_acceso'=>'resp',
+                    'user_id' => $new_user->id
+                ]);
 
         $new_user->name = 'Usuario modificado';
         $new_user->email = 'otrousuario@gmail.com';
         $request = [
                 '_token' => csrf_token(),
-                'user'  =>$new_user
+                'id' => $new_user->id,
+                'name' => $new_user->name,
+                'email' => $new_user->email,
+                'password' => $new_user->password,
+                'cod_doc' => $new_user->cod_doc,
+                'acceso_id' => 3,
             ];
-        $this->put(route('users.update'), $request);
+        $this->post(route('users.update'), $request);
 
         $this->assertDatabaseHas("users", [
             'name' => $new_user->name,

@@ -2,11 +2,11 @@
 @section('title','Usuarios')
 
 @section('content')
-    <h1 class="text-center">Usuarios</h1>
+    <h1 class="text-center">Mantenimiento de Datos de Usuarios</h1>
     <table style="width:50%" align="center">
     	<tr>
 			<p style="text-align:center;">
-                <a href="{{ route('users.create') }}" class="btn btn-success" data-toggle="tooltip">Crear Usuario</a>
+                <!--a href="{{ route('users.create') }}" class="btn btn-success" data-toggle="tooltip">Crear Usuario</a-->
 			</p>
     	</tr>
     </table>
@@ -31,8 +31,6 @@
 				<td>
 					<a href="{{ route('users.destroy', $user->id) }}" class="btn btn-danger" data-toggle="tooltip" title="Eliminar" ><span class="glyphicon glyphicon-remove" aria-hidden='true'></span></a>
 					<a href="{{ route('users.edit', $user->id) }}" class="btn btn-success" data-toggle="tooltip" title="Editar Datos" ><span class="glyphicon glyphicon-pencil" aria-hidden='true'></span></a>
-					<a href="{{ route('users.password', $user->id) }}" class="btn btn-success" data-toggle="tooltip" title="Editar Password" ><span class="glyphicon glyphicon-lock" aria-hidden='true'></span></a>
-					<a href="{{ route('users.acceso', $user->id) }}" class="btn btn-success" data-toggle="tooltip" title="Editar Acceso" ><span class="glyphicon glyphicon-ok" aria-hidden='true'></span></a>
 				</td>
 			</tr>
 		@endforeach
