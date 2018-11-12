@@ -161,10 +161,10 @@
                     mess = 'Inserte el texto UBICACIÓN.';
                 }
                 var check = linea.data[4].texto;
-                if(!isNaN(check) && check > 2015){
+                if(!isNaN(check) && check > 1900){
                     consistencia = consistencia + 1;
                 }else{
-                    mess = 'El AÑO debe ser un número entero mayor a 2015.';
+                    mess = 'El AÑO debe ser un número entero mayor a 1900.';
                 }
                 var check = linea.data[3].texto;
                 if(check.trim().length > 0){

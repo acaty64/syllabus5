@@ -290,7 +290,7 @@ class A03_EditTest extends DuskTestCase
 
             $selector = '.id2.col-4';
             $texto = '2016';
-            $error = 'El AÑO debe ser un número entero mayor a 2015.';
+            $error = 'El AÑO debe ser un número entero mayor a 1900.';
             $browser->type($selector, ' ')
                     ->assertDontSeeIn($selector, $texto)
                     ->click('.btnSave2')

@@ -66,11 +66,16 @@ trait Consistencia
 		}
 
 		/* Bibliografia */
+		$year_limit = date('Y')-3;
+
 		$bibliografia = Bibliografia::where('semestre', env("SEMESTRE"))
-							->where('cod_curso', $curso->cod_curso)->get();
+							->where('cod_curso', $curso->cod_curso)
+							->where('year', '>', $year_limit)
+							->get();
+
 		if($bibliografia->count() < 2){
 			array_push($consistencia, ['campo'=>'bibliografia', 
-										'texto' => 'No se ha ingresado por lo menos 2 BIBLIOGRAFÍAS.']);
+										'texto' => 'No se ha ingresado por lo menos 2 BIBLIOGRAFÍAS con menos de 3 años de antiguedad.']);
 			$incompleto++;
 		}else{
 			array_push($consistencia, ['campo'=>'bibliografia', 

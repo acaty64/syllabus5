@@ -21,6 +21,8 @@
 						<br>
 						<p>Su acceso estará disponible hasta el: <span class="dato">{{ $datos['limite'] }}</span> </p>
 						<br>
+						<p>Por favor ingrese la información a los syllabus de los cursos a su cargo en la opción: EDICIÓN / GRUPO TEMÁTICO</p>
+						<br>
 						<p>Saludos,</p>
 						<p>Departamento Académico de la FCEC</p>
 						<p><img class="navbar-brand" src="{{asset('images/logo-ucss.png')}}" ></img></p>
