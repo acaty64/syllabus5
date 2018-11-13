@@ -56,7 +56,9 @@ class Join extends Model
  
         $rpta = json_decode($res->getBody()->getContents(),true);
 
-        Linea::truncate();
+//        Linea::truncate();
+
+$registros = [];
 
         $datos = $rpta["data"];
         $orden_unidad = 0;
@@ -81,7 +83,8 @@ class Join extends Model
                             $xHtml = $xHtml . $titulo_romano;
                             $xHtml = $xHtml . '</span></div>';
                         $linea['html'] = $xHtml;
-                        Linea::create($linea);
+                        // Linea::create($linea);
+array_push($registros, $linea);
                     };
                     break;
                 case 'unidades':
@@ -104,7 +107,8 @@ class Join extends Model
                                 $xHtml = $xHtml . $linea['texto'] . '<br> Logro: ' . $datos[$key1]['data'][$key2]['logro'];
                                 $xHtml = $xHtml . '</span></div>';
                             $linea['html'] = $xHtml;
-                            Linea::create($linea);
+                            // Linea::create($linea);
+array_push($registros, $linea);
                         }
                     };
                     break;
@@ -134,7 +138,8 @@ class Join extends Model
                         }                        
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
-                        Linea::create($linea);
+                        // Linea::create($linea);
+array_push($registros, $linea);
                         $xHtml = '';
                     };
                     break;
@@ -180,7 +185,8 @@ class Join extends Model
                         }                        
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
-                        Linea::create($linea);
+                        // Linea::create($linea);
+array_push($registros, $linea);
                         $xHtml = '';
                     };
                     break;
@@ -196,12 +202,14 @@ class Join extends Model
                             $xHtml = $xHtml . $datos[$key1]['data'][$key2]['texto'] . "</span>";          
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
-                        Linea::create($linea);
+                        // Linea::create($linea);
+array_push($registros, $linea);
                         $linea['row'] = $linea['row'] + 1 ;
                         $xHtml = '';
                     };
                     $linea['html'] = "</div>";
-                    Linea::create($linea);
+                    // Linea::create($linea);
+array_push($registros, $linea);
                     $xHtml = '';
                     break;
                 default:
@@ -216,19 +224,21 @@ class Join extends Model
                             $xHtml = $xHtml . $linea['texto'] . "</span>";          
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
-                        Linea::create($linea);
+                        // Linea::create($linea);
+array_push($registros, $linea);
                         $linea['row'] = $linea['row'] + 1 ;
                         $xHtml = '';
                     };
                     $linea['html'] = "</div>";
-                    Linea::create($linea);
+                    // Linea::create($linea);
+array_push($registros, $linea);
                     $xHtml = '';
                     break;
             }
 
         }
-        $registros = Linea::all();
-
+        // $registros = Linea::all();
+$registros = collect($registros);
         /* https://stackoverflow.com/questions/25451019/what-is-the-syntax-for-sorting-an-eloquent-collection-by-multiple-columns */  
         $registros = $registros->sort(
             function ($a, $b) {

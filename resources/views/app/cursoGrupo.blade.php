@@ -18,7 +18,9 @@
                 <td>{{ $fila->cod_curso }}</td>
                 <td>{{ $fila->wcurso }}</td>
                 <td>
-                    @if( $mensaje['color'] == 'green' )
+                    @if( $mensaje['color'] == 'green' || 
+                            Auth::user()->acceso->cod_acceso == 'master' || 
+                            Auth::user()->acceso->cod_acceso == 'adm')
                         <a href="{{ route( 'syllabus.show', [
                             'semestre'=>env('SEMESTRE'), 
                             'cod_curso'=>$fila->cod_curso, 
