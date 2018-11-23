@@ -154,12 +154,12 @@
                 toastr.showDuration = 50;
                 var mess = '';
                 var consistencia = 0;
-                var check = linea.data[5].texto;
-                if(check.trim().length > 0){
-                    consistencia = consistencia + 1;
-                }else{
-                    mess = 'Inserte el texto UBICACIÓN.';
-                }
+                // var check = linea.data[5].texto;
+                // if(check.trim().length > 0){
+                //     consistencia = consistencia + 1;
+                // }else{
+                //     mess = 'Inserte el texto UBICACIÓN.';
+                // }
                 var check = linea.data[4].texto;
                 if(!isNaN(check) && check > 1900){
                     consistencia = consistencia + 1;
@@ -185,7 +185,7 @@
                     mess = 'Inserte el texto AUTOR(ES).';
                 }
 
-                if(consistencia == 5){                
+                if(consistencia == 4){                
                     return true;
                 }else{
                     toastr.error(mess);

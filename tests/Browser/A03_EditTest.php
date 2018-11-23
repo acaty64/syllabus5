@@ -299,16 +299,16 @@ class A03_EditTest extends DuskTestCase
                     ->type($selector, $texto)
                     ->assertSeeIn($selector, $texto);
 
-            $selector = '.id2.col-5';
-            $texto = $browser->text($selector);
-            $error = 'Inserte el texto UBICACIÓN.';
-            $browser->type($selector, ' ')
-                    ->assertDontSeeIn($selector, $texto)
-                    ->click('.btnSave2')
-                    ->waitForText($error)
-                    ->waitUntilMissing('.toast', 11)
-                    ->type($selector, $texto)
-                    ->assertSeeIn($selector, $texto);
+            // $selector = '.id2.col-5';
+            // $texto = $browser->text($selector);
+            // $error = 'Inserte el texto UBICACIÓN.';
+            // $browser->type($selector, ' ')
+            //         ->assertDontSeeIn($selector, $texto)
+            //         ->click('.btnSave2')
+            //         ->waitForText($error)
+            //         ->waitUntilMissing('.toast', 11)
+            //         ->type($selector, $texto)
+            //         ->assertSeeIn($selector, $texto);
 
         });
 
