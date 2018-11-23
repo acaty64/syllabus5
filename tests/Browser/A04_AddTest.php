@@ -225,8 +225,10 @@ class A04_AddTest extends DuskTestCase
                     ->press('Vista')
                     ->script('window.scrollTo(0, 2000);');
 
-            $browser->waitForText($texto);
+            $browser->waitForText($texto)
+                    ->script('window.scrollTo(0, 0);');
 
+            $browser->assertDontSee('Nuevo Registro');
 
             $this->assertDatabaseHas('estrategias', [
                         'semestre' => '20191',

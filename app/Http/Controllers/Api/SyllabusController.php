@@ -446,7 +446,6 @@ class SyllabusController extends Controller
         
         $curso = Curso::all()->where('cod_curso', $cod_curso)
                 ->first();
-
         $new_data = $this->upload_titulo0($request, $curso);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
@@ -472,8 +471,8 @@ class SyllabusController extends Controller
             $datos = $this->insertData($datos, $new_data);
         }
 
-        $new_data = $this->upload_unidades($datos, $request);
 
+        $new_data = $this->upload_unidades($datos, $request);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -493,12 +492,12 @@ class SyllabusController extends Controller
             $datos = $this->insertData($datos, $new_data);
         }
 
-        $new_data = $this->upload_evaluaciones($request);
+        $new_data = $this->upload_estrategias($datos, $request);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
 
-        $new_data = $this->upload_estrategias($datos, $request);
+        $new_data = $this->upload_evaluaciones($request);
         if(!empty($new_data)){
             $datos = $this->insertData($datos, $new_data);
         }
@@ -1125,13 +1124,10 @@ class SyllabusController extends Controller
 
     protected function upload_estrategias($datos, $request)
     {
-        $datos0 = [];
 
         $estrategias = Estrategia::all()->where('semestre', $request->semestre)
-                    ->where('cod_curso', $request->cod_curso)
-                    ->toArray();
-
-        /* Estrategias */
+                    ->where('cod_curso', $request->cod_curso)->first();
+        /* Sumillas */
         $collection = collect($datos)
                     ->where('tipo', 'titulo1')
                     ->where('subtipo', 'estrategias');
@@ -1139,6 +1135,45 @@ class SyllabusController extends Controller
 
         $data = 'estrategias';
         $data1 = $$data;
+        $datos0 = [];
+        $new_data = [];
+        if(!empty($$data) || !is_null($$data)){
+            $$data = $$data->toArray();
+            $new_data['id'] = $data1['id'];
+            $new_data['row'] = $data1['orden'] * 1000 + $row_titulo;
+            $new_data['pre_row'] = $new_data['row'];
+            $new_data['editing'] = true;
+            $new_data['tipo'] = $data;
+            $new_data['subtipo'] = $data;
+            $new_data['data'] = [
+                    [
+                        'view' => true,
+                        'col' => 1,
+                        'cols' => 7,
+                        'offset' => 2,
+                        'align' => 'justify',
+                        'texto' => $$data['texto']
+                    ],
+            ];
+            array_push($datos0, $new_data);
+        }
+        return $datos0;     
+/*
+        $datos0 = [];
+
+        $estrategias = Estrategia::all()->where('semestre', $request->semestre)
+                    ->where('cod_curso', $request->cod_curso)
+                    ->toArray();
+        /* Estrategias */
+/*
+        $collection = collect($datos)
+                    ->where('tipo', 'titulo1')
+                    ->where('subtipo', 'estrategias');
+        $row_titulo = $collection->first()['row']; 
+
+        $data = 'estrategias';
+        $data1 = $$data;
+dd($data1[1]['id']);
         if(!empty($$data)){
             $new_data = [];
             $new_data['id'] = $data1[0]['id'];
@@ -1161,7 +1196,7 @@ class SyllabusController extends Controller
         }
          
         return $datos0;
-
+*/
     }
 
     protected function upload_bibliografias($datos, $request)

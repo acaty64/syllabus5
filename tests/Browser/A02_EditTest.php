@@ -129,7 +129,7 @@ class A02_EditTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->press('Evaluaciones')
                     ->assertSee('EVALUACIONES')
-                    ->waitForText('PORCENTAJE')
+                    ->waitForText('PORCENTAJE', 20)
                     ->click('.btnEdit2')
                     ->clear('.id2.col-1')
                     ->type('.id2.col-1', 'yyyyy')

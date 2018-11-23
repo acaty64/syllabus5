@@ -83,7 +83,7 @@ Route::get('/show/{semestre}/{cod_curso}/{edit}', [
 */
 
 /* Acceso Responsable, Administrador, Master  */
-Route::get('/show', [
+Route::get('/syllabus/show', [
 	'as'	=> 'syllabus.show',
 	'uses'	=> 'SyllabusController@show'
 ]);
