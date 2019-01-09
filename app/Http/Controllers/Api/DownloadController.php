@@ -80,7 +80,8 @@ class DownloadController extends Controller
 
         /* Crea el archivo .zip */
         $zipFileName = $cod_grupo . "_" . $semestre . ".zip";
-        $outputFileZip = base_path('storage/output/') . $zipFileName;
+        $outputFileZip = storage_path() . DIRECTORY_SEPARATOR . 'output'. DIRECTORY_SEPARATOR . $zipFileName;
+        // base_path('storage/output/') . $zipFileName;
         $zip = new ZipArchive();
         /* Fin Creacion de archivo .zip */
         if ($zip->open($outputFileZip, ZipArchive::CREATE) === TRUE) {

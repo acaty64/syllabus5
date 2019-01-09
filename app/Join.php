@@ -266,7 +266,7 @@ $registros = collect($registros);
 
     protected function getTitulo($texto, $orden)
     {
-        $romanos = [ '','I','II','III','IV','V','VI','VII','VIII','IX','X' ];
+        $romanos = [ '','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII' ];
         $titulo = $romanos[$orden].'. '.$texto;
         return $titulo;
     }

@@ -20,7 +20,10 @@
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "^1.24",
         "spatie/laravel-backup": "^5.11",
-        "symfony/psr-http-message-bridge": "0.2"
+        "symfony/psr-http-message-bridge": "0.2",
+        "maatwebsite/excel": "~2.0",
+        "doctrine/common": "2.7.0",
+        "doctrine/dbal": "2.5.13"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
