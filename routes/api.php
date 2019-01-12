@@ -19,10 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //Route::resource('syllabus', 'Api\SyllabusController');
 
-Route::get('cambios/generate', [
-	'as'	=> 'cambios.generate',
-	'uses'	=> 'Api\CambioController@generate'
-]);
+// Route::get('cambios/generate', [
+// 	'as'	=> 'cambios.generate',
+// 	'uses'	=> 'Api\CambioController@generate'
+// ]);
 
 Route::get('processing-status', function()
 {
