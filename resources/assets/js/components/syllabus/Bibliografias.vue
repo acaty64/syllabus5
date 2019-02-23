@@ -23,7 +23,7 @@
                         <span class="notEditing col-2 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Título</b></span>
                         <span class="notEditing col-3 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Editorial</b></span>
                         <span class="notEditing col-4 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'><b>Año</b></span>
-                        <span class="notEditing col-5 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Ubicación</b></span>
+                        <span class="notEditing col-5 col-xs-2 col-xs-offset-1 bibliografias componente" align='center'><b>Código UCSS</b></span>
                         <span class="notEditing col-6 col-xs-1 col-xs-offset-1 bibliografias componente" align='center'></span>
                     </div>                
                 </tr>
@@ -154,12 +154,12 @@
                 toastr.showDuration = 50;
                 var mess = '';
                 var consistencia = 0;
-                // var check = linea.data[5].texto;
-                // if(check.trim().length > 0){
-                //     consistencia = consistencia + 1;
-                // }else{
-                //     mess = 'Inserte el texto UBICACIÓN.';
-                // }
+                var check = linea.data[5].texto;
+                if(check.trim().length > 0){
+                    consistencia = consistencia + 1;
+                }else{
+                    mess = 'Inserte el código de biblioteca UCSS o * para indicar que está pendiente de adquirir.';
+                }
                 var check = linea.data[4].texto;
                 if(!isNaN(check) && check > 1900){
                     consistencia = consistencia + 1;

@@ -15,7 +15,7 @@ class Curso extends Model
 	protected $appends = [ 'texto_horas', 
                            'ciclo_romano',
                            'status',
-                           'consistencia'
+                           // 'consistencia'
                         ];
 
     protected $fillable = [
@@ -39,13 +39,13 @@ class Curso extends Model
         $val = $this->belongsTo(CursoStatus::class, 'id', 'curso_id')->first();
         return $val;
     }
-/*
-    protected function getConsistenciaAttribute()
-    {
-        $val = Send::find(1)->consistencia($this->id, 'boolean');
-        return $val;
-    }
-*/
+
+    // protected function getConsistenciaAttribute()
+    // {
+    //     $val = Send::find(1)->consistencia($this->id, 'boolean');
+    //     return $val;
+    // }
+
     protected function getTextoHorasAttribute()
     {
     	return $this->horas . " (" . $this->ht . " HT/" . $this->hp . " HP)";

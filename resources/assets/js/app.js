@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('syllabus-component', require('./components/syllabus/SyllabusComponent.vue'));
+Vue.component('cambios-component', require('./components/cambios/CambiosComponent.vue'));
 
 import { store } from './components/syllabus/store.js';
 

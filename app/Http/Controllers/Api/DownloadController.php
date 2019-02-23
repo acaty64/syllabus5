@@ -102,11 +102,14 @@ class DownloadController extends Controller
                 $cod_curso = $curso->cod_curso;
                 $data = $this->join->syllabus($semestre, $cod_curso);
                 $snappy = $this->join->snappy($data, $semestre, $message);
-                $outputFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
+                /*** Nombre de archivo de descarga ***/
+                $outputFile = base_path('storage/output/') . $semestre . '-A-' .  $cod_curso . "-SYL.pdf";
+                /*  */
                 $snappy->save($outputFile);
                 // Add File in ZipArchive
-                $xFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
-                $zip->addFile($xFile);
+                // $xFile = base_path('storage/output/') . $cod_curso . "_" . $semestre . ".pdf";
+                // $zip->addFile($xFile);
+                $zip->addFile($outputFile);
             }
             // Close ZipArchive     
             $zip->close();

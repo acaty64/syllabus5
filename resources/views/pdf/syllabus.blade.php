@@ -55,7 +55,9 @@
         }
 
         .examenes {
-            border: 0.5px solid black;
+            border: 1px solid;
+            border-color: rgba(0,0,0,0.75);
+            text-align: center;
         }
     </style>
 @endsection

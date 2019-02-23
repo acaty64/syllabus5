@@ -28,9 +28,17 @@ class ContenidosTableSeeder extends Seeder
             'procedimiento' => 'Determinación, distribución y aplicación de los costos en una empresa mercantil.',
             'actividad' => 'Dinámica grupal/debate en clase',
 		]);
-		Contenido::create([
+        Contenido::create([
             'semestre' => '20191', 
             'cod_curso' => '100048', 
+            'semana' => 3,
+            'concepto' => 'Elementos de los Estados Financieros:\n‐ Balance General: Activo, pasivo y patrimonio.\n‐ Estado de Resultados: Ingresos y Gastos',
+            'procedimiento' => 'Analizar y aplicar el marco legal normativo para la elaboración de los Estados Financieros.',
+            'actividad' => 'Exposición dialogada',          
+        ]);
+		Contenido::create([
+            'semestre' => '20191', 
+            'cod_curso' => 'EG002', 
             'semana' => 3,
             'concepto' => 'Elementos de los Estados Financieros:\n‐ Balance General: Activo, pasivo y patrimonio.\n‐ Estado de Resultados: Ingresos y Gastos',
             'procedimiento' => 'Analizar y aplicar el marco legal normativo para la elaboración de los Estados Financieros.',

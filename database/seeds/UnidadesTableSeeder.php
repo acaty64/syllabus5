@@ -23,5 +23,13 @@ class UnidadesTableSeeder extends Seeder
 			'logro' => 'Quisque vitae sapien pharetra, ullamcorper quam nec, pellentesque tellus. Phasellus scelerisque augue sed volutpat lobortis.',
 			'orden' => 2,
 		]);
+		Unidad::create([
+			'semestre' => '20191', 
+			'cod_curso' => 'EG002', 
+			'semana' => 6,
+			'texto' => 'ANALISIS E INTERPRETACION DE LOS ESTADOS FINANCIEROS.',
+			'logro' => 'Quisque vitae sapien pharetra, ullamcorper quam nec, pellentesque tellus. Phasellus scelerisque augue sed volutpat lobortis.',
+			'orden' => 2,
+		]);
 	}
 }

@@ -23670,7 +23670,7 @@ module.exports = Vue;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(95);
+module.exports = __webpack_require__(98);
 
 
 /***/ }),
@@ -23679,7 +23679,7 @@ module.exports = __webpack_require__(95);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_syllabus_store_js__ = __webpack_require__(97);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -23699,6 +23699,7 @@ window.Vue = __webpack_require__(15);
 
 Vue.component('example-component', __webpack_require__(44));
 Vue.component('syllabus-component', __webpack_require__(47));
+Vue.component('cambios-component', __webpack_require__(94));
 
 
 
@@ -50018,6 +50019,386 @@ if (false) {
 
 /***/ }),
 /* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(95)
+/* template */
+var __vue_template__ = __webpack_require__(96)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/cambios/CambiosComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-42923d62", Component.options)
+  } else {
+    hotAPI.reload("data-v-42923d62", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log('CambiosComponent mounted.');
+    this.getData();
+    toastr.closeButton = false;
+    toastr.debug = false;
+    toastr.showDuration = 100;
+  },
+  data: function data() {
+    return {
+      cursos: [],
+      old_data: [],
+      new_data: '',
+      type_data: '',
+      item: [],
+      items: [],
+      search: '',
+      URLdomain: window.location.host,
+      protocol: window.location.protocol
+    };
+  },
+
+  computed: {
+    consistencia: function consistencia() {
+      switch (this.type_data) {
+        case 'codigo':
+          if (this.new_data.length != 6) {
+            return false;
+          }
+          break;
+        case 'descripcion':
+          this.new_data = this.new_data.toUpperCase();
+          this.new_data = this.new_data.trim();
+          if (this.new_data.length == 0) {
+            return false;
+          }
+          break;
+        default:
+          return false;
+      }
+      if (this.item.length == 0) {
+        return false;
+      }
+      return true;
+    }
+  },
+  methods: {
+    saveData: function saveData() {
+      var _this = this;
+
+      if (this.consistencia) {
+        // alert('Grabar informacion. EN CONSTRUCCION');
+        var request = {
+          'sw_change': this.type_data,
+          'cod_curso': this.item.cod_curso,
+          'new_data': this.new_data
+        };
+        var url = this.protocol + '//' + this.URLdomain + '/api/cambios/change';
+        axios.post(url, request).then(function (response) {
+          console.log(response.data);
+          toastr.success('Cambios realizados');
+          _this.getData();
+        }).catch(function (error) {
+          console.log('error getData: ', error);
+        });
+      };
+    },
+    getData: function getData() {
+      var _this2 = this;
+
+      var url = this.protocol + '//' + this.URLdomain + '/api/cambios/upload';
+      axios.get(url).then(function (response) {
+        _this2.cursos = response.data.data.cursos;
+        _this2.items = _this2.cursos;
+      }).catch(function (error) {
+        console.log('error getData: ', error);
+      });
+    },
+    selectCurso: function selectCurso() {
+      this.old_data = this.item;
+    },
+    buscar: function buscar(search) {
+      this.search = search;
+      this.items = this.cursos.filter(function (item) {
+        return item.wcurso.indexOf(search) > -1;
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }, [
+            _vm.consistencia
+              ? _c("span", [
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.saveData()
+                        }
+                      }
+                    },
+                    [_vm._v("Ejecutar Cambio")]
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("label", { attrs: { for: "" } }, [_vm._v("Tipo de cambio")]),
+              _c("br"),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.type_data,
+                    expression: "type_data"
+                  }
+                ],
+                attrs: { type: "radio", id: "codigo", value: "codigo" },
+                domProps: { checked: _vm._q(_vm.type_data, "codigo") },
+                on: {
+                  change: function($event) {
+                    _vm.type_data = "codigo"
+                  }
+                }
+              }),
+              _c("label", { attrs: { for: "codigo" } }, [_vm._v("Codigo")]),
+              _c("br"),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.type_data,
+                    expression: "type_data"
+                  }
+                ],
+                attrs: {
+                  type: "radio",
+                  id: "descripcion",
+                  value: "descripcion"
+                },
+                domProps: { checked: _vm._q(_vm.type_data, "descripcion") },
+                on: {
+                  change: function($event) {
+                    _vm.type_data = "descripcion"
+                  }
+                }
+              }),
+              _c("label", { attrs: { for: "descripcion" } }, [
+                _vm._v("Descripcion")
+              ]),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-4" }, [
+              _c("label", { attrs: { for: "new_data" } }, [
+                _vm._v("Nuevo Valor: ")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_data,
+                    expression: "new_data"
+                  }
+                ],
+                attrs: { type: "text", id: "new_data" },
+                domProps: { value: _vm.new_data },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.new_data = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-4" }, [
+              _c("label", { attrs: { for: "search" } }, [
+                _vm._v("Buscar curso: ")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.search,
+                    expression: "search"
+                  }
+                ],
+                attrs: { type: "text", id: "search" },
+                domProps: { value: _vm.search },
+                on: {
+                  change: function($event) {
+                    _vm.buscar(_vm.search.toUpperCase())
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.search = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.item,
+                      expression: "item"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { dusk: "sel_curso", id: "sel_curso" },
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.item = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      },
+                      _vm.selectCurso
+                    ]
+                  }
+                },
+                _vm._l(_vm.items, function(item) {
+                  return _c("option", { domProps: { value: item } }, [
+                    _vm._v(
+                      "\n                  " +
+                        _vm._s(item.cod_curso) +
+                        " " +
+                        _vm._s(item.wcurso) +
+                        "\n                "
+                    )
+                  ])
+                })
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-42923d62", module.exports)
+  }
+}
+
+/***/ }),
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50809,7 +51190,7 @@ function findByRow(lineas, row, id) {
 }
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

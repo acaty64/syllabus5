@@ -39,7 +39,7 @@ class BibliografiasTableSeeder extends Seeder
 
         Bibliografia::create([
         	'semestre' => '20191',
-            'cod_curso' => '100048',
+            'cod_curso' => 'EG002',
 //            'tipo' => '1',
             'autor' => 'Díaz Izquierdo, Pedro; Quiroz Pacheco, Juan',
             'titulo' => 'Contabilidad Gerencial II',
