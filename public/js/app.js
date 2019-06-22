@@ -47511,6 +47511,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -47813,9 +47814,7 @@ var render = function() {
                             _c("span", {
                               class: _vm.rowClass(item, linea),
                               attrs: { align: item.align },
-                              domProps: {
-                                innerHTML: _vm._s(_vm.viewTexto(item))
-                              }
+                              domProps: { innerHTML: _vm._s(item.texto) }
                             })
                           ])
                         : _vm._e(),
@@ -49406,12 +49405,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             toastr.showDuration = 50;
             var mess = '';
             var consistencia = 0;
-            // var check = linea.data[5].texto;
-            // if(check.trim().length > 0){
-            //     consistencia = consistencia + 1;
-            // }else{
-            //     mess = 'Inserte el texto UBICACIÓN.';
-            // }
+            var check = linea.data[5].texto;
+            if (check.trim().length > 0) {
+                consistencia = consistencia + 1;
+            } else {
+                mess = 'Inserte el código de biblioteca UCSS o * para indicar que está pendiente de adquirir.';
+            }
             var check = linea.data[4].texto;
             if (!isNaN(check) && check > 1900) {
                 consistencia = consistencia + 1;
@@ -49782,7 +49781,7 @@ var staticRenderFns = [
               "notEditing col-5 col-xs-2 col-xs-offset-1 bibliografias componente",
             attrs: { align: "center" }
           },
-          [_c("b", [_vm._v("Ubicación")])]
+          [_c("b", [_vm._v("Código UCSS")])]
         ),
         _vm._v(" "),
         _c("span", {
@@ -50168,7 +50167,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var url = this.protocol + '//' + this.URLdomain + '/api/cambios/change';
         axios.post(url, request).then(function (response) {
           console.log(response.data);
-          toastr.success('Cambios realizados');
+          toastr.success('Cambio de ' + request.sw_change + ' en codigo ' + request.cod_curso + ' a: ' + request.new_data);
+          _this.new_data = '';
+          _this.search = '';
           _this.getData();
         }).catch(function (error) {
           console.log('error getData: ', error);
@@ -50281,33 +50282,6 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-4" }, [
-              _c("label", { attrs: { for: "new_data" } }, [
-                _vm._v("Nuevo Valor: ")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.new_data,
-                    expression: "new_data"
-                  }
-                ],
-                attrs: { type: "text", id: "new_data" },
-                domProps: { value: _vm.new_data },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.new_data = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-4" }, [
               _c("label", { attrs: { for: "search" } }, [
                 _vm._v("Buscar curso: ")
               ]),
@@ -50380,6 +50354,33 @@ var render = function() {
                   ])
                 })
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-4" }, [
+              _c("label", { attrs: { for: "new_data" } }, [
+                _vm._v("Nuevo Valor: ")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_data,
+                    expression: "new_data"
+                  }
+                ],
+                attrs: { type: "text", id: "new_data" },
+                domProps: { value: _vm.new_data },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.new_data = $event.target.value
+                  }
+                }
+              })
             ])
           ])
         ])

@@ -56,16 +56,16 @@ class Join extends Model
  
         $rpta = json_decode($res->getBody()->getContents(),true);
 
-//        Linea::truncate();
-
-$registros = [];
+        $registros = [];
 
         $datos = $rpta["data"];
         $orden_unidad = 0;
         foreach ($datos as $key1 => $value1) {
+
             $linea['row'] = $datos[$key1]['row'];
             $linea['tipo'] = $datos[$key1]['tipo'];
             $linea['subtipo'] = $datos[$key1]['subtipo'];
+
             switch ($datos[$key1]['tipo']) {
                 case 'titulo1':
                     foreach ($datos[$key1]['data'] as $key2 => $value2) {
@@ -84,7 +84,7 @@ $registros = [];
                             $xHtml = $xHtml . '</span></div>';
                         $linea['html'] = $xHtml;
                         // Linea::create($linea);
-array_push($registros, $linea);
+                        array_push($registros, $linea);
                     };
                     break;
                 case 'unidades':
@@ -108,7 +108,7 @@ array_push($registros, $linea);
                                 $xHtml = $xHtml . '</span></div>';
                             $linea['html'] = $xHtml;
                             // Linea::create($linea);
-array_push($registros, $linea);
+                            array_push($registros, $linea);
                         }
                     };
                     break;
@@ -139,7 +139,7 @@ array_push($registros, $linea);
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
                         // Linea::create($linea);
-array_push($registros, $linea);
+                        array_push($registros, $linea);
                         $xHtml = '';
                     };
                     break;
@@ -186,30 +186,43 @@ array_push($registros, $linea);
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
                         // Linea::create($linea);
-array_push($registros, $linea);
+                        array_push($registros, $linea);
                         $xHtml = '';
                     };
                     break;
                 case 'contenidos': 
+
                     $xHtml = "<div class='row " . $linea['row'] . "'>";
                     foreach ($datos[$key1]['data'] as $key2 => $value2) {
-                            $linea['texto'] = $datos[$key1]['data'][$key2]['texto'];
-                            $linea['cols'] = $datos[$key1]['data'][$key2]['cols'];
-                            $linea['align'] = $datos[$key1]['data'][$key2]['align'];
-                            $xHtml = $xHtml . "<span class=";
-                            $xHtml = $xHtml."'row col-" . $datos[$key1]['data'][$key2]['col'] . " " . $linea['tipo'] . " col-xs-" . $datos[$key1]['data'][$key2]['cols'] . " col-xs-offset-" . $datos[$key1]['data'][$key2]['offset']."'";
-                            $xHtml = $xHtml . ">";
-                            $xHtml = $xHtml . $datos[$key1]['data'][$key2]['texto'] . "</span>";          
+                        // Reconstruye texto
+                        $cadena = $datos[$key1]['data'][$key2]['texto'];
+                        // $patron = '/(\n)/';
+                        $patron = array("\n", "\r\n");
+                        $sustitucion = '</br>'; 
+                        $new_text = str_replace($patron, $sustitucion, $cadena);
+
+
+                        $linea['texto'] = $new_text;
+                        $linea['cols'] = $datos[$key1]['data'][$key2]['cols'];
+                        $linea['align'] = $datos[$key1]['data'][$key2]['align'];
+                        $xHtml = $xHtml . "<span class=";
+                        $xHtml = $xHtml."'row col-" . $datos[$key1]['data'][$key2]['col'] . " " . $linea['tipo'] . " col-xs-" . $datos[$key1]['data'][$key2]['cols'] . " col-xs-offset-" . $datos[$key1]['data'][$key2]['offset']."'". " style='text-align:".$linea['align']."'" ;
+// if ($key1 == 27 && $key2 == 2){
+
+// dd('join@syllabus:', $xHtml);
+// }
+                        $xHtml = $xHtml . ">";
+                        $xHtml = $xHtml . $linea['texto'] . "</span>";          
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
                         // Linea::create($linea);
-array_push($registros, $linea);
+                        array_push($registros, $linea);
                         $linea['row'] = $linea['row'] + 1 ;
                         $xHtml = '';
                     };
                     $linea['html'] = "</div>";
                     // Linea::create($linea);
-array_push($registros, $linea);
+                    array_push($registros, $linea);
                     $xHtml = '';
                     break;
                 default:
@@ -225,20 +238,20 @@ array_push($registros, $linea);
                         $linea['html'] = $xHtml;
                         $linea['col'] = $key2;
                         // Linea::create($linea);
-array_push($registros, $linea);
+                    array_push($registros, $linea);
                         $linea['row'] = $linea['row'] + 1 ;
                         $xHtml = '';
                     };
                     $linea['html'] = "</div>";
                     // Linea::create($linea);
-array_push($registros, $linea);
+                    array_push($registros, $linea);
                     $xHtml = '';
                     break;
             }
 
         }
         // $registros = Linea::all();
-$registros = collect($registros);
+        $registros = collect($registros);
         /* https://stackoverflow.com/questions/25451019/what-is-the-syntax-for-sorting-an-eloquent-collection-by-multiple-columns */  
         $registros = $registros->sort(
             function ($a, $b) {
@@ -260,9 +273,10 @@ $registros = collect($registros);
             'wcurso' => $wcurso,
             'lineas' => $lineas
         ];
-
+// dd('join.syllabus: ', $new_data);
         return $new_data;
     }
+
 
     protected function getTitulo($texto, $orden)
     {

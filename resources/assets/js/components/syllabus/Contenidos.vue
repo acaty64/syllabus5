@@ -39,7 +39,8 @@
                         <span v-for="item in linea.data">                  
                             <span v-if="!switchEdit && active_line != linea.id && item.view && active_line != 'new'">
                                 <!-- view -->
-                                <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span>
+                                <!-- <span :class="rowClass(item, linea)" :align="item.align" v-html="viewTexto(item)"></span> -->
+                                <span :class="rowClass(item, linea)" :align="item.align" v-html="item.texto"></span>
                             </span>
                             <span v-if="switchEdit && active_line == linea.id && linea.tipo == status">
                                 <!-- edit -->
@@ -219,7 +220,7 @@
                 this.$store.dispatch('SetTitulo', subtipo);
             },
         } 
-    }
+    };
 </script>
 <style>
     .titulo3.componente,
