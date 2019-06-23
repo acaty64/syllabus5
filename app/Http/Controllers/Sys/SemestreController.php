@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Sys;
 use App\Bibliografia;
 use App\Contenido;
 use App\Estrategia;
+use App\Evaluacion;
 use App\General;
 use App\Http\Controllers\Controller;
 use App\Responsable;
@@ -83,6 +84,13 @@ class SemestreController extends Controller
             }
 
             $antes = Estrategia::where('semestre', $semestre_old)->get();
+            foreach ($antes as $registro) {
+                $newRegistro = $registro->replicate();
+                $newRegistro->semestre = $new_semestre;
+                $newRegistro->save();
+            }
+            
+            $antes = Evaluacion::where('semestre', $semestre_old)->get();
             foreach ($antes as $registro) {
                 $newRegistro = $registro->replicate();
                 $newRegistro->semestre = $new_semestre;
