@@ -28,6 +28,19 @@ Route::get('backup/restore/{file}', [
 	'uses'	=> 'Sys\BackupController@restore'
 ]);
 
+Route::get('index_semestre', [
+	'as'	=> 'semestre.index',
+	'uses'	=> 'Sys\SemestreController@index'
+]);
+
+Route::post('create_semestre', [
+	'as'	=> 'semestre.create',
+	'uses'	=> 'Sys\SemestreController@create'
+]);
+
+
+
+
 Route::fallback(function()
 {
 	return response('Página no encontrada', 404);

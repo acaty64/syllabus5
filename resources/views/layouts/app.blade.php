@@ -63,11 +63,13 @@
                                     <li><a class="comunicados" href="{{ route('send.index') }}">Comunicados</a></li>
                                     <li><a class="preview" href="{{ route('send.show') }}">Vista Previa</a></li>
                                 </ul>
+                            </li>
                             <li class="dropdown mantenimiento">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>Mantenimiento</a>
                                 <ul class="dropdown-menu">
                                     <li><a class="download" href="{{ route('grupos.index', ['download']) }}">Descarga de Archivos</a></li>
                                     <li><a class="usuarios" href="{{ route('users.index') }}">Usuarios</a></li>
+                                    <li><a class="index_semestre" href="{{ route('semestre.index') }}">Nuevo Semestre</a></li>
                                     <li><a class="accesos" href="/enConstruccion">Accesos</a></li>
                                     <li><a class="grupos" href="/enConstruccion">Grupos</a></li>
                                     <li><a class="cursos" href="/enConstruccion">Cursos</a></li>

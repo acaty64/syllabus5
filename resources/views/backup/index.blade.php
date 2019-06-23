@@ -39,4 +39,4 @@
 
 @endsection
 
-@section('view','app/backup/index.blade.php')
+@section('view','backup/index.blade.php')
