@@ -666,6 +666,7 @@ export const store = new Vuex.Store({
                     context.dispatch('RecallUnidades');
                 }
                 if(context.state.status == 'bibliografias'){
+console.log('SaveLinea bibliografias: ', response.data);
                     context.dispatch('OrdenarPorAutor');
                 }
                 if(context.state.status == 'evaluaciones'){

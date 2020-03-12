@@ -184,8 +184,7 @@
                 }else{
                     mess = 'Inserte el texto AUTOR(ES).';
                 }
-
-                if(consistencia == 4){                
+                if(consistencia == 5){                
                     return true;
                 }else{
                     toastr.error(mess);

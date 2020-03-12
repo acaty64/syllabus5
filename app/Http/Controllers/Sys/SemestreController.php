@@ -23,11 +23,11 @@ class SemestreController extends Controller
     public function index()
     {
         $grupos = General::all()->groupBy('semestre');
-        $semestres = ['nuevo semestre'];
+        $semestres = [];
         foreach ($grupos as $key => $value) {
             array_push($semestres, $key);
         }
-        sort($semestres);
+        rsort($semestres);
 
 // dd($semestres);
         return view('semestre.index')
@@ -41,18 +41,19 @@ class SemestreController extends Controller
      */
     public function create(Request $request)
     {
+
         $semestre = $request->semestre;
         $new_semestre = $request->new_semestre;
 
-        if($semestre != "nuevo semestre"){
-            $key = 'SEMESTRE';
-            $value = "'".$semestre."'";
-            $this->changeEnvironmentVariable($key,$value);
-            flash('Semestre Activo: ' . $semestre)->success();
-            return back();
+        $ciclo = substr($semestre, -1, 1);
+        if($ciclo == "1"){
+            $chkSemestre = substr($semestre, 0, 4) . "2";
+        }else{
+            $chkSemestre = substr($semestre, 0, 4) + 1 . "1";
         }
+// dd($chkSemestre);
 
-        if(strlen($new_semestre) == 5 && $semestre == "nuevo semestre"){
+        if(strlen($new_semestre) == 5 && $new_semestre == $chkSemestre){
             // Verifica si existe anteriormente
             $anterior = General::where('semestre',$new_semestre)->get();
             if($anterior->count()>0){

@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::auth();
 
+Route::get('prueba', [
+	'as'	=> 'test',
+	'uses'	=> 'Sys\ArchivoController@index'
+]);
+
+
 
 /* Ruta auth()  */
 Route::get('login', [
