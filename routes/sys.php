@@ -3,11 +3,16 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
+
+Route::get('correccion', [
+	'as'	=> 'correccion',
+	'uses'	=> 'Sys\SemestreController@correccion'
+]);
+
 Route::get('backup', [
 	'as'	=> 'backup.index',
 	'uses'	=> 'Sys\BackupController@index'
 ]);
-
 Route::get('backup/destroy/{file}', [
 	'as'	=> 'backup.destroy',
 	'uses'	=> 'Sys\BackupController@destroy'

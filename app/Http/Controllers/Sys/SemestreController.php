@@ -15,6 +15,27 @@ use Illuminate\Http\Request;
 
 class SemestreController extends Controller
 {
+    public function correccion()
+    {
+        $semestre_old = '20192';
+        $new_semestre = '20201';
+        $despues = UserGrupo::where('semestre', $new_semestre)->get();
+        foreach ($despues as $registro) {
+            $registro->delete();
+        }
+
+        $antes = UserGrupo::where('semestre', $semestre_old)->get();
+        foreach ($antes as $registro) {
+            $newRegistro = $registro->replicate();
+            $newRegistro->semestre = $new_semestre;
+            $newRegistro->save();
+        }
+
+        $despues = UserGrupo::where('semestre', $new_semestre)->get();
+
+        return ['antes'=>$antes->count(), 'despues'=>$despues->count()];
+        
+    }
     /**
      * Display a listing of the resource.
      *
@@ -122,9 +143,9 @@ class SemestreController extends Controller
             $key = 'SEMESTRE';
             $value = "'".$new_semestre."'";
             // dd('$this->changeEnvironmentVariable($key,$value)');
-            $this->changeEnvironmentVariable($key,$value);
+            // $this->changeEnvironmentVariable($key,$value);
 
-            flash('Semestre Activo: ' . $new_semestre)->success();
+            flash('Corrija Semestre Activo en archivo .env')->success();
             return back();
         }
         flash($new_semestre.' debe tener 5 caracteres!!!')->error();
