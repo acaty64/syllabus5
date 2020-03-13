@@ -419,7 +419,6 @@ class SyllabusController extends Controller
      */
     public function index(Request $request)
     {
-        return 'Controller';
         if(!$request->user_id){
             $acceso = '';
         }else{
