@@ -15,12 +15,12 @@ class UserTableSeeder extends Seeder
     User::create(
         ['name'=>'Master del módulo',
          'email'=>'ucss.horarios@gmail.com',
-         'password' => bcrypt('ucss20505378629'),
+         'password' => bcrypt('ucss'),
         ]);
     User::create(
         ['name'=>'Administrador FCEC Lima',
          'email'=>'ucss.fcec.lim@gmail.com',
-         'password' => bcrypt('ucss20505378629'),
+         'password' => bcrypt('ucss'),
         ]);
     User::create(
         ['name'=>'ROMERO ARRESE, HENRY JOSE',
